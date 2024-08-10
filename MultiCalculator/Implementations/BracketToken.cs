@@ -3,7 +3,7 @@ using MultiCalculator.Enums;
 
 namespace MultiCalculator.Implementations
 {
-	public class BracketOperationToken : IToken
+	public class BracketToken : IToken
     {
         public string DisplayName { get; init; } = "[";
 

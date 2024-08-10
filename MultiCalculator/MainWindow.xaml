@@ -1,12 +1,36 @@
 ﻿<Window x:Class="MultiCalculator.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MultiCalculator"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:MultiCalculator"
+		mc:Ignorable="d"
+		Title="MainWindow" Height="500" Width="1000">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="200"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
 
+        <Button x:Name="scientific" Content="Scientific Calculator" Grid.Row="1" Grid.Column="0" FontSize="20" Margin="4" Tag="ScientificCalculator" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="calculus" Content="Calculus Calculator" Grid.Row="2" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="graphing" Content="Graphing Calculator" Grid.Row="3" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="encyclopedia" Content="Encyclopedia" Grid.Row="4" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="history" Content="History" Grid.Row="5" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="plugins" Content="Plugins" Grid.Row="1" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="practice" Content="Practice Problems" Grid.Row="2" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="chat" Content="Global Chat" Grid.Row="3" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="feedback" Content="Submit Feedback" Grid.Row="4" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="settings" Content="Settings" Grid.Row="5" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        
+        <TextBlock x:Name="title" Text="Calculator" Grid.Row="0" Grid.Column="0" FontSize="20" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="MS Gothic" FontWeight="Bold"/>
     </Grid>
 </Window>

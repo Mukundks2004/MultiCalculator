@@ -13,7 +13,7 @@ namespace MultiCalculator.Controls
         public RoundedButton()
         {
             InitializeComponent();
-			ButtonOperation = new UnaryOperationToken() { DisplayName = "Single" };
+			ButtonOperation = new UnaryOperationToken() { DisplayName = "S" };
 			DataContext = this;
         }
 

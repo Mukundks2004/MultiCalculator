@@ -2,7 +2,7 @@
 
 namespace MultiCalculator.Implementations
 {
-	public class DigitOperationToken : IToken
+	public class DigitToken : IToken
     {
         public string DisplayName { get; init; } = "1";
 

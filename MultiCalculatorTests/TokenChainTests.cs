@@ -7,20 +7,20 @@ namespace MultiCalculatorTests
 	[TestFixture]
 	public class TokenChainTests
 	{
-		static readonly DigitOperationToken one = new() { DisplayName = "1" };
-		static readonly DigitOperationToken two = new() { DisplayName = "2" };
-		static readonly DigitOperationToken three = new() { DisplayName = "3" };
-		static readonly DigitOperationToken four = new() { DisplayName = "4" };
-		static readonly DigitOperationToken five = new() { DisplayName = "5" };
-		static readonly DigitOperationToken point = new() { DisplayName = "." };
+		static readonly DigitToken one = new() { DisplayName = "1" };
+		static readonly DigitToken two = new() { DisplayName = "2" };
+		static readonly DigitToken three = new() { DisplayName = "3" };
+		static readonly DigitToken four = new() { DisplayName = "4" };
+		static readonly DigitToken five = new() { DisplayName = "5" };
+		static readonly DigitToken point = new() { DisplayName = "." };
 
 		static readonly DualArityOperationToken plus = new() { DisplayName = "+", Priority = 0, CalculateBinary = (a, b) => a + b, CalculateUnary = (x) => x};
 		static readonly DualArityOperationToken minus = new() { DisplayName = "-", Priority = 0, CalculateBinary = (a, b) => a - b, CalculateUnary = (x) => -x };
 		static readonly BinaryOperationToken times = new() { DisplayName = "*", Priority = 1, CalculateBinary = (a, b) => a * b };
 		static readonly BinaryOperationToken dividedby = new() { DisplayName = "/",  Priority = 1, CalculateBinary = (a, b) => a / b };
 
-		static readonly BracketOperationToken c = new() { DisplayName = "[", BracketType = BracketType.Open };
-		static readonly BracketOperationToken J = new() { DisplayName = "]", BracketType = BracketType.Closed };
+		static readonly BracketToken c = new() { DisplayName = "[", BracketType = BracketType.Open };
+		static readonly BracketToken J = new() { DisplayName = "]", BracketType = BracketType.Closed };
 
 		static readonly UnaryOperationToken sin = new() { DisplayName = "sin", CalculateUnary = Math.Sin };
 

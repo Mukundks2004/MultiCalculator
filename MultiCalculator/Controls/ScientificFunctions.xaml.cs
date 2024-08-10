@@ -27,8 +27,8 @@ namespace MultiCalculator.Controls
 			ButtonB0.ButtonOperation = new UnaryOperationToken() { DisplayName = "√", CalculateUnary = Math.Sqrt };
 			ButtonB0.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "∛", CalculateUnary = Math.Cbrt };
 			ButtonB1.ButtonOperation = new UnaryOperationToken() { DisplayName = "x²", CalculateUnary = (x) => x * x };
-			ButtonB2.ButtonOperation = new BracketOperationToken() { DisplayName = "(", BracketType = BracketType.Open };
-			ButtonB3.ButtonOperation = new BracketOperationToken() { DisplayName = ")", BracketType = BracketType.Closed };
+			ButtonB2.ButtonOperation = new BracketToken() { DisplayName = "(", BracketType = BracketType.Open };
+			ButtonB3.ButtonOperation = new BracketToken() { DisplayName = ")", BracketType = BracketType.Closed };
 			ButtonB4.ButtonOperation = new UnaryOperationToken() { DisplayName = "log", CalculateUnary = Math.Log10 };
 			ButtonB4.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "10▫", CalculateUnary = (x) => Math.Pow(10, x) };
 			ButtonB5.ButtonOperation = new UnaryOperationToken() { DisplayName = "ln", CalculateUnary = Math.Log };
@@ -49,7 +49,7 @@ namespace MultiCalculator.Controls
 
 			ButtonD0.ButtonOperation = new BinaryOperationToken() { DisplayName = "nPr", CalculateBinary = MathHelpers.P };
 			ButtonD0.SecondaryButtonOperation = new BinaryOperationToken() { DisplayName = "nCr", CalculateBinary = MathHelpers.C };
-			ButtonD1.ButtonOperation = new UnaryOperationToken() { DisplayName = "erf(x)", CalculateUnary = MathHelpers.Erf };
+			ButtonD1.ButtonOperation = new UnaryOperationToken() { DisplayName = "erf", CalculateUnary = MathHelpers.Erf };
 			ButtonD1.SecondaryButtonOperation = new NullaryOperationToken() { DisplayName = "ϖ", Calculate = () => 2.6220575542921198 };
 			ButtonD2.ButtonOperation = new UnaryOperationToken() { DisplayName = "W(x)", CalculateUnary = MathHelpers.LambertW };
 			ButtonD2.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "sinc", CalculateUnary = (x) => Math.Sin(x) / x };
@@ -61,7 +61,7 @@ namespace MultiCalculator.Controls
 			ButtonD5.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "atanh", CalculateUnary = Math.Atanh };
 		}
 
-		public void DoCalculator(object sender, RoutedEventArgs e)
+		public void ScientificButton_Click(object sender, RoutedEventArgs e)
 		{
 			//This needs to be changed to work for shiftablebutton OR button
 			var x = sender as ICalculatorButton;

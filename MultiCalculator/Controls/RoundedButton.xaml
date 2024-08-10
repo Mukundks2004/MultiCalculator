@@ -5,9 +5,9 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:MultiCalculator.Controls"
 			 mc:Ignorable="d" 
-			 d:DesignHeight="50" d:DesignWidth="75">
+			 d:DesignHeight="50" d:DesignWidth="50">
 
-    <Button x:Name="Button" Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Height="30" Width="60" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold">
+    <Button x:Name="Button" Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Height="30" Width="40" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold">
         <Button.Resources>
             <Style TargetType="Border">
                 <Setter Property="CornerRadius" Value="8"/>

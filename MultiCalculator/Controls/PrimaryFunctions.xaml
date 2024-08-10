@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="MultiCalculator.Controls.PrimaryFunctions"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:local="clr-namespace:MultiCalculator.Controls"
+             xmlns:calculatorbuttons="clr-namespace:MultiCalculator.Controls"
+			 mc:Ignorable="d" 
+			 d:DesignHeight="200" d:DesignWidth="300">
+    <Grid Width="300" Height="200" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <calculatorbuttons:RoundedButton x:Name="ButtonX0" Grid.Row="1" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonX1" Grid.Row="1" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonX2" Grid.Row="1" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+
+        <Button x:Name="Answer" Content="Ans" Grid.Row="1" Grid.Column="3" ButtonBase.Click="GetAnswer_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button x:Name="Equals" Content="=" Grid.Row="1" Grid.Column="4" ButtonBase.Click="EvaluateExpression_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <calculatorbuttons:RoundedButton x:Name="ButtonY0" Grid.Row="2" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonY1" Grid.Row="2" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonY2" Grid.Row="2" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonY3" Grid.Row="2" Grid.Column="3" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonY4" Grid.Row="2" Grid.Column="4" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+                                                                                                                               
+        <calculatorbuttons:RoundedButton x:Name="ButtonZ0" Grid.Row="0" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonZ1" Grid.Row="0" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonZ2" Grid.Row="0" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonZ3" Grid.Row="0" Grid.Column="3" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonZ4" Grid.Row="0" Grid.Column="4" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+
+        <calculatorbuttons:RoundedButton x:Name="ButtonW0" Grid.Row="3" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonW1" Grid.Row="3" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <Button x:Name="Shift" Content="Shift" Grid.Row="3" Grid.Column="2" ButtonBase.Click="ToggleShift_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button x:Name="Backspace" Content="C" Grid.Row="3" Grid.Column="3" ButtonBase.Click="Delete_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button x:Name="AllClear" Content="AC" Grid.Row="3" Grid.Column="4" ButtonBase.Click="ClearAll_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+    </Grid>
+</UserControl>
