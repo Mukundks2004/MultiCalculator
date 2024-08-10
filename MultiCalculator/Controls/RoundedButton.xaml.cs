@@ -13,15 +13,15 @@ namespace MultiCalculator.Controls
         public RoundedButton()
         {
             InitializeComponent();
-			ButtonOperation = new UnaryButtonOperation() { DisplayName = "Single" };
+			ButtonOperation = new UnaryOperationToken() { DisplayName = "Single" };
 			DataContext = this;
         }
 
-		public static readonly DependencyProperty ButtonOperationProperty = DependencyProperty.Register("ButtonOperation", typeof(IButtonOperation), typeof(RoundedButton), new PropertyMetadata(new UnaryButtonOperation(), ValueChanged));
+		public static readonly DependencyProperty ButtonOperationProperty = DependencyProperty.Register("ButtonOperation", typeof(IToken), typeof(RoundedButton), new PropertyMetadata(new UnaryOperationToken(), ValueChanged));
 
-		public IButtonOperation ButtonOperation
+		public IToken ButtonOperation
 		{
-			get => (IButtonOperation)GetValue(ButtonOperationProperty);
+			get => (IToken)GetValue(ButtonOperationProperty);
 			set => SetValue(ButtonOperationProperty, value);
 		}
 
@@ -29,7 +29,7 @@ namespace MultiCalculator.Controls
 		{
 			var control = d as RoundedButton;
 			_ = control ?? throw new ArgumentNullException(nameof(control));
-			control.Button.Content = ((IButtonOperation)e.NewValue).DisplayName;
+			control.Button.Content = ((IToken)e.NewValue).DisplayName;
 		}
 	}
 }

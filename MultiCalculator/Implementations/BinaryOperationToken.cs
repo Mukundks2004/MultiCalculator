@@ -1,23 +1,16 @@
 ﻿using MultiCalculator.Abstractions;
+using MultiCalculator.Enums;
 
 namespace MultiCalculator.Implementations
 {
-	public class BinaryButtonOperation : IButtonOperation
+	public class BinaryOperationToken : IToken, IBinaryOperation
     {
         public string DisplayName { get; init; } = "&";
 
-		public Func<double, double, double> Calculate { get; init; } = (x, y) => x + y;
+		public Func<double, double, double> CalculateBinary { get; init; } = (x, y) => x + y;
 
         public int Priority { get; init; } = int.MinValue;
 
-		public bool IsUnary { get; init; } = false;
-
 		public Associativity Associativity { get; init; } = Associativity.Left;
-	}
-
-	public enum Associativity
-	{
-		Right,
-		Left
 	}
 }

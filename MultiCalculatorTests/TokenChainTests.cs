@@ -1,30 +1,31 @@
 using MultiCalculator.Utilities;
 using MultiCalculator.Implementations;
+using MultiCalculator.Enums;
 
 namespace MultiCalculatorTests
 {
 	[TestFixture]
 	public class TokenChainTests
 	{
-		static readonly DigitButtonOperation one = new() { DisplayName = "1" };
-		static readonly DigitButtonOperation two = new() { DisplayName = "2" };
-		static readonly DigitButtonOperation three = new() { DisplayName = "3" };
-		static readonly DigitButtonOperation four = new() { DisplayName = "4" };
-		static readonly DigitButtonOperation five = new() { DisplayName = "5" };
-		static readonly DigitButtonOperation point = new() { DisplayName = "." };
+		static readonly DigitOperationToken one = new() { DisplayName = "1" };
+		static readonly DigitOperationToken two = new() { DisplayName = "2" };
+		static readonly DigitOperationToken three = new() { DisplayName = "3" };
+		static readonly DigitOperationToken four = new() { DisplayName = "4" };
+		static readonly DigitOperationToken five = new() { DisplayName = "5" };
+		static readonly DigitOperationToken point = new() { DisplayName = "." };
 
-		static readonly BinaryButtonOperation plus = new() { DisplayName = "+", IsUnary = true, Priority = 0, Calculate = (a, b) => a + b};
-		static readonly BinaryButtonOperation minus = new() { DisplayName = "-", IsUnary = true, Priority = 0, Calculate = (a, b) => a - b };
-		static readonly BinaryButtonOperation times = new() { DisplayName = "*", IsUnary = false, Priority = 1, Calculate = (a, b) => a * b };
-		static readonly BinaryButtonOperation dividedby = new() { DisplayName = "/", IsUnary = false, Priority = 1, Calculate = (a, b) => a / b };
+		static readonly DualArityOperationToken plus = new() { DisplayName = "+", Priority = 0, CalculateBinary = (a, b) => a + b, CalculateUnary = (x) => x};
+		static readonly DualArityOperationToken minus = new() { DisplayName = "-", Priority = 0, CalculateBinary = (a, b) => a - b, CalculateUnary = (x) => -x };
+		static readonly BinaryOperationToken times = new() { DisplayName = "*", Priority = 1, CalculateBinary = (a, b) => a * b };
+		static readonly BinaryOperationToken dividedby = new() { DisplayName = "/",  Priority = 1, CalculateBinary = (a, b) => a / b };
 
-		static readonly BracketButtonOperation c = new() { DisplayName = "[", BracketType = BracketType.Open };
-		static readonly BracketButtonOperation J = new() { DisplayName = "]", BracketType = BracketType.Closed };
+		static readonly BracketOperationToken c = new() { DisplayName = "[", BracketType = BracketType.Open };
+		static readonly BracketOperationToken J = new() { DisplayName = "]", BracketType = BracketType.Closed };
 
-		static readonly UnaryButtonOperation sin = new() { DisplayName = "sin", Calculate = Math.Sin };
+		static readonly UnaryOperationToken sin = new() { DisplayName = "sin", CalculateUnary = Math.Sin };
 
-		static readonly NullaryButtonOperation pi = new() { DisplayName = "pi", Calculate = () => Math.PI };
-		static readonly NullaryButtonOperation e = new() { DisplayName = "e", Calculate = () => Math.E };
+		static readonly NullaryOperationToken pi = new() { DisplayName = "pi", Calculate = () => Math.PI };
+		static readonly NullaryOperationToken e = new() { DisplayName = "e", Calculate = () => Math.E };
 
 
 		[Test, TestCaseSource(typeof(TokenChainTests), nameof(ValidAndInvalidExpressionTestCases))]
@@ -142,6 +143,14 @@ namespace MultiCalculatorTests
 			get
 			{
 				yield return new TestCaseData(new TokenChain([one, plus, one]), 2).SetDescription("1 + 1 = 2");
+				yield return new TestCaseData(new TokenChain([one, times, c, two, plus, three, J, times, four]), 20).SetDescription("1 x (2 + 3) x 4 = 20");
+				yield return new TestCaseData(new TokenChain([one, plus, two, times, three, plus, four]), 11).SetDescription("1 + 2 x 3 + 4 = 11");
+				yield return new TestCaseData(new TokenChain([one, plus, one, plus, one]), 3).SetDescription("1 + 1 + 1 = 3");
+				yield return new TestCaseData(new TokenChain([one, plus, plus, one]), 2).SetDescription("1 + + 1 = 2");
+				yield return new TestCaseData(new TokenChain([one, minus, minus, one]), 2).SetDescription("1 - - 1 = 2");
+				yield return new TestCaseData(new TokenChain([one, minus, plus, one]), 0).SetDescription("1 - + 1 = 0");
+				yield return new TestCaseData(new TokenChain([one, plus, minus, one]), 0).SetDescription("1 + - 1 = 0");
+				yield return new TestCaseData(new TokenChain([one, plus, plus, plus, one]), 2).SetDescription("1 + + + 1 = 2");
 				yield return new TestCaseData(new TokenChain([one]), 1).SetDescription("1 = 1");
 				yield return new TestCaseData(new TokenChain([plus, one]), 1).SetDescription("+1 = 1");
 				yield return new TestCaseData(new TokenChain([one, plus, two]), 3).SetDescription("1 + 2 = 3");

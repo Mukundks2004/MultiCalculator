@@ -14,8 +14,8 @@ namespace MultiCalculator.Controls
 		{
 			InitializeComponent();
 
-			ButtonOperation = new UnaryButtonOperation();
-			SecondaryButtonOperation = new UnaryButtonOperation() { DisplayName = "Sec" };
+			ButtonOperation = new UnaryOperationToken();
+			SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "Sec" };
 			DataContext = this;
 		}
 
@@ -24,19 +24,19 @@ namespace MultiCalculator.Controls
 			(ButtonOperation, SecondaryButtonOperation) = (SecondaryButtonOperation, ButtonOperation);
 		}
 
-		public static readonly DependencyProperty ButtonOperationProperty = DependencyProperty.Register("ButtonOperation", typeof(IButtonOperation), typeof(ShiftableButton), new PropertyMetadata(new UnaryButtonOperation(), ValueChanged));
+		public static readonly DependencyProperty ButtonOperationProperty = DependencyProperty.Register("ButtonOperation", typeof(IToken), typeof(ShiftableButton), new PropertyMetadata(new UnaryOperationToken(), ValueChanged));
 		
-		public static readonly DependencyProperty SecondaryButtonOperationProperty = DependencyProperty.Register("SecondaryButtonOperation", typeof(IButtonOperation), typeof(ShiftableButton), new PropertyMetadata(new UnaryButtonOperation(), ValueChangedSecondary));
+		public static readonly DependencyProperty SecondaryButtonOperationProperty = DependencyProperty.Register("SecondaryButtonOperation", typeof(IToken), typeof(ShiftableButton), new PropertyMetadata(new UnaryOperationToken(), ValueChangedSecondary));
 
-		public IButtonOperation ButtonOperation
+		public IToken ButtonOperation
 		{
-			get => (IButtonOperation)GetValue(ButtonOperationProperty);
+			get => (IToken)GetValue(ButtonOperationProperty);
 			set => SetValue(ButtonOperationProperty, value);
 		}
 
-		public IButtonOperation SecondaryButtonOperation
+		public IToken SecondaryButtonOperation
 		{
-			get => (IButtonOperation)GetValue(SecondaryButtonOperationProperty);
+			get => (IToken)GetValue(SecondaryButtonOperationProperty);
 			set => SetValue(SecondaryButtonOperationProperty, value);
 		}
 
@@ -44,14 +44,14 @@ namespace MultiCalculator.Controls
 		{
 			var control = d as ShiftableButton;
 			_ = control ?? throw new ArgumentNullException(nameof(control));
-			control.Primary.Content = ((IButtonOperation)e.NewValue).DisplayName;
+			control.Primary.Content = ((IToken)e.NewValue).DisplayName;
 		}
 
 		static void ValueChangedSecondary(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			var control = d as ShiftableButton;
 			_ = control ?? throw new ArgumentNullException(nameof(control));
-			control.Secondary.Content = ((IButtonOperation)e.NewValue).DisplayName;
+			control.Secondary.Content = ((IToken)e.NewValue).DisplayName;
 		}
 	}
 }

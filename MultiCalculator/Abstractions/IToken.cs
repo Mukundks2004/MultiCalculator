@@ -1,6 +1,6 @@
 ﻿namespace MultiCalculator.Abstractions
 {
-	public interface IButtonOperation
+	public interface IToken
     {
         public string DisplayName { get; init; }
     }

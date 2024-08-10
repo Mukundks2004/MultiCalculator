@@ -2,10 +2,10 @@
 
 namespace MultiCalculator.Implementations
 {
-	public class UnaryButtonOperation : IButtonOperation
+	public class UnaryOperationToken : IToken, IUnaryOperation
     {
         public string DisplayName { get; init; } = "f(x)";
 
-		public Func<double, double> Calculate { get; init; } = (x) => x;
+		public Func<double, double> CalculateUnary { get; init; } = (x) => x;
     }
 }
