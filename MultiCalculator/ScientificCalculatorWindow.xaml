@@ -8,11 +8,11 @@
         mc:Ignorable="d"
         Title="ScientificCalculatorWindow" Height="600" Width="320">
     <StackPanel HorizontalAlignment="Center">
-        <TextBlock Height="100"/>
+        <TextBlock x:Name="ResultBox" Height="100"/>
         <Separator/>
         <Separator Height="10" Background="Transparent"/>
         <calculatorbuttons:CalculatorControlBar/>
-        <calculatorbuttons:ScientificFunctions/>
+        <calculatorbuttons:ScientificFunctions x:Name="ScientificButtonsGrid"/>
         <calculatorbuttons:PrimaryFunctions/>
     </StackPanel>
 </Window>

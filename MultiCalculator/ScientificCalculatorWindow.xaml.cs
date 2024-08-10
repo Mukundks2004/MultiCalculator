@@ -1,4 +1,8 @@
-﻿using System;
+﻿using MultiCalculator.Abstractions;
+using MultiCalculator.Controls;
+using MultiCalculator.Implementations;
+using MultiCalculator.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +26,23 @@ namespace MultiCalculator
 		public ScientificCalculatorWindow()
 		{
 			InitializeComponent();
+			CalculatorExpression = new TokenChain();
+			DataContext = this;
+		}
+
+		public static readonly DependencyProperty CalculatorExpressionProperty = DependencyProperty.Register("CalculatorExpression", typeof(TokenChain), typeof(ScientificCalculatorWindow), new PropertyMetadata(new TokenChain(), ValueChanged));
+
+		public TokenChain CalculatorExpression
+		{
+			get => (TokenChain)GetValue(CalculatorExpressionProperty);
+			set => SetValue(CalculatorExpressionProperty, value);
+		}
+
+		static void ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var control = d as ScientificCalculatorWindow;
+			_ = control ?? throw new ArgumentNullException(nameof(control));
+			control.ResultBox.Text = ((TokenChain)e.NewValue).ToString();
 		}
 	}
 }
