@@ -1,7 +1,5 @@
 ﻿using MultiCalculator.Abstractions;
 using MultiCalculator.Implementations;
-using System.DirectoryServices.ActiveDirectory;
-using System.Linq.Expressions;
 
 namespace MultiCalculator.Utilities
 {
@@ -42,26 +40,108 @@ namespace MultiCalculator.Utilities
 			return string.Join(string.Empty, operations.Select(t => t.DisplayName));
 		}
 
-		//IN THE FUTURE, HAVE A VALIDATOR U CAN USE FOR DERIVATIVES, ETC.
-		//THEREFORE THIS VALID FUNCTION WILL BE CALLED ON A _VALIDATOR
-		//conditions for validity:
-		//cannot have */* (non unary operators MUST be followed by numbers)
-		//all brackets matched
-		//no pairs of brackets empty
-		//unary operators can be followed by unary operators eg + - + 3 is valid
-		//separate service to fix the expression called simplify -> but we cannot simplify 
-		//2 pairs of brackets without a times symbol should have it inserted eg (2+1)(2+1) = (2+1)*(2+1)
-		//Dont forget, 3sin(x) is valid
-
-		//If isValid, make sure to add brakcets, * smbols, etc. in a method afterwards
 		public bool IsValid()
 		{
-			var a = HasMatchingAndNonEmptyBraces();
-			var b = NumbersExistAndAreWellFormed();
-			var c = NoConsecutiveBinaryOperations();
-			var d = NoDigitsFollowClosingBrace();
-
 			return HasMatchingAndNonEmptyBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace();
+		}
+
+		public double Parse()
+		{
+			return ParseFromIndexToIndex(0, operations.Count).Calculate();
+		}
+
+		NullaryButtonOperation ParseFromIndexToIndex(int startIndex, int indexEndExclusive)
+		{
+			var currentIndex = startIndex;
+			//digits and constants are both nullaries
+			var numStack = new Stack<NullaryButtonOperation>();
+
+			//brackets and unaries trigger a recursive call
+			//operations are binary
+			var opStack = new Stack<BinaryButtonOperation>();
+
+			while (currentIndex < indexEndExclusive)
+			{
+				if (operations[currentIndex] is NullaryButtonOperation nullaryOperation)
+				{
+					numStack.Push(nullaryOperation);
+				}
+				else if (operations[currentIndex] is DigitButtonOperation)
+				{
+					var parsedNumberAsNullary = ParseDoubleFromIndex(currentIndex, out int lengthOfNumber);
+					numStack.Push(parsedNumberAsNullary);
+					currentIndex += lengthOfNumber - 1;
+				}
+				//we shouldnt ever reach a closing brace but whatever
+				else if (operations[currentIndex] is BracketButtonOperation openingBracket && openingBracket.BracketType == BracketType.Open)
+				{
+					int nextClosingBraceDistance = 1;
+					while (currentIndex + nextClosingBraceDistance < indexEndExclusive && !(operations[currentIndex + nextClosingBraceDistance] is BracketButtonOperation bracket && bracket.BracketType == BracketType.Closed))
+					{
+						nextClosingBraceDistance++;
+					}
+
+					numStack.Push(ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance));
+					currentIndex += nextClosingBraceDistance;
+				}
+				else if (operations[currentIndex] is UnaryButtonOperation unaryOperation)
+				{
+					int nextClosingBraceDistance = 1;
+					while (currentIndex + nextClosingBraceDistance < indexEndExclusive && !(operations[currentIndex + nextClosingBraceDistance] is BracketButtonOperation bracket && bracket.BracketType == BracketType.Closed))
+					{
+						nextClosingBraceDistance++;
+					}
+
+					var nullaryResultFromBraces = ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance);
+					numStack.Push(new NullaryButtonOperation() { Calculate = () => unaryOperation.Calculate(nullaryResultFromBraces.Calculate()) });
+					currentIndex += nextClosingBraceDistance;
+				}
+				else if (operations[currentIndex] is BinaryButtonOperation binaryOperation)
+				{
+					if (opStack.Count == 0)
+					{
+						opStack.Push(binaryOperation);
+					}
+                    else
+                    {
+						var mostRecentOperation = opStack.Peek();
+
+						if (mostRecentOperation.Priority > binaryOperation.Priority)
+						{
+							var firstOperand = numStack.Pop();
+							var secondOperand = numStack.Pop();
+							var result = mostRecentOperation.Calculate(firstOperand.Calculate(), secondOperand.Calculate());
+						}
+                    }
+				}
+
+				while (opStack.Count > 0)
+				{
+					var secondOperand = numStack.Pop();
+					var firstOperand = numStack.Pop();
+					numStack.Push(new NullaryButtonOperation() { Calculate = () => opStack.Pop().Calculate(firstOperand.Calculate(), secondOperand.Calculate())} );
+				}
+
+				currentIndex++;
+			}
+
+			return numStack.Pop();
+		}
+
+		NullaryButtonOperation ParseDoubleFromIndex(int index, out int lengthParsed)
+		{
+			var resultAsString = (operations[index] as DigitButtonOperation)!.DisplayName;
+			index++;
+			lengthParsed = 1;
+
+			while (index < operations.Count && operations[index] is DigitButtonOperation digit)
+			{
+				resultAsString += digit.DisplayName;
+				lengthParsed++;
+			}
+
+			var result = double.Parse(resultAsString);
+			return new NullaryButtonOperation() { Calculate = () => result };
 		}
 
 		bool NoDigitsFollowClosingBrace()

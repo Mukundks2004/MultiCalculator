@@ -11,5 +11,13 @@ namespace MultiCalculator.Implementations
         public int Priority { get; init; } = int.MinValue;
 
 		public bool IsUnary { get; init; } = false;
+
+		public Associativity Associativity { get; init; } = Associativity.Left;
+	}
+
+	public enum Associativity
+	{
+		Right,
+		Left
 	}
 }

@@ -1,7 +1,5 @@
 using MultiCalculator.Utilities;
 using MultiCalculator.Implementations;
-using NUnit.Framework.Interfaces;
-using MultiCalculator.Abstractions;
 
 namespace MultiCalculatorTests
 {
@@ -15,22 +13,30 @@ namespace MultiCalculatorTests
 		static readonly DigitButtonOperation five = new() { DisplayName = "5" };
 		static readonly DigitButtonOperation point = new() { DisplayName = "." };
 
-		static readonly BinaryButtonOperation plus = new() { DisplayName = "+", Calculate = (a, b) => a + b, IsUnary = true };
-		static readonly BinaryButtonOperation minus = new() { DisplayName = "-", Calculate = (a, b) => a - b, IsUnary = true };
-		static readonly BinaryButtonOperation times = new() { DisplayName = "*", Calculate = (a, b) => a * b, IsUnary = false };
+		static readonly BinaryButtonOperation plus = new() { DisplayName = "+", IsUnary = true, Priority = 0, Calculate = (a, b) => a + b};
+		static readonly BinaryButtonOperation minus = new() { DisplayName = "-", IsUnary = true, Priority = 0, Calculate = (a, b) => a - b };
+		static readonly BinaryButtonOperation times = new() { DisplayName = "*", IsUnary = false, Priority = 1, Calculate = (a, b) => a * b };
+		static readonly BinaryButtonOperation dividedby = new() { DisplayName = "/", IsUnary = false, Priority = 1, Calculate = (a, b) => a / b };
 
 		static readonly BracketButtonOperation c = new() { DisplayName = "(", BracketType = BracketType.Open };
 		static readonly BracketButtonOperation J = new() { DisplayName = ")", BracketType = BracketType.Closed };
 
-		static readonly UnaryButtonOperation sin = new() { DisplayName = "sin" };
+		static readonly UnaryButtonOperation sin = new() { DisplayName = "sin", Calculate = Math.Sin };
 
-		static readonly NullaryButtonOperation pi = new() { DisplayName = "pi" };
+		static readonly NullaryButtonOperation pi = new() { DisplayName = "pi", Calculate = () => Math.PI };
+		static readonly NullaryButtonOperation e = new() { DisplayName = "e", Calculate = () => Math.E };
 
 
 		[Test, TestCaseSource(typeof(TokenChainTests), nameof(ValidAndInvalidExpressionTestCases))]
-		public void IsExpressionValid(TokenChain tokenChain, bool expectedIsValid)
+		public void IsExpressionValidTest(TokenChain tokenChain, bool expectedIsValid)
 		{
 			Assert.That(tokenChain.IsValid(), Is.EqualTo(expectedIsValid));
+		}
+
+		[Test, TestCaseSource(typeof(TokenChainTests), nameof(ParseExpressionTestCases))]
+		public void ParseExpressionTest(TokenChain tokenChain, double expectedResult)
+		{
+			Assert.That(tokenChain.Parse(), Is.EqualTo(expectedResult));
 		}
 
 		public static IEnumerable<TestCaseData> ValidAndInvalidExpressionTestCases
@@ -113,11 +119,25 @@ namespace MultiCalculatorTests
 
 				yield return new TestCaseData(new TokenChain([pi]), true).SetDescription("pi");
 				yield return new TestCaseData(new TokenChain([pi, pi]), true).SetDescription("pi pi");
+				yield return new TestCaseData(new TokenChain([pi, e]), true).SetDescription("pi e");
 				yield return new TestCaseData(new TokenChain([pi, times, pi]), true).SetDescription("pi x pi");
 				yield return new TestCaseData(new TokenChain([pi, times, minus, pi]), true).SetDescription("pi x - pi");
 				yield return new TestCaseData(new TokenChain([pi, three]), false).SetDescription("pi 3");
 				yield return new TestCaseData(new TokenChain([three, pi]), true).SetDescription("3 pi");
 				yield return new TestCaseData(new TokenChain([c, pi, J, pi]), true).SetDescription("(pi)pi");
+
+				yield return new TestCaseData(new TokenChain([c, two, plus, two, J, c, three, times, three]), true).SetDescription("(2 + 2)(3 x 3");
+				yield return new TestCaseData(new TokenChain([two, times, dividedby, three]), true).SetDescription("2 * / 3");
+			}
+		}
+
+		public static IEnumerable<TestCaseData> ParseExpressionTestCases
+		{
+			get
+			{
+				yield return new TestCaseData(new TokenChain([one, plus, one]), 2).SetDescription("1 + 1 = 2");
+				yield return new TestCaseData(new TokenChain([one, plus, one]), 2).SetDescription("1 + 2 = 3");
+				yield return new TestCaseData(new TokenChain([one, plus, one]), 2).SetDescription("1 + 2 = 3");
 			}
 		}
 	}
