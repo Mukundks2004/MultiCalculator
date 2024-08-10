@@ -113,8 +113,13 @@ namespace MultiCalculator.Utilities
 						{
 							var firstOperand = numStack.Pop();
 							var secondOperand = numStack.Pop();
+							opStack.Pop();
 							var result = mostRecentOperation.Calculate(firstOperand.Calculate(), secondOperand.Calculate());
 							numStack.Push(new NullaryButtonOperation() { Calculate = () => result });
+							opStack.Push(binaryOperation);
+						}
+						else
+						{
 							opStack.Push(binaryOperation);
 						}
                     }
