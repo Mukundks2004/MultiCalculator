@@ -5,11 +5,11 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:MultiCalculator.Controls"
 			 mc:Ignorable="d" 
-			 d:DesignHeight="50" d:DesignWidth="75">
-	<Grid Width="75" Height="50">
+			 d:DesignHeight="50" d:DesignWidth="50">
+	<Grid Width="50" Height="50">
         <StackPanel>
             <Label x:Name="Secondary" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="20" Foreground="Gray" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold"/>
-            <Button x:Name="Primary" Padding="0" VerticalContentAlignment="Center"  Height="30" Width="60" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold">
+            <Button x:Name="Primary" Padding="0" VerticalContentAlignment="Center"  Height="30" Width="40" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="8"/>

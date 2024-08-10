@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:MultiCalculator.Controls"
              xmlns:calculatorbuttons="clr-namespace:MultiCalculator.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="500">
+             d:DesignHeight="200" d:DesignWidth="300">
 
-    <Grid Width="500" Height="200" VerticalAlignment="Top" HorizontalAlignment="Left">
+    <Grid Width="300" Height="200" VerticalAlignment="Top" HorizontalAlignment="Left">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -25,30 +25,30 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <calculatorbuttons:RoundedButton x:Name="ButtonA0" Grid.Row="0" Grid.Column="0" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:RoundedButton x:Name="ButtonA1" Grid.Row="0" Grid.Column="1" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:RoundedButton x:Name="ButtonA4" Grid.Row="0" Grid.Column="4" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:RoundedButton x:Name="ButtonA5" Grid.Row="0" Grid.Column="5" ButtonBase.Click="DoCalculator"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonA0" Grid.Row="0" Grid.Column="0" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonA1" Grid.Row="0" Grid.Column="1" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonA4" Grid.Row="0" Grid.Column="4" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonA5" Grid.Row="0" Grid.Column="5" ButtonBase.Click="ScientificButton_Click"/>
 
-        <calculatorbuttons:ShiftableButton x:Name="ButtonB0" Grid.Row="1" Grid.Column="0" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:RoundedButton x:Name="ButtonB1" Grid.Row="1" Grid.Column="1" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:RoundedButton x:Name="ButtonB2" Grid.Row="1" Grid.Column="2" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:RoundedButton x:Name="ButtonB3" Grid.Row="1" Grid.Column="3" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonB4" Grid.Row="1" Grid.Column="4" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonB5" Grid.Row="1" Grid.Column="5" ButtonBase.Click="DoCalculator"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonB0" Grid.Row="1" Grid.Column="0" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonB1" Grid.Row="1" Grid.Column="1" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonB2" Grid.Row="1" Grid.Column="2" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:RoundedButton x:Name="ButtonB3" Grid.Row="1" Grid.Column="3" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonB4" Grid.Row="1" Grid.Column="4" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonB5" Grid.Row="1" Grid.Column="5" ButtonBase.Click="ScientificButton_Click"/>
 
-        <calculatorbuttons:ShiftableButton x:Name="ButtonC0" Grid.Row="2" Grid.Column="0" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonC1" Grid.Row="2" Grid.Column="1" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonC2" Grid.Row="2" Grid.Column="2" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonC3" Grid.Row="2" Grid.Column="3" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonC4" Grid.Row="2" Grid.Column="4" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonC5" Grid.Row="2" Grid.Column="5" ButtonBase.Click="DoCalculator"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonC0" Grid.Row="2" Grid.Column="0" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonC1" Grid.Row="2" Grid.Column="1" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonC2" Grid.Row="2" Grid.Column="2" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonC3" Grid.Row="2" Grid.Column="3" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonC4" Grid.Row="2" Grid.Column="4" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonC5" Grid.Row="2" Grid.Column="5" ButtonBase.Click="ScientificButton_Click"/>
 
-        <calculatorbuttons:ShiftableButton x:Name="ButtonD0" Grid.Row="3" Grid.Column="0" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonD1" Grid.Row="3" Grid.Column="1" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonD2" Grid.Row="3" Grid.Column="2" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonD3" Grid.Row="3" Grid.Column="3" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonD4" Grid.Row="3" Grid.Column="4" ButtonBase.Click="DoCalculator"/>
-        <calculatorbuttons:ShiftableButton x:Name="ButtonD5" Grid.Row="3" Grid.Column="5" ButtonBase.Click="DoCalculator"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonD0" Grid.Row="3" Grid.Column="0" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonD1" Grid.Row="3" Grid.Column="1" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonD2" Grid.Row="3" Grid.Column="2" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonD3" Grid.Row="3" Grid.Column="3" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonD4" Grid.Row="3" Grid.Column="4" ButtonBase.Click="ScientificButton_Click"/>
+        <calculatorbuttons:ShiftableButton x:Name="ButtonD5" Grid.Row="3" Grid.Column="5" ButtonBase.Click="ScientificButton_Click"/>
     </Grid>
 </UserControl>

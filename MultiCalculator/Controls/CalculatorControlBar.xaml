@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="MultiCalculator.Controls.CalculatorControlBar"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:local="clr-namespace:MultiCalculator.Controls"
+			 mc:Ignorable="d" 
+			 d:DesignHeight="50" d:DesignWidth="300">
+	<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <ComboBox Height="30" Grid.Column="0"/>
+        <Button Content="←" Height="45" Width="30" Grid.Column="1" FontSize="20">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Content="→" Height="45" Width="30" Grid.Column="2" FontSize="20">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Content="Copy" Height="30" Width="80" Grid.Column="3" FontSize="14" FontFamily="MS Gothic"/>
+    </Grid>
+</UserControl>

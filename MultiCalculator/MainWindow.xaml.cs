@@ -1,13 +1,5 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MultiCalculator
 {
@@ -19,6 +11,35 @@ namespace MultiCalculator
 		public MainWindow()
 		{
 			InitializeComponent();
+		}
+
+		void OpenWindowButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (sender is Button button)
+			{
+				var tag = button.Tag as string;
+				OpenWindow(tag);
+			}
+		}
+
+		void OpenWindow(string? windowTag)
+		{
+			Window? windowToOpen = null;
+
+			switch (windowTag)
+			{
+				case "ScientificCalculator":
+					windowToOpen = new ScientificCalculatorWindow();
+					break;
+				default:
+					MessageBox.Show($"Unknown window tag: {windowTag ?? "Empty"}");
+					break;
+			}
+
+			if (windowToOpen != null)
+			{
+				windowToOpen.Show();
+			}
 		}
 	}
 }
