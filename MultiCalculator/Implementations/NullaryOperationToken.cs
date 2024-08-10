@@ -2,7 +2,7 @@
 
 namespace MultiCalculator.Implementations
 {
-	public class NullaryButtonOperation : IButtonOperation
+	public class NullaryOperationToken : IToken
     {
         public string DisplayName { get; init; } = "T";
 
