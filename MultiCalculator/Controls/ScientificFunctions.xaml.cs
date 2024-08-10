@@ -33,8 +33,8 @@ namespace MultiCalculator.Controls
 			ButtonB5.ButtonOperation = new UnaryButtonOperation() { DisplayName = "ln", Calculate = Math.Log };
 			ButtonB5.SecondaryButtonOperation = new UnaryButtonOperation() { DisplayName = "e▫", Calculate = (x) => Math.Pow(10, x) };
 
-			ButtonC0.ButtonOperation = new BinaryButtonOperation() { DisplayName = "x▫", Calculate = Math.Pow };
-			ButtonC0.SecondaryButtonOperation = new BinaryButtonOperation() { DisplayName = "▫√", Calculate = (x, y) => Math.Pow(x, 1 / y) };
+			ButtonC0.ButtonOperation = new BinaryButtonOperation() { DisplayName = "x▫", Calculate = Math.Pow, IsUnary = false };
+			ButtonC0.SecondaryButtonOperation = new BinaryButtonOperation() { DisplayName = "▫√", Calculate = (x, y) => Math.Pow(x, 1 / y), IsUnary = false };
 			ButtonC1.ButtonOperation = new NullaryButtonOperation() { DisplayName = "e", Calculate = () => Math.E };
 			ButtonC1.SecondaryButtonOperation = new NullaryButtonOperation() { DisplayName = "γ", Calculate = () => 0.5772156649015329 };
 			ButtonC2.ButtonOperation = new NullaryButtonOperation() { DisplayName = "π", Calculate = () => Math.PI };
@@ -46,8 +46,8 @@ namespace MultiCalculator.Controls
 			ButtonC5.ButtonOperation = new UnaryButtonOperation() { DisplayName = "tan", Calculate = Math.Tan };
 			ButtonC5.SecondaryButtonOperation = new UnaryButtonOperation() { DisplayName = "atan", Calculate = Math.Tan };
 
-			ButtonD0.ButtonOperation = new BinaryButtonOperation() { DisplayName = "nPr", Calculate = MathHelpers.P };
-			ButtonD0.SecondaryButtonOperation = new BinaryButtonOperation() { DisplayName = "nCr", Calculate = MathHelpers.C };
+			ButtonD0.ButtonOperation = new BinaryButtonOperation() { DisplayName = "nPr", Calculate = MathHelpers.P, IsUnary = false };
+			ButtonD0.SecondaryButtonOperation = new BinaryButtonOperation() { DisplayName = "nCr", Calculate = MathHelpers.C, IsUnary = false };
 			ButtonD1.ButtonOperation = new UnaryButtonOperation() { DisplayName = "erf(x)", Calculate = MathHelpers.Erf };
 			ButtonD1.SecondaryButtonOperation = new NullaryButtonOperation() { DisplayName = "ϖ", Calculate = () => 2.6220575542921198 };
 			ButtonD2.ButtonOperation = new UnaryButtonOperation() { DisplayName = "W(x)", Calculate = MathHelpers.LambertW };

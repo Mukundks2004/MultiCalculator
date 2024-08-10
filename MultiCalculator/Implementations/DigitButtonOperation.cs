@@ -5,5 +5,10 @@ namespace MultiCalculator.Implementations
 	public class DigitButtonOperation : IButtonOperation
     {
         public string DisplayName { get; init; } = "1";
+
+        public override string ToString()
+        {
+            return DisplayName;
+        }
     }
 }

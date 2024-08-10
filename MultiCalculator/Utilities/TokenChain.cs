@@ -1,9 +1,10 @@
 ﻿using MultiCalculator.Abstractions;
 using MultiCalculator.Implementations;
+using System.Linq.Expressions;
 
 namespace MultiCalculator.Utilities
 {
-	public class TokenChain<T> where T : IButtonOperation
+	public class TokenChain
 	{
 		public int Cursor { get; private set; }
 
@@ -12,6 +13,12 @@ namespace MultiCalculator.Utilities
 		public TokenChain()
 		{
 			operations = [];
+		}
+
+		public TokenChain(IEnumerable<IButtonOperation> operations)
+		{
+			Cursor = operations.Count();
+			this.operations = operations.ToList();
 		}
 
 		public void Add(IButtonOperation button)
@@ -24,6 +31,11 @@ namespace MultiCalculator.Utilities
 		{
 			operations.RemoveAt(Cursor);
 			Cursor--;
+		}
+
+		public override string ToString()
+		{
+			return string.Join(string.Empty, operations.Select(t => t.DisplayName));
 		}
 
 		//IN THE FUTURE, HAVE A VALIDATOR U CAN USE FOR DERIVATIVES, ETC.
@@ -40,95 +52,52 @@ namespace MultiCalculator.Utilities
 		//If isValid, make sure to add brakcets, * smbols, etc. in a method afterwards
 		public bool IsValid()
 		{
-			//Check that all pairs of brackets match
-			int bracketCount = 0;
-			bool previousTokenIsBinaryOperation = false;
-			bool previousTokenIsOpenBracket = false;
+			return HasMatchingAndNonEmptyBraces() && NumbersExistAndAreWellFormed();
+		}
 
-			foreach (var button in operations)
+		bool HasMatchingAndNonEmptyBraces()
+		{
+			Stack<int> stack = new Stack<int>();
+
+			for (int i = 0; i < operations.Count; i++)
 			{
-				if (button is BinaryButtonOperation)
+				if (operations[i] is BracketButtonOperation openBracket && openBracket.BracketType == BracketType.Open || operations[i] is UnaryButtonOperation)
 				{
-					if (previousTokenIsBinaryOperation)
+					stack.Push(i);
+				}
+				else if (operations[i] is BracketButtonOperation closedBracket && closedBracket.BracketType == BracketType.Closed)
+				{
+					if (stack.Count == 0)
 					{
 						return false;
 					}
 
-					previousTokenIsBinaryOperation = true;
-				}
-
-				previousTokenIsBinaryOperation = false;
-				if (button is UnaryButtonOperation)
-				{
-					previousTokenIsOpenBracket = true;
-					bracketCount++;
-				}
-				
-				if (button is BracketButtonOperation bracketButtonOperation)
-				{
-					if (bracketButtonOperation.BracketType == BracketType.Open)
+					int openingIndex = stack.Pop();
+					if (i - openingIndex == 1)
 					{
-						previousTokenIsOpenBracket = true;
-						bracketCount++;
+						return false;
 					}
-					else
-					{
-						if (previousTokenIsOpenBracket)
-						{
-							return false;
-						}
-						bracketCount--;
-					}
-				}
-
-				if (bracketCount < 0)
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool HasMatchingBraces()
-		{
-			int bracketCount = 0;
-			foreach (var operation in operations)
-			{
-				if (operation is UnaryButtonOperation)
-				{
-					bracketCount++;
-				}
-
-				if (operation is BracketButtonOperation bracketButtonOperation)
-				{
-					if (bracketButtonOperation.BracketType == BracketType.Open)
-					{
-						bracketCount++;
-					}
-					else
-					{
-						bracketCount--;
-					}
-				}
-
-				if (bracketCount < 0)
-				{
-					return false;
 				}
 			}
 
-			return true;
+			return stack.Count >= 0;
 		}
 
-		public bool AllNumbersWellFormed()
+		bool NumbersExistAndAreWellFormed()
 		{
 			bool encounteredDecimalPointInNumber;
-			for (int i = 0; i < operations.Count; i++)
+			bool atLeastOneIntInNumber;
+			bool atLeastOneNumber = false;
+			int currentTokenIndex = 0;
+
+			while (currentTokenIndex < operations.Count)
 			{
-				if (operations[i] is DigitButtonOperation)
+				if (operations[currentTokenIndex] is DigitButtonOperation)
 				{
+					atLeastOneNumber = true;
 					encounteredDecimalPointInNumber = false;
-					while (operations[i] is DigitButtonOperation digit && i < operations.Count)
+					atLeastOneIntInNumber = false;
+					while (currentTokenIndex < operations.Count && operations[currentTokenIndex] is DigitButtonOperation digit)
 					{
 						if (digit.DisplayName.Equals("."))
 						{
@@ -139,10 +108,26 @@ namespace MultiCalculator.Utilities
 
 							encounteredDecimalPointInNumber = true;
 						}
+						else
+						{
+							atLeastOneIntInNumber = true;
+						}
 
-						i++;
+						currentTokenIndex++;
+					}
+
+					if (!atLeastOneIntInNumber)
+					{
+						return false;
 					}
 				}
+
+				currentTokenIndex++;
+			}
+
+			if (!atLeastOneNumber)
+			{
+				return false;
 			}
 
 			return true;

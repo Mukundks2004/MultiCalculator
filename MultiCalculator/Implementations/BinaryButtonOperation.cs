@@ -8,6 +8,8 @@ namespace MultiCalculator.Implementations
 
 		public Func<double, double, double> Calculate { get; init; } = (x, y) => x + y;
 
-        public int Priority { get; init; } = int.MaxValue;
+        public int Priority { get; init; } = int.MinValue;
+
+		public bool IsUnary { get; init; } = false;
 	}
 }
