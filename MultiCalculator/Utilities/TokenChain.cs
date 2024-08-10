@@ -42,7 +42,13 @@ namespace MultiCalculator.Utilities
 
 		public bool IsValid()
 		{
-			return HasMatchingAndNonEmptyBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace();
+			var a = HasMatchingAndNonEmptyBraces();
+			var b = NumbersExistAndAreWellFormed();
+			var c = NoConsecutiveBinaryOperations();
+			var d = NoDigitsFollowClosingBrace();
+			var e = ExpressionDoesNotEndInOperation();
+
+			return HasMatchingAndNonEmptyBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
 		}
 
 		public double Parse()
@@ -50,15 +56,12 @@ namespace MultiCalculator.Utilities
 			return ParseFromIndexToIndex(0, operations.Count).Calculate();
 		}
 
-		//Currently cannot handle 2 x ----4
+		//Still cannot handle 2 x ----4
+		//Also not sure if (2 x 2, missing brackets, parses correctly
 		NullaryButtonOperation ParseFromIndexToIndex(int startIndex, int indexEndExclusive)
 		{
 			var currentIndex = startIndex;
-			//digits and constants are both nullaries
 			var numStack = new Stack<NullaryButtonOperation>();
-
-			//brackets and unaries trigger a recursive call
-			//operations are binary
 			var opStack = new Stack<BinaryButtonOperation>();
 
 			while (currentIndex < indexEndExclusive)
@@ -240,6 +243,12 @@ namespace MultiCalculator.Utilities
 			}
 
 			return bracketStack.Count >= 0;
+		}
+
+		bool ExpressionDoesNotEndInOperation()
+		{
+			var finalToken = operations.Last();
+			return !(finalToken is BracketButtonOperation bracket && bracket.BracketType == BracketType.Open || finalToken is UnaryButtonOperation || finalToken is BinaryButtonOperation);
 		}
 
 		bool NumbersExistAndAreWellFormed()

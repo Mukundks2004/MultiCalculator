@@ -128,6 +128,12 @@ namespace MultiCalculatorTests
 
 				yield return new TestCaseData(new TokenChain([c, two, plus, two, J, c, three, times, three]), true).SetDescription("(2 + 2)(3 x 3");
 				yield return new TestCaseData(new TokenChain([two, times, dividedby, three]), false).SetDescription("2 x / 3");
+				yield return new TestCaseData(new TokenChain([two, c]), false).SetDescription("2(");
+				yield return new TestCaseData(new TokenChain([two, times]), false).SetDescription("2 x");
+				yield return new TestCaseData(new TokenChain([two, plus]), false).SetDescription("2 +");
+				yield return new TestCaseData(new TokenChain([two, sin]), false).SetDescription("2 sin");
+				yield return new TestCaseData(new TokenChain([two, times, sin]), false).SetDescription("2 x sin");
+				yield return new TestCaseData(new TokenChain([two, plus, point]), false).SetDescription("2 + .");
 			}
 		}
 
@@ -143,6 +149,8 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([one, times, three, plus, two]), 5).SetDescription("1 x 3 + 2 = 5");
 				yield return new TestCaseData(new TokenChain([one, times, three, times, two]), 6).SetDescription("1 x 3 x 2 = 6");
 				yield return new TestCaseData(new TokenChain([one, plus, three, plus, two]), 6).SetDescription("1 + 3 + 2 = 6");
+				yield return new TestCaseData(new TokenChain([c, one, plus, one, J, times, c, one, plus, one, J]), 4).SetDescription("(1 + 1) x (1 + 1) = 4");
+				yield return new TestCaseData(new TokenChain([c, one, plus, one, J, times, c, one, plus, one]), 4).SetDescription("(1 + 1) x (1 + 1 = 4");
 			}
 		}
 	}
