@@ -8,23 +8,23 @@ namespace MultiCalculatorTests
 	[TestFixture]
 	public class TokenChainTests
 	{
-		static readonly DigitButtonOperation one = new DigitButtonOperation() { DisplayName = "1" };
-		static readonly DigitButtonOperation two = new DigitButtonOperation() { DisplayName = "2" };
-		static readonly DigitButtonOperation three = new DigitButtonOperation() { DisplayName = "3" };
-		static readonly DigitButtonOperation four = new DigitButtonOperation() { DisplayName = "4" };
-		static readonly DigitButtonOperation five = new DigitButtonOperation() { DisplayName = "5" };
-		static readonly DigitButtonOperation point = new DigitButtonOperation() { DisplayName = "." };
+		static readonly DigitButtonOperation one = new() { DisplayName = "1" };
+		static readonly DigitButtonOperation two = new() { DisplayName = "2" };
+		static readonly DigitButtonOperation three = new() { DisplayName = "3" };
+		static readonly DigitButtonOperation four = new() { DisplayName = "4" };
+		static readonly DigitButtonOperation five = new() { DisplayName = "5" };
+		static readonly DigitButtonOperation point = new() { DisplayName = "." };
 
-		static readonly BinaryButtonOperation plus = new BinaryButtonOperation() { DisplayName = "+", Calculate = (a, b) => a + b, IsUnary = true };
-		static readonly BinaryButtonOperation minus = new BinaryButtonOperation() { DisplayName = "-", Calculate = (a, b) => a - b, IsUnary = true };
-		static readonly BinaryButtonOperation times = new BinaryButtonOperation() { DisplayName = "*", Calculate = (a, b) => a * b, IsUnary = false };
+		static readonly BinaryButtonOperation plus = new() { DisplayName = "+", Calculate = (a, b) => a + b, IsUnary = true };
+		static readonly BinaryButtonOperation minus = new() { DisplayName = "-", Calculate = (a, b) => a - b, IsUnary = true };
+		static readonly BinaryButtonOperation times = new() { DisplayName = "*", Calculate = (a, b) => a * b, IsUnary = false };
 
-		static readonly BracketButtonOperation c = new BracketButtonOperation() { DisplayName = "(", BracketType = BracketType.Open };
-		static readonly BracketButtonOperation J = new BracketButtonOperation() { DisplayName = ")", BracketType = BracketType.Closed };
+		static readonly BracketButtonOperation c = new() { DisplayName = "(", BracketType = BracketType.Open };
+		static readonly BracketButtonOperation J = new() { DisplayName = ")", BracketType = BracketType.Closed };
 
-		static readonly UnaryButtonOperation sin = new UnaryButtonOperation() { DisplayName = "sin" };
+		static readonly UnaryButtonOperation sin = new() { DisplayName = "sin" };
 
-		static readonly NullaryButtonOperation pi = new NullaryButtonOperation() { DisplayName = "pi" };
+		static readonly NullaryButtonOperation pi = new() { DisplayName = "pi" };
 
 
 		[Test, TestCaseSource(typeof(TokenChainTests), nameof(ValidAndInvalidExpressionTestCases))]
