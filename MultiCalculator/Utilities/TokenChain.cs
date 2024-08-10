@@ -1,5 +1,6 @@
 ﻿using MultiCalculator.Abstractions;
 using MultiCalculator.Implementations;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq.Expressions;
 
 namespace MultiCalculator.Utilities
@@ -29,8 +30,11 @@ namespace MultiCalculator.Utilities
 
 		public void Remove()
 		{
-			operations.RemoveAt(Cursor);
-			Cursor--;
+			if (!(Cursor == 0))
+			{
+				operations.RemoveAt(Cursor - 1);
+				Cursor--;
+			}
 		}
 
 		public override string ToString()
@@ -52,27 +56,91 @@ namespace MultiCalculator.Utilities
 		//If isValid, make sure to add brakcets, * smbols, etc. in a method afterwards
 		public bool IsValid()
 		{
-			return HasMatchingAndNonEmptyBraces() && NumbersExistAndAreWellFormed();
+			var a = HasMatchingAndNonEmptyBraces();
+			var b = NumbersExistAndAreWellFormed();
+			var c = NoConsecutiveBinaryOperations();
+			var d = NoDigitsFollowClosingBrace();
+
+			return HasMatchingAndNonEmptyBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace();
+		}
+
+		bool NoDigitsFollowClosingBrace()
+		{
+			bool currentTokenIsClosingBrace = false;
+			foreach (var operation in operations)
+			{
+				if (operation is BracketButtonOperation bracketButtonOperation && bracketButtonOperation.BracketType == BracketType.Closed || operation is NullaryButtonOperation)
+				{
+					currentTokenIsClosingBrace = true;
+				}
+				else
+				{
+					if (operation is DigitButtonOperation nextDigit)
+					{
+						if (currentTokenIsClosingBrace)
+						{
+							return false;
+						}
+					}
+					currentTokenIsClosingBrace = false;
+				}
+			}
+
+			return true;
+		}
+
+		bool NoConsecutiveBinaryOperations()
+		{
+			bool currentOperationIsBinaryAndFirstBinaryOperationInSequence = false;
+			
+			if (operations[0] is BinaryButtonOperation firstOperation && !firstOperation.IsUnary)
+			{
+				return false;
+			}
+
+			foreach (var operation in operations)
+			{
+				if (operation is BinaryButtonOperation binaryOperation)
+				{
+					if (!currentOperationIsBinaryAndFirstBinaryOperationInSequence)
+					{
+						currentOperationIsBinaryAndFirstBinaryOperationInSequence = true;
+					}
+					else
+					{
+						if (!binaryOperation.IsUnary)
+						{
+							return false;
+						}
+					}
+				}
+				else
+				{
+					currentOperationIsBinaryAndFirstBinaryOperationInSequence = false;
+				}
+			}
+
+			return true;
 		}
 
 		bool HasMatchingAndNonEmptyBraces()
 		{
-			Stack<int> stack = new Stack<int>();
+			var bracketStack = new Stack<int>();
 
 			for (int i = 0; i < operations.Count; i++)
 			{
 				if (operations[i] is BracketButtonOperation openBracket && openBracket.BracketType == BracketType.Open || operations[i] is UnaryButtonOperation)
 				{
-					stack.Push(i);
+					bracketStack.Push(i);
 				}
 				else if (operations[i] is BracketButtonOperation closedBracket && closedBracket.BracketType == BracketType.Closed)
 				{
-					if (stack.Count == 0)
+					if (bracketStack.Count == 0)
 					{
 						return false;
 					}
 
-					int openingIndex = stack.Pop();
+					int openingIndex = bracketStack.Pop();
 					if (i - openingIndex == 1)
 					{
 						return false;
@@ -80,7 +148,7 @@ namespace MultiCalculator.Utilities
 				}
 			}
 
-			return stack.Count >= 0;
+			return bracketStack.Count >= 0;
 		}
 
 		bool NumbersExistAndAreWellFormed()
@@ -92,7 +160,11 @@ namespace MultiCalculator.Utilities
 
 			while (currentTokenIndex < operations.Count)
 			{
-				if (operations[currentTokenIndex] is DigitButtonOperation)
+				if (operations[currentTokenIndex] is NullaryButtonOperation)
+				{
+					atLeastOneNumber = true;
+				}
+				else if (operations[currentTokenIndex] is DigitButtonOperation)
 				{
 					atLeastOneNumber = true;
 					encounteredDecimalPointInNumber = false;
