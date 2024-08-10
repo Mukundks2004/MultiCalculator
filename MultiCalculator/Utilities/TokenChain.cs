@@ -50,6 +50,7 @@ namespace MultiCalculator.Utilities
 			return ParseFromIndexToIndex(0, operations.Count).Calculate();
 		}
 
+		//Currently cannot handle 2 x ----4
 		NullaryButtonOperation ParseFromIndexToIndex(int startIndex, int indexEndExclusive)
 		{
 			var currentIndex = startIndex;
@@ -106,23 +107,28 @@ namespace MultiCalculator.Utilities
                     {
 						var mostRecentOperation = opStack.Peek();
 
-						if (mostRecentOperation.Priority > binaryOperation.Priority)
+						//Having two operators with the same precedence but different associativity would create ambiguity in expressions (impossible)
+						//An expression like a op1 b op2 c would have conflicting evaluation orders
+						if (mostRecentOperation.Priority == binaryOperation.Priority && mostRecentOperation.Associativity == Associativity.Left || mostRecentOperation.Priority > binaryOperation.Priority)
 						{
 							var firstOperand = numStack.Pop();
 							var secondOperand = numStack.Pop();
 							var result = mostRecentOperation.Calculate(firstOperand.Calculate(), secondOperand.Calculate());
+							numStack.Push(new NullaryButtonOperation() { Calculate = () => result });
+							opStack.Push(binaryOperation);
 						}
                     }
 				}
 
-				while (opStack.Count > 0)
-				{
-					var secondOperand = numStack.Pop();
-					var firstOperand = numStack.Pop();
-					numStack.Push(new NullaryButtonOperation() { Calculate = () => opStack.Pop().Calculate(firstOperand.Calculate(), secondOperand.Calculate())} );
-				}
-
 				currentIndex++;
+			}
+
+			while (opStack.Count > 0)
+			{
+				var secondOperand = numStack.Pop();
+				var firstOperand = numStack.Pop();
+				var result = opStack.Pop().Calculate(firstOperand.Calculate(), secondOperand.Calculate());
+				numStack.Push(new NullaryButtonOperation() { Calculate = () => result });
 			}
 
 			return numStack.Pop();
