@@ -44,7 +44,7 @@ namespace MultiCalculator
 
 		public static readonly DependencyProperty CalculatorExpressionProperty = DependencyProperty.Register("CalculatorExpression", typeof(TokenChain), typeof(ScientificCalculatorWindow), new PropertyMetadata(null, ExpressionValueChanged));
 
-		public static readonly DependencyProperty CalculatorAnswerProperty = DependencyProperty.Register("CalculatorAnswer", typeof(double), typeof(ScientificCalculatorWindow), new PropertyMetadata((double)0, AnswerValueChanged));
+		public static readonly DependencyProperty CalculatorAnswerProperty = DependencyProperty.Register("CalculatorAnswer", typeof(string), typeof(ScientificCalculatorWindow), new PropertyMetadata(string.Empty, AnswerValueChanged));
 
 		public TokenChain CalculatorExpression
 		{
@@ -52,9 +52,9 @@ namespace MultiCalculator
 			set => SetValue(CalculatorExpressionProperty, value);
 		}
 
-		public double CalculatorAnswer
+		public string CalculatorAnswer
 		{
-			get => (double)GetValue(CalculatorAnswerProperty);
+			get => (string)GetValue(CalculatorAnswerProperty);
 			set => SetValue(CalculatorAnswerProperty, value);
 		}
 
@@ -97,8 +97,17 @@ namespace MultiCalculator
 
 		public void EvaluateExpression_Click()
 		{
-			var result = CalculatorExpression.Parse();
-			CalculatorAnswer = result;
+			var isValid = CalculatorExpression.IsValid();
+			if (!isValid)
+			{
+				CalculatorAnswer = "exp ill formed";
+			}
+			else
+			{
+				var result = CalculatorExpression.Parse();
+				CalculatorAnswer = result.ToString();
+			}
+
 			CalculatorExpression.MakeEmpty();
 		}
 
