@@ -14,21 +14,21 @@ namespace MultiCalculator.Controls
 		{
 			InitializeComponent();
 
-			ButtonOperation = new UnaryOperationToken();
+			Token = new UnaryOperationToken();
 			SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "Sec" };
 			DataContext = this;
 		}
 
 		public void Toggle()
 		{
-			(ButtonOperation, SecondaryButtonOperation) = (SecondaryButtonOperation, ButtonOperation);
+			(Token, SecondaryButtonOperation) = (SecondaryButtonOperation, Token);
 		}
 
 		public static readonly DependencyProperty ButtonOperationProperty = DependencyProperty.Register("ButtonOperation", typeof(IToken), typeof(ShiftableButton), new PropertyMetadata(new UnaryOperationToken(), ValueChanged));
 		
 		public static readonly DependencyProperty SecondaryButtonOperationProperty = DependencyProperty.Register("SecondaryButtonOperation", typeof(IToken), typeof(ShiftableButton), new PropertyMetadata(new UnaryOperationToken(), ValueChangedSecondary));
 
-		public IToken ButtonOperation
+		public IToken Token
 		{
 			get => (IToken)GetValue(ButtonOperationProperty);
 			set => SetValue(ButtonOperationProperty, value);

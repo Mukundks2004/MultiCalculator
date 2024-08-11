@@ -19,8 +19,8 @@ namespace MultiCalculatorTests
 		static readonly BinaryOperationToken times = new() { DisplayName = "*", Priority = 1, CalculateBinary = (a, b) => a * b };
 		static readonly BinaryOperationToken dividedby = new() { DisplayName = "/",  Priority = 1, CalculateBinary = (a, b) => a / b };
 
-		static readonly BracketToken c = new() { DisplayName = "[", BracketType = BracketType.Open };
-		static readonly BracketToken J = new() { DisplayName = "]", BracketType = BracketType.Closed };
+		static readonly BracketToken c = BracketToken.OpenBracket;
+		static readonly BracketToken J = BracketToken.ClosedBracket;
 
 		static readonly UnaryOperationToken sin = new() { DisplayName = "sin", CalculateUnary = Math.Sin };
 

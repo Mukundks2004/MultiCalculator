@@ -17,8 +17,8 @@ namespace MultiCalculator
 
 		public void ButtonToggle_Click(object sender, RoutedEventArgs e)
 		{
-			var scientificBox = (ScientificFunctions)FindName("gridA");
-			scientificBox.ToggleAllButtons();
+			/*var scientificBox = (ScientificFunctions)FindName("gridA");
+			scientificBox.ToggleAllButtons();*/
 		}
 	}
 }

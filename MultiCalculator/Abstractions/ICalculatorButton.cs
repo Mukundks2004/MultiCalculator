@@ -2,6 +2,6 @@
 {
 	public interface ICalculatorButton
     {
-        IToken ButtonOperation { get; set; }
+        IToken Token { get; set; }
     }
 }

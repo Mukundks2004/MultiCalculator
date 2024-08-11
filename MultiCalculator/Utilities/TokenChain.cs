@@ -1,4 +1,5 @@
 ﻿using MultiCalculator.Abstractions;
+using MultiCalculator.Delegates;
 using MultiCalculator.Enums;
 using MultiCalculator.Implementations;
 
@@ -6,9 +7,11 @@ namespace MultiCalculator.Utilities
 {
 	public class TokenChain
 	{
-		public int Cursor { get; private set; }
+		public event SimpleEventHandler? OperationsUpdated;
 
 		List<IToken> operations;
+
+		public int Cursor { get; private set; }
 
 		public TokenChain()
 		{
@@ -25,15 +28,24 @@ namespace MultiCalculator.Utilities
 		{
 			operations.Insert(Cursor, button);
 			Cursor++;
+			OperationsUpdated?.Invoke();
 		}
 
-		public void Remove()
+		public void RemoveLastBeforeCursor()
 		{
 			if (!(Cursor == 0))
 			{
 				operations.RemoveAt(Cursor - 1);
 				Cursor--;
+				OperationsUpdated?.Invoke();
 			}
+		}
+
+		public void MakeEmpty()
+		{
+			operations = [];
+			Cursor = 0;
+			OperationsUpdated?.Invoke();
 		}
 
 		public override string ToString()

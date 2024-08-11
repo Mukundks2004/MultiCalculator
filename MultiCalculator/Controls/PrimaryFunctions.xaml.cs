@@ -1,4 +1,5 @@
-﻿using MultiCalculator.Implementations;
+﻿using MultiCalculator.Delegates;
+using MultiCalculator.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,53 +22,78 @@ namespace MultiCalculator.Controls
 	/// </summary>
 	public partial class PrimaryFunctions : UserControl
 	{
+		public event EventHandler? WriteTokenToScreen;
+
+		public event SimpleEventHandler? EvaluateExpression;
+
+		public event SimpleEventHandler? ToggleShiftables;
+
+		public event SimpleEventHandler? BackspaceToken;
+
+		public event SimpleEventHandler? ClearEntireExpression;
+
+		public event SimpleEventHandler? GetLastAnswer;
+
 		public PrimaryFunctions()
 		{
 			InitializeComponent();
 
-			ButtonX0.ButtonOperation = new DigitToken() { DisplayName = "7" };
-			ButtonX1.ButtonOperation = new DigitToken() { DisplayName = "8" };
-			ButtonX2.ButtonOperation = new DigitToken() { DisplayName = "9" };
+			ButtonX0.Token = new DigitToken() { DisplayName = "7" };
+			ButtonX1.Token = new DigitToken() { DisplayName = "8" };
+			ButtonX2.Token = new DigitToken() { DisplayName = "9" };
 
-			ButtonY0.ButtonOperation = new DigitToken() { DisplayName = "4" };
-			ButtonY1.ButtonOperation = new DigitToken() { DisplayName = "5" };
-			ButtonY2.ButtonOperation = new DigitToken() { DisplayName = "6" };
-			ButtonY3.ButtonOperation = new BinaryOperationToken() { DisplayName = "×", CalculateBinary = (x, y) => x * y };
-			ButtonY4.ButtonOperation = new BinaryOperationToken() { DisplayName = "÷", CalculateBinary = (x, y) => x / y };
+			ButtonY0.Token = new DigitToken() { DisplayName = "4" };
+			ButtonY1.Token = new DigitToken() { DisplayName = "5" };
+			ButtonY2.Token = new DigitToken() { DisplayName = "6" };
 
+			ButtonY3.Token = new BinaryOperationToken() { DisplayName = "×", CalculateBinary = (x, y) => x * y };
+			ButtonY4.Token = new BinaryOperationToken() { DisplayName = "÷", CalculateBinary = (x, y) => x / y };
 
-			ButtonZ0.ButtonOperation = new DigitToken() { DisplayName = "1" };
-			ButtonZ1.ButtonOperation = new DigitToken() { DisplayName = "2" };
-			ButtonZ2.ButtonOperation = new DigitToken() { DisplayName = "3" };
-			ButtonZ3.ButtonOperation = new DualArityOperationToken() { DisplayName = "+", CalculateBinary = (x, y) => x + y, CalculateUnary = (x) => x };
-			ButtonZ4.ButtonOperation = new DualArityOperationToken() { DisplayName = "-", CalculateBinary = (x, y) => x - y, CalculateUnary = (x) => -x };
+			ButtonZ0.Token = new DigitToken() { DisplayName = "1" };
+			ButtonZ1.Token = new DigitToken() { DisplayName = "2" };
+			ButtonZ2.Token = new DigitToken() { DisplayName = "3" };
+			ButtonZ3.Token = new DualArityOperationToken() { DisplayName = "+", CalculateBinary = (x, y) => x + y, CalculateUnary = (x) => x };
+			ButtonZ4.Token = new DualArityOperationToken() { DisplayName = "-", CalculateBinary = (x, y) => x - y, CalculateUnary = (x) => -x };
 
-			ButtonW0.ButtonOperation = new DigitToken() { DisplayName = "0" };
-			ButtonW1.ButtonOperation = new DigitToken() { DisplayName = "." };
+			ButtonW0.Token = new DigitToken() { DisplayName = "0" };
+			ButtonW1.Token = new DigitToken() { DisplayName = "." };
+
+			Equals.Rename("=");
+			Answer.Rename("Ans");
+			Shift.Rename("Shift");
+			Backspace.Rename("C");
+			AllClear.Rename("AC");
 		}
 
+		//Revise for the next 6 functions that sender is the right object
 		public void PrimaryButton_Click(object sender, RoutedEventArgs e)
 		{
-		}
-
-		public void GetAnswer_Click(object sender, RoutedEventArgs e)
-		{
-		}
-
-		public void EvaluateExpression_Click(object sender, RoutedEventArgs e)
-		{
+			WriteTokenToScreen?.Invoke(sender, EventArgs.Empty);
 		}
 
 		public void ToggleShift_Click(object sender, RoutedEventArgs e)
 		{
+			ToggleShiftables?.Invoke();
 		}
 
 		public void Delete_Click(object sender, RoutedEventArgs e)
 		{
+			BackspaceToken?.Invoke();
 		}
 
 		public void ClearAll_Click(object sender, RoutedEventArgs e)
 		{
+			ClearEntireExpression?.Invoke();
+		}
+
+		public void EvaluateExpression_Click(object sender, RoutedEventArgs e)
+		{
+			EvaluateExpression?.Invoke();
+		}
+
+		public void GetLastAnswer_Click(object sender, RoutedEventArgs e)
+		{
+			GetLastAnswer?.Invoke();
 		}
 	}
 }
