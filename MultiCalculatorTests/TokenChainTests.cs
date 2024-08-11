@@ -143,6 +143,7 @@ namespace MultiCalculatorTests
 			get
 			{
 				yield return new TestCaseData(new TokenChain([one, plus, one]), 2).SetDescription("1 + 1 = 2");
+				yield return new TestCaseData(new TokenChain([two, plus, three, times, three, times, three]), 29).SetDescription("2 + 3 x 3 x 3 = 29");
 				yield return new TestCaseData(new TokenChain([one, times, c, two, plus, three, J, times, four]), 20).SetDescription("1 x (2 + 3) x 4 = 20");
 				yield return new TestCaseData(new TokenChain([one, plus, two, times, three, plus, four]), 11).SetDescription("1 + 2 x 3 + 4 = 11");
 				yield return new TestCaseData(new TokenChain([one, plus, one, plus, one]), 3).SetDescription("1 + 1 + 1 = 3");
