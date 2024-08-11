@@ -1,7 +1,7 @@
 # MultiCalculator
 
 ## WHAT EVERYONE IS WORKING ON
-- Mukund: Clicking buttons shows up on screen
+- Mukund: Clicking buttons puts numbers on screen in raw text
 
 ## TODO
 1. Replace concrete is statements and casts with interfaces, eg, IUnaryOperator
