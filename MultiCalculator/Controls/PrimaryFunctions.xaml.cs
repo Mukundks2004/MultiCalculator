@@ -83,7 +83,7 @@ namespace MultiCalculator.Controls
 
 		public void Delete_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender is RoundedButton button && button.Name == "C")
+			if (sender is RoundedButton button && button.Name == "Backspace")
 			{
 				BackspaceToken?.Invoke();
 			}
@@ -91,7 +91,7 @@ namespace MultiCalculator.Controls
 
 		public void ClearAll_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender is RoundedButton button && button.Name == "AC")
+			if (sender is RoundedButton button && button.Name == "AllClear")
 			{
 				ClearEntireExpression?.Invoke();
 			}
@@ -99,7 +99,7 @@ namespace MultiCalculator.Controls
 
 		public void EvaluateExpression_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender is RoundedButton button && button.Name == "=")
+			if (sender is RoundedButton button && button.Name == "Equals")
 			{
 				EvaluateExpression?.Invoke();
 			}
@@ -107,7 +107,7 @@ namespace MultiCalculator.Controls
 
 		public void GetLastAnswer_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender is RoundedButton button && button.Name == "Ans")
+			if (sender is RoundedButton button && button.Name == "Answer")
 			{
 				GetLastAnswer?.Invoke();
 			}
