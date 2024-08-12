@@ -2,6 +2,7 @@
 
 ## WHAT EVERYONE IS WORKING ON
 - Mukund: Clicking buttons puts numbers on screen in raw text
+- Dennis: Setup OPENAI, has $10 credit, we still need testing. AI/Database basically has been setup.
 
 ## TODO
 1. Replace concrete is statements and casts with interfaces, eg, IUnaryOperator
