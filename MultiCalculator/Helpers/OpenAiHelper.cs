@@ -22,20 +22,21 @@ namespace MultiCalculator.Helpers
 
         async void OpenAi(string prompt)
         {
-            var openAiApiKey = "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"; // May have to replace currently using the gmail one I sent.
+            var openAiApiKey = "sk-TAotAypTGxc_Vaa9tntvWdxoc7AvP0ODDsaP1eZUbNT3BlbkFJf6J_VPy-GlqxYp0ARcECC9O0tmrzS-5OLpcSMZ7uMA"; // I put $10 into this so we can use it.
 
             APIAuthentication aPIAuthentication = new APIAuthentication(openAiApiKey);
             OpenAIAPI openAiApi = new OpenAIAPI(aPIAuthentication);
 
-
             try
             {
-                string model = "gpt-3.5-turbo-0613"; // We gonna have to use gpt-4o-mini seems to be the cheapest at around $0.015 for 1000 output tokens & $0.005 for 1000 input tokens. 
+                string model = "gpt-4o-mini"; // We gonna have to use gpt-4o-mini seems to be the cheapest at around $0.015 for 1000 output tokens & $0.005 for 1000 input tokens. 
+                int maxTokens = 50; // So do not spam use this for no reason now -- Still needs testing, but the API Link and Model should be fine? (Model not 100% sure but the API does work and has $10 on that account.
 
                 var completionRequest = new CompletionRequest
                 {
                     Prompt = prompt,
                     Model = model,
+                    MaxTokens = maxTokens,
                 };
 
                 var completionResult = await openAiApi.Completions.CreateCompletionAsync(completionRequest);
