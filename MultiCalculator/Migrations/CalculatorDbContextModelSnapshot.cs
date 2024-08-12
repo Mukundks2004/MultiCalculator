@@ -44,6 +44,30 @@ namespace MultiCalculator.Migrations
                     b.ToTable("CalculationHistory");
                 });
 
+            modelBuilder.Entity("MultiCalculator.Database.Models.OpenAiQuestionsModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("QuestionSenderId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionSenderId");
+
+                    b.ToTable("OpenAiQuestions");
+                });
+
             modelBuilder.Entity("MultiCalculator.Database.Models.UserModel", b =>
                 {
                     b.Property<int>("Id")
@@ -78,12 +102,30 @@ namespace MultiCalculator.Migrations
             modelBuilder.Entity("MultiCalculator.Database.Models.CalculationHistoryModel", b =>
                 {
                     b.HasOne("MultiCalculator.Database.Models.UserModel", "QuestionSender")
-                        .WithMany()
+                        .WithMany("calculationHistory")
                         .HasForeignKey("QuestionSenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("QuestionSender");
+                });
+
+            modelBuilder.Entity("MultiCalculator.Database.Models.OpenAiQuestionsModel", b =>
+                {
+                    b.HasOne("MultiCalculator.Database.Models.UserModel", "QuestionSender")
+                        .WithMany("openAiQuestions")
+                        .HasForeignKey("QuestionSenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("QuestionSender");
+                });
+
+            modelBuilder.Entity("MultiCalculator.Database.Models.UserModel", b =>
+                {
+                    b.Navigation("calculationHistory");
+
+                    b.Navigation("openAiQuestions");
                 });
 #pragma warning restore 612, 618
         }

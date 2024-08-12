@@ -11,9 +11,13 @@ namespace MultiCalculator.Database.Services
     {
         UserModel LoadUserById(int id);
         CalculationHistoryModel LoadCalculationHistoryById(Guid id);
+        OpenAiQuestionsModel LoadOpenAiQuestionsById(Guid id);
         List<CalculationHistoryModel> LoadAllCalculationHistory();
         List<CalculationHistoryModel> LoadAllCalculationHistoryBasedOffUser(UserModel user);
+        List<OpenAiQuestionsModel> LoadAllOpenAiQuestions();
+        List<OpenAiQuestionsModel> LoadAllOpenAiQuestionsBasedOffUser(UserModel user);
         void AddUser(UserModel user);
         void AddCalculationHistory(CalculationHistoryModel calculationHistory);
+        void AddOpenAiQuestion(OpenAiQuestionsModel openAiQuestion);
     }
 }
