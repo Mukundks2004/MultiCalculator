@@ -9,9 +9,9 @@ namespace MultiCalculator.Database
     {
         public virtual DbSet<UserModel> User { get; set; }
         public virtual DbSet<CalculationHistoryModel> CalculationHistory { get; set; }
+        public virtual DbSet<OpenAiQuestionsModel> OpenAiQuestions { get; set; }
         public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => { });
         public static string FilePath = "";
-
         public CalculatorDbContext(DbContextOptions<CalculatorDbContext> options) : base(options)
         {
             var folder = Environment.SpecialFolder.LocalApplicationData;

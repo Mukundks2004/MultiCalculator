@@ -13,12 +13,14 @@ namespace MultiCalculator.Database.Services
         readonly CalculatorDbContext _dbContext;
         readonly UserRepository _userRepository;
         readonly CalculationHistoryRepository _calculationHistoryRepository;
+        readonly OpenAiQuestionsRepository _openAiQuestionsRepository;
 
-        public DatabaseService(CalculatorDbContext dbContext, UserRepository userRepository, CalculationHistoryRepository calculationHistoryRepository)
+        public DatabaseService(CalculatorDbContext dbContext, UserRepository userRepository, CalculationHistoryRepository calculationHistoryRepository, OpenAiQuestionsRepository openAiQuestionsRepository)
         {
             _dbContext = dbContext;
             _userRepository = userRepository;
             _calculationHistoryRepository = calculationHistoryRepository;
+            _openAiQuestionsRepository = openAiQuestionsRepository;
         }
 
         public UserModel LoadUserById(int id)
@@ -31,6 +33,11 @@ namespace MultiCalculator.Database.Services
             return _calculationHistoryRepository.GetCalculationById(id);
         }
 
+        public OpenAiQuestionsModel LoadOpenAiQuestionsById(Guid id)
+        {
+            return _openAiQuestionsRepository.GetOpenAiQuestionHistoryById(id);
+        }
+
         public List<CalculationHistoryModel> LoadAllCalculationHistory()
         {
             return _calculationHistoryRepository.GetAllCalculationHistory().ToList();
@@ -39,6 +46,16 @@ namespace MultiCalculator.Database.Services
         public List<CalculationHistoryModel> LoadAllCalculationHistoryBasedOffUser(UserModel user)
         {
             return _calculationHistoryRepository.GetAllCalculationHistoryBasedOffUser(user).ToList();
+        }
+
+        public List<OpenAiQuestionsModel> LoadAllOpenAiQuestions()
+        {
+            return _openAiQuestionsRepository.GetAllOpenAiQuestionHistory().ToList();
+        }
+
+        public List<OpenAiQuestionsModel> LoadAllOpenAiQuestionsBasedOffUser(UserModel user)
+        {
+            return _openAiQuestionsRepository.GetAllOpenAiQuestionHistoryBasedOffUser(user).ToList();
         }
 
         public void AddUser(UserModel user)
@@ -51,5 +68,9 @@ namespace MultiCalculator.Database.Services
             _calculationHistoryRepository.Add(calculationHistory);
         }
 
+        public void AddOpenAiQuestion(OpenAiQuestionsModel openAiQuestion)
+        {
+            _openAiQuestionsRepository.Add(openAiQuestion);
+        }
     }
 }
