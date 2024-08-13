@@ -18,9 +18,9 @@ namespace MultiCalculator
 	/// <summary>
 	/// Interaction logic for PracticeProblems.xaml
 	/// </summary>
-	public partial class PracticeProblems : Page
+	public partial class PracticeProblemsWindow : Window
 	{
-		public PracticeProblems()
+		public PracticeProblemsWindow()
 		{
 			InitializeComponent();
 		}

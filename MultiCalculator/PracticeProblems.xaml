@@ -1,4 +1,4 @@
-﻿<Window x:Class="MultiCalculator.PracticeProblems"
+﻿<Window x:Class="MultiCalculator.PracticeProblemsWindow"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,22 +8,20 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PracticeProblems">
     <Grid>
-        <!-- Define the grid rows -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Title TextBlock -->
-        <TextBlock Text="Random Question Generator"
+        <TextBlock x:Name="Title"
+                   Text="Random Question Generator"
                    FontSize="24"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
                    Margin="10"
                    Grid.Row="0"/>
 
-        <!-- Question TextBlock -->
         <TextBlock x:Name="QuestionTextBlock"
                    Text="Here will be the generated question"
                    FontSize="18"
@@ -31,16 +29,12 @@
                    HorizontalAlignment="Center"
                    Grid.Row="1"/>
 
-        <!-- Button, Label, and TextBox in the third row -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="480"/>
-                <!-- Button column -->
                 <ColumnDefinition Width="*"/>
-                <!-- Label and TextBox column -->
             </Grid.ColumnDefinitions>
 
-            <!-- Button centered horizontally in the grid -->
             <Button Content="Click for Question"
                     Grid.Column="0"
                     Margin="5"
@@ -49,17 +43,14 @@
                     VerticalAlignment="Center"
                     Grid.ColumnSpan="2"/>
 
-            <!-- Label and TextBox to the right of the button -->
             <StackPanel Orientation="Horizontal"
                         Grid.Column="1"
                         VerticalAlignment="Center"
                         Margin="5">
-                <!-- Label -->
                 <TextBlock Text="Send to email:"
                            VerticalAlignment="Center"
                            Margin="5"/>
 
-                <!-- TextBox for email input -->
                 <TextBox x:Name="EmailTextBox"
                          Width="200"
                          Margin="5"/>
