@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ceTe.DynamicPDF;
 
 namespace MultiCalculator.Database.Models
 {
@@ -13,8 +14,12 @@ namespace MultiCalculator.Database.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public int AmountOfGeneratedPdfs { get; set; }
+        public ICollection<string> GeneratedPdfLocations { get; set; } = new List<string>();
+
         [InverseProperty("QuestionSender")]
         public ICollection<CalculationHistoryModel> calculationHistory { get; set; } = new List<CalculationHistoryModel>();
+        
         [InverseProperty("QuestionSender")]
         public ICollection<OpenAiQuestionsModel> openAiQuestions { get; set; } = new List<OpenAiQuestionsModel>();
     }
