@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,18 +28,37 @@ namespace MultiCalculator.Controls
 
 		private void ThemeChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-            ChangeTheme("DarkTheme.xaml");
+            var selectedTheme = (string)ThemeChoice.SelectedItem;
+            switch (selectedTheme)
+            {
+                case "Dark":
+                    ChangeTheme("DarkTheme.xaml");
+                    break;
+                case "Default":
+                default:
+                    Application.Current.Resources.MergedDictionaries.Clear();
+                    break;
+            }
         }
 
         void ChangeTheme(string themeResourceDictionary)
         {
             var themeDict = new ResourceDictionary
             {
-                Source = new Uri($"pack://application:,,,/{themeResourceDictionary}", UriKind.Absolute)
+                Source = new Uri($"pack://application:,,,/Themes/{themeResourceDictionary}", UriKind.Absolute)
             };
 
             Application.Current.Resources.MergedDictionaries.Clear();
             Application.Current.Resources.MergedDictionaries.Add(themeDict);
+        }
+    }
+
+    class Themes : ObservableCollection<string>
+    {
+        public Themes()
+        {
+            Add("Default");
+            Add("Dark");
         }
     }
 }
