@@ -21,7 +21,9 @@ namespace MultiCalculator.Migrations
                     FirstName = table.Column<string>(type: "TEXT", nullable: false),
                     LastName = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Phone = table.Column<string>(type: "TEXT", nullable: false)
+                    Phone = table.Column<string>(type: "TEXT", nullable: false),
+                    AmountOfGeneratedPdfs = table.Column<int>(type: "INTEGER", nullable: false),
+                    GeneratedPdfLocations = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
