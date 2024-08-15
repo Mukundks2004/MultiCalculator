@@ -6,13 +6,17 @@ namespace MultiCalculator.Definitions
 {
     public static class OperationDefinitions
     {
-        static readonly DualArityOperationToken addition = new() { CalculateBinary = (a, b) => a + b, CalculateUnary = (a) => a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "+" };
-        static readonly DualArityOperationToken subtraction = new() { CalculateBinary = (a, b) => a - b, CalculateUnary = (a) => -a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "-" };
+		static readonly UnaryOperationToken u = new() { CalculateUnary = (x) => x, Position = OperandPosition.Prefix, TokenSymbol = "+" };
+		static readonly UnaryOperationToken p = new() { CalculateUnary = (x) => -x, Position = OperandPosition.Prefix, TokenSymbol = "-" };
+
+		static readonly DualArityOperationToken addition = new() { CalculateBinary = (a, b) => a + b, CalculateUnary = (a) => a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "+", UnaryOperation = p };
+        static readonly DualArityOperationToken subtraction = new() { CalculateBinary = (a, b) => a - b, CalculateUnary = (a) => -a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "-", UnaryOperation = u };
 
 		static readonly BinaryOperationToken multiplication = new() { CalculateBinary = (a, b) => a * b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "×" };
         static readonly BinaryOperationToken division = new() { CalculateBinary = (a, b) => a / b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "÷" };
         static readonly BinaryOperationToken exponentiation = new() { CalculateBinary = Math.Pow, Associativity = Associativity.Right, Priority = 3, TokenSymbol = "^" };
-        //Requires special attention
+        
+		//Requires special attention
 		static readonly BinaryOperationToken nthroot = new() { CalculateBinary = (a, b) => Math.Pow(a, 1 / b), Associativity = Associativity.Right, Priority = 3, TokenSymbol = "√" };
         static readonly BinaryOperationToken permutations = new() { CalculateBinary = MathHelpers.P, Associativity = Associativity.Left, Priority = 2, TokenSymbol = "P" };
         static readonly BinaryOperationToken combinations = new() { CalculateBinary = MathHelpers.C, Associativity = Associativity.Left, Priority = 2, TokenSymbol = "C" };

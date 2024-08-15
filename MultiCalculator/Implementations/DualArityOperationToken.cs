@@ -11,9 +11,11 @@ namespace MultiCalculator.Implementations
 
 		public Func<double, double, double> CalculateBinary { get; init; } = (x, y) => throw new MultiCalculatorException("Not implemented");
 
-		public Func<double, double> CalculateUnary { get; init; } = (x) => throw new MultiCalculatorException("Not implemented");
+		public UnaryOperationToken UnaryOperation { get; init; } = new UnaryOperationToken();
 
-        public int Priority { get; init; } = int.MinValue;
+		public Func<double, double> CalculateUnary { get => UnaryOperation.CalculateUnary; init => throw new MultiCalculatorException("Can't initialize CalculateUnary func, please set via UnaryOperation"); }
+
+		public int Priority { get; init; } = int.MinValue;
 
 		public Associativity Associativity { get; init; } = Associativity.Left;
 

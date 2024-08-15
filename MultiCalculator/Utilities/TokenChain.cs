@@ -76,10 +76,16 @@ namespace MultiCalculator.Utilities
 
 		public double Parse()
 		{
-			return 0;
-			//return ParseFromIndexToIndex(0, operations.Count).Calculate();
+			return ParseFromIndexToIndex(0, operations.Count).Calculate();
 		}
 
+		NullaryOperationToken ParseFromIndexToIndex(int startIndex, int EndIndexExclusive)
+		{
+			var currentIndex = startIndex;
+			var numStack = new Stack<NullaryOperationToken>();
+			var opStack = new Stack<IBinaryOperation>();
+			return new NullaryOperationToken();
+		}
 		//Still cannot handle 2 x ----4
 		//Also not sure if (2 x 2, missing brackets, parses correctly
 		/*NullaryOperationToken ParseFromIndexToIndex(int startIndex, int indexEndExclusive)
