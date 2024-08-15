@@ -47,6 +47,9 @@ namespace MultiCalculator
 				case "ScientificCalculator":
 					windowToOpen = new ScientificCalculatorWindow();
 					break;
+				case "Settings":
+					windowToOpen = new SettingsWindow();
+					break;
 				default:
 					MessageBox.Show($"Unknown window tag: {windowTag ?? "Empty"}");
 					break;
