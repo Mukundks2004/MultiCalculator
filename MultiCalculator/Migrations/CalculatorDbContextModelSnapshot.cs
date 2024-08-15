@@ -74,11 +74,18 @@ namespace MultiCalculator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AmountOfGeneratedPdfs")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GeneratedPdfLocations")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

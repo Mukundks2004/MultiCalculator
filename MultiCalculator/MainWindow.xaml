@@ -6,7 +6,7 @@
 		xmlns:local="clr-namespace:MultiCalculator"
 		mc:Ignorable="d"
 		Title="MainWindow" Height="500" Width="1000">
-	<Grid>
+    <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="200"/>
 			<RowDefinition Height="*"/>
@@ -29,7 +29,7 @@
         <Button x:Name="practice" Content="Practice Problems" Grid.Row="2" Grid.Column="1" FontSize="20" Margin="4" Tag="PracticeProblems" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
         <Button x:Name="chat" Content="Global Chat" Grid.Row="3" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
         <Button x:Name="feedback" Content="Submit Feedback" Grid.Row="4" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="settings" Content="Settings" Grid.Row="5" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="settings" Content="Settings" Grid.Row="5" Grid.Column="1" FontSize="20" Margin="4" Tag="Settings" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
         
         <TextBlock x:Name="title" Text="Calculator" Grid.Row="0" Grid.Column="0" FontSize="20" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="MS Gothic" FontWeight="Bold"/>
     </Grid>

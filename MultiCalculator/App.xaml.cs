@@ -9,6 +9,7 @@ namespace MultiCalculator
 	/// </summary>
 	public partial class App : Application
 	{
+		public string Username { get; set; }
 	}
 
 }

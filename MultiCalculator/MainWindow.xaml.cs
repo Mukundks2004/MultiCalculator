@@ -47,6 +47,9 @@ namespace MultiCalculator
 				case "ScientificCalculator":
 					windowToOpen = new ScientificCalculatorWindow();
 					break;
+				case "Settings":
+					windowToOpen = new SettingsWindow();
+					break;
 				case "PracticeProblems":
 					windowToOpen = new PracticeProblemsWindow();
 					break;
