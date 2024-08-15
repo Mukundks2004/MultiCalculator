@@ -1,32 +1,42 @@
-using MultiCalculator.Utilities;
 using MultiCalculator.Implementations;
-using MultiCalculator.Enums;
+using MultiCalculator.Utilities;
+
+using static MultiCalculator.Definitions.OperationDefinitions;
 
 namespace MultiCalculatorTests
 {
 	[TestFixture]
 	public class TokenChainTests
 	{
-		static readonly DigitToken one = new() { DisplayName = "1" };
-		static readonly DigitToken two = new() { DisplayName = "2" };
-		static readonly DigitToken three = new() { DisplayName = "3" };
-		static readonly DigitToken four = new() { DisplayName = "4" };
-		static readonly DigitToken five = new() { DisplayName = "5" };
-		static readonly DigitToken point = new() { DisplayName = "." };
+		static DualArityOperationToken plus { get => Addition; }
 
-		static readonly DualArityOperationToken plus = new() { DisplayName = "+", Priority = 0, CalculateBinary = (a, b) => a + b, CalculateUnary = (x) => x};
-		static readonly DualArityOperationToken minus = new() { DisplayName = "-", Priority = 0, CalculateBinary = (a, b) => a - b, CalculateUnary = (x) => -x };
-		static readonly BinaryOperationToken times = new() { DisplayName = "*", Priority = 1, CalculateBinary = (a, b) => a * b };
-		static readonly BinaryOperationToken dividedby = new() { DisplayName = "/",  Priority = 1, CalculateBinary = (a, b) => a / b };
+		static DualArityOperationToken minus { get => Subtraction; }
 
-		static readonly BracketToken c = BracketToken.OpenBracket;
-		static readonly BracketToken J = BracketToken.ClosedBracket;
+		static BinaryOperationToken times { get => Multiplication; }
 
-		static readonly UnaryOperationToken sin = new() { DisplayName = "sin", CalculateUnary = Math.Sin };
+		static BinaryOperationToken dividedby { get => Division; }
 
-		static readonly NullaryOperationToken pi = new() { DisplayName = "pi", Calculate = () => Math.PI };
-		static readonly NullaryOperationToken e = new() { DisplayName = "e", Calculate = () => Math.E };
+		static DigitToken one { get => One; }
 
+		static DigitToken two { get => Two; }
+
+		static DigitToken three { get => Three; }
+
+		static DigitToken four { get => Four; }
+
+		static DigitToken five { get => Five; }
+
+		static DigitToken point { get => Point; }
+
+		static BracketToken c { get => OpenBracket; }
+
+		static BracketToken J { get => ClosedBracket; }
+
+		static NullaryOperationToken pi { get => Pi; }
+
+		static NullaryOperationToken e { get => E; }
+
+		static UnaryOperationToken sin { get => Sin; }
 
 		[Test, TestCaseSource(typeof(TokenChainTests), nameof(ValidAndInvalidExpressionTestCases))]
 		public void IsExpressionValidTest(TokenChain tokenChain, bool expectedIsValid)
@@ -52,18 +62,18 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([one, point, five, point, two]), false).SetDescription("1.5.2");
 				yield return new TestCaseData(new TokenChain([one, point, five, point, two, point, one]), false).SetDescription("1.5.2.1");
 				yield return new TestCaseData(new TokenChain([three, plus, three, point, three, plus, three, point, three, point, three]), false).SetDescription("3 + 3.3 + 3.3.3");
-				yield return new TestCaseData(new TokenChain([two, two, point, two, times, two, one, point, one, point, one, plus, one]), false).SetDescription("22.2 x 21.1.1 + 1");
-				yield return new TestCaseData(new TokenChain([one, times, two, times, three]), true).SetDescription("1 x 2 x 3");
-				yield return new TestCaseData(new TokenChain([one, times, two, three, four, plus, five]), true).SetDescription("1 x 234 + 5");
-				yield return new TestCaseData(new TokenChain([one, two, three, point, four, five]), true).SetDescription("123.45");
-				yield return new TestCaseData(new TokenChain([one, two, three, point, four, five, plus, two, point, three]), true).SetDescription("123.45 + 2.3");
-				yield return new TestCaseData(new TokenChain([one, point, five, times, two]), true).SetDescription("1.5 x 2");
+				yield return new TestCaseData(new TokenChain([two, two, point, two, times, two, One, point, One, point, One, plus, One]), false).SetDescription("22.2 x 21.1.1 + 1");
+				yield return new TestCaseData(new TokenChain([One, times, two, times, three]), true).SetDescription("1 x 2 x 3");
+				yield return new TestCaseData(new TokenChain([One, times, two, three, four, plus, five]), true).SetDescription("1 x 234 + 5");
+				yield return new TestCaseData(new TokenChain([One, two, three, point, four, five]), true).SetDescription("123.45");
+				yield return new TestCaseData(new TokenChain([One, two, three, point, four, five, plus, two, point, three]), true).SetDescription("123.45 + 2.3");
+				yield return new TestCaseData(new TokenChain([One, point, five, times, two]), true).SetDescription("1.5 x 2");
 
 				yield return new TestCaseData(new TokenChain([point]), false).SetDescription(".");
 				yield return new TestCaseData(new TokenChain([point, plus, point]), false).SetDescription(". + .");
 				yield return new TestCaseData(new TokenChain([point, plus, one, point]), false).SetDescription(". + 1.");
-				yield return new TestCaseData(new TokenChain([one, plus, one, point]), true).SetDescription("1 + 1.");
-				yield return new TestCaseData(new TokenChain([one, point, plus, one, point]), true).SetDescription("1. + 1.");
+				yield return new TestCaseData(new TokenChain([One, plus, one, point]), true).SetDescription("1 + 1.");
+				yield return new TestCaseData(new TokenChain([One, point, plus, one, point]), true).SetDescription("1. + 1.");
 
 				yield return new TestCaseData(new TokenChain([c]), false).SetDescription("(");
 				yield return new TestCaseData(new TokenChain([c]), false).SetDescription("(.)");

@@ -23,27 +23,27 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonX0" Grid.Row="0" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonX1" Grid.Row="0" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonX2" Grid.Row="0" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonX0" Grid.Row="0" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonX1" Grid.Row="0" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonX2" Grid.Row="0" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
 
         <calculatorbuttons:RoundedButton x:Name="Answer" Grid.Row="0" Grid.Column="3" ButtonBase.Click="GetLastAnswer_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold"/>
         <calculatorbuttons:RoundedButton x:Name="Equals" Grid.Row="0" Grid.Column="4" ButtonBase.Click="EvaluateExpression_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold"/>
 
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonY0" Grid.Row="1" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonY1" Grid.Row="1" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonY2" Grid.Row="1" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonY3" Grid.Row="1" Grid.Column="3" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonY4" Grid.Row="1" Grid.Column="4" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonY0" Grid.Row="1" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonY1" Grid.Row="1" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonY2" Grid.Row="1" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonY3" Grid.Row="1" Grid.Column="3" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonY4" Grid.Row="1" Grid.Column="4" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
                                                                                                                                
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonZ0" Grid.Row="2" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonZ1" Grid.Row="2" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonZ2" Grid.Row="2" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonZ3" Grid.Row="2" Grid.Column="3" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonZ4" Grid.Row="2" Grid.Column="4" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonZ0" Grid.Row="2" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonZ1" Grid.Row="2" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonZ2" Grid.Row="2" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonZ3" Grid.Row="2" Grid.Column="3" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonZ4" Grid.Row="2" Grid.Column="4" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
 
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonW0" Grid.Row="3" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
-        <calculatorbuttons:SingleTokenButton x:Name="ButtonW1" Grid.Row="3" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonW0" Grid.Row="3" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
+        <calculatorbuttons:SingleTaskButton x:Name="ButtonW1" Grid.Row="3" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
         <calculatorbuttons:RoundedButton x:Name="Shift" Grid.Row="3" Grid.Column="2" ButtonBase.Click="ToggleShift_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold"/>
 
         <calculatorbuttons:RoundedButton x:Name="Backspace" Grid.Row="3" Grid.Column="3" ButtonBase.Click="Delete_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold"/>

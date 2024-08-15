@@ -1,13 +1,14 @@
 ﻿using MultiCalculator.Abstractions;
 using MultiCalculator.Enums;
+using MultiCalculator.Exceptions;
 
 namespace MultiCalculator.Implementations
 {
 	public class BinaryOperationToken : IToken, IBinaryOperation
     {
-        public string DisplayName { get; init; } = "&";
+		public string TokenSymbol { get; init; } = string.Empty;
 
-		public Func<double, double, double> CalculateBinary { get; init; } = (x, y) => x + y;
+		public Func<double, double, double> CalculateBinary { get; init; } = (x, y) => throw new MultiCalculatorException("Not implemented");
 
         public int Priority { get; init; } = int.MinValue;
 

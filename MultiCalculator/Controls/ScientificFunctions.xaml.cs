@@ -1,7 +1,7 @@
-﻿using MultiCalculator.Helpers;
-using MultiCalculator.Implementations;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+
+using static MultiCalculator.Definitions.OperationDefinitions;
 
 namespace MultiCalculator.Controls
 {
@@ -17,46 +17,87 @@ namespace MultiCalculator.Controls
 			InitializeComponent();
 
 			//Note: these symbols may not render. In the long term, move to images on buttons.
-			ButtonA0.Token = new UnaryOperationToken() { DisplayName = "Abs", CalculateUnary = Math.Abs };
-			ButtonA1.Token = new UnaryOperationToken() { DisplayName = "x³", CalculateUnary = (x) => x * x * x };
-			ButtonA4.Token = new UnaryOperationToken() { DisplayName = "x⁻¹", CalculateUnary = (x) => 1 / x };
-			ButtonA5.Token = new UnaryOperationToken() { DisplayName = "x!", CalculateUnary = MathHelpers.Factorial };
+			ButtonA0.CalculatorTask.Name = "Abs";
+			ButtonA0.CalculatorTask.Add(Abs);
+			ButtonA1.CalculatorTask.Name = "x³";
+			ButtonA1.CalculatorTask.Add(Exponentiation);
+			ButtonA1.CalculatorTask.Add(Three);
+			ButtonA4.CalculatorTask.Name = "x⁻¹";
+			ButtonA4.CalculatorTask.Add(Exponentiation);
+			ButtonA4.CalculatorTask.Add(Subtraction);
+			ButtonA4.CalculatorTask.Add(One);
+			ButtonA5.CalculatorTask.Name = "x!";
+			ButtonA5.CalculatorTask.Add(Factorial);
 
-			ButtonB0.Token = new UnaryOperationToken() { DisplayName = "√", CalculateUnary = Math.Sqrt };
-			ButtonB0.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "∛", CalculateUnary = Math.Cbrt };
-			ButtonB1.Token = new UnaryOperationToken() { DisplayName = "x²", CalculateUnary = (x) => x * x };
-			ButtonB2.Token = BracketToken.OpenBracket;
-			ButtonB3.Token = BracketToken.ClosedBracket;
-			ButtonB4.Token = new UnaryOperationToken() { DisplayName = "log", CalculateUnary = Math.Log10 };
-			ButtonB4.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "10▫", CalculateUnary = (x) => Math.Pow(10, x) };
-			ButtonB5.Token = new UnaryOperationToken() { DisplayName = "ln", CalculateUnary = Math.Log };
-			ButtonB5.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "e▫", CalculateUnary = (x) => Math.Pow(10, x) };
+			ButtonB0.CalculatorTask.Name = "√";
+			ButtonB0.CalculatorTask.Add(Sqrt);
+			ButtonB0.SecondaryCalculatorTask.Name = "∛";
+			ButtonB0.SecondaryCalculatorTask.Add(Cbrt);
+			ButtonB1.CalculatorTask.Name = "x²";
+			ButtonB1.CalculatorTask.Add(Exponentiation);
+			ButtonB1.CalculatorTask.Add(Two);
+			ButtonB2.CalculatorTask.Name = "(";
+			ButtonB2.CalculatorTask.Add(OpenBracket);
+			ButtonB3.CalculatorTask.Name = ")";
+			ButtonB3.CalculatorTask.Add(ClosedBracket);
+			ButtonB4.CalculatorTask.Name = "log";
+			ButtonB4.CalculatorTask.Add(Log);
+			ButtonB4.SecondaryCalculatorTask.Name = "10▫";
+			ButtonB4.SecondaryCalculatorTask.Add(Antilog);
+			ButtonB5.CalculatorTask.Name = "ln";
+			ButtonB5.CalculatorTask.Add(Ln);
+			ButtonB5.SecondaryCalculatorTask.Name = "e▫";
+			ButtonB5.SecondaryCalculatorTask.Add(Exp);
 
-			ButtonC0.Token = new BinaryOperationToken() { DisplayName = "x▫", CalculateBinary = Math.Pow };
-			ButtonC0.SecondaryButtonOperation = new BinaryOperationToken() { DisplayName = "▫√", CalculateBinary = (x, y) => Math.Pow(x, 1 / y) };
-			ButtonC1.Token = new NullaryOperationToken() { DisplayName = "e", Calculate = () => Math.E };
-			ButtonC1.SecondaryButtonOperation = new NullaryOperationToken() { DisplayName = "γ", Calculate = () => 0.5772156649015329 };
-			ButtonC2.Token = new NullaryOperationToken() { DisplayName = "π", Calculate = () => Math.PI };
-			ButtonC2.SecondaryButtonOperation = new NullaryOperationToken() { DisplayName = "φ", Calculate = () => (1 + Math.Sqrt(5)) / 2 };
-			ButtonC3.Token = new UnaryOperationToken() { DisplayName = "sin", CalculateUnary = Math.Sin };
-			ButtonC3.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "asin", CalculateUnary = Math.Asin };
-			ButtonC4.Token = new UnaryOperationToken() { DisplayName = "cos", CalculateUnary = Math.Cos };
-			ButtonC4.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "acos", CalculateUnary = Math.Acos };
-			ButtonC5.Token = new UnaryOperationToken() { DisplayName = "tan", CalculateUnary = Math.Tan };
-			ButtonC5.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "atan", CalculateUnary = Math.Tan };
+			ButtonC0.CalculatorTask.Name = "x▫";
+			ButtonC0.CalculatorTask.Add(Exponentiation);
+			ButtonC0.SecondaryCalculatorTask.Name = "▫√";
+			ButtonC0.SecondaryCalculatorTask.Add(Nthroot);
+			ButtonC1.CalculatorTask.Name = "e";
+			ButtonC1.CalculatorTask.Add(E);
+			ButtonC1.SecondaryCalculatorTask.Name = "γ";
+			ButtonC1.SecondaryCalculatorTask.Add(Mascheroni);
+			ButtonC2.CalculatorTask.Name = "π";
+			ButtonC2.CalculatorTask.Add(Pi);
+			ButtonC2.SecondaryCalculatorTask.Name = "φ";
+			ButtonC2.SecondaryCalculatorTask.Add(Phi);
+			ButtonC3.CalculatorTask.Name = "sin";
+			ButtonC3.CalculatorTask.Add(Sin);
+			ButtonC3.SecondaryCalculatorTask.Name = "asin";
+			ButtonC3.SecondaryCalculatorTask.Add(Asin);
+			ButtonC4.CalculatorTask.Name = "cos";
+			ButtonC4.CalculatorTask.Add(Cos);
+			ButtonC4.SecondaryCalculatorTask.Name = "acos";
+			ButtonC4.SecondaryCalculatorTask.Add(Acos);
+			ButtonC5.CalculatorTask.Name = "tan";
+			ButtonC5.CalculatorTask.Add(Tan);
+			ButtonC5.SecondaryCalculatorTask.Name = "atan";
+			ButtonC5.SecondaryCalculatorTask.Add(Atan);
 
-			ButtonD0.Token = new BinaryOperationToken() { DisplayName = "nPr", CalculateBinary = MathHelpers.P };
-			ButtonD0.SecondaryButtonOperation = new BinaryOperationToken() { DisplayName = "nCr", CalculateBinary = MathHelpers.C };
-			ButtonD1.Token = new UnaryOperationToken() { DisplayName = "erf", CalculateUnary = MathHelpers.Erf };
-			ButtonD1.SecondaryButtonOperation = new NullaryOperationToken() { DisplayName = "ϖ", Calculate = () => 2.6220575542921198 };
-			ButtonD2.Token = new UnaryOperationToken() { DisplayName = "W(x)", CalculateUnary = MathHelpers.LambertW };
-			ButtonD2.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "sinc", CalculateUnary = (x) => Math.Sin(x) / x };
-			ButtonD3.Token = new UnaryOperationToken() { DisplayName = "sinh", CalculateUnary = Math.Sinh };
-			ButtonD3.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "asinh", CalculateUnary = Math.Asinh };
-			ButtonD4.Token = new UnaryOperationToken() { DisplayName = "cosh", CalculateUnary = Math.Cosh };
-			ButtonD4.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "acosh", CalculateUnary = Math.Acosh };
-			ButtonD5.Token = new UnaryOperationToken() { DisplayName = "tanh", CalculateUnary = Math.Tanh };
-			ButtonD5.SecondaryButtonOperation = new UnaryOperationToken() { DisplayName = "atanh", CalculateUnary = Math.Atanh };
+			ButtonD0.CalculatorTask.Name = "nPr";
+			ButtonD0.CalculatorTask.Add(Permuations);
+			ButtonD0.SecondaryCalculatorTask.Name = "nCr";
+			ButtonD0.SecondaryCalculatorTask.Add(Combinations);
+			ButtonD1.CalculatorTask.Name = "erf";
+			ButtonD1.CalculatorTask.Add(Erf);
+			ButtonD1.SecondaryCalculatorTask.Name = "ϖ";
+			ButtonD1.SecondaryCalculatorTask.Add(Lemniscate);
+			ButtonD2.CalculatorTask.Name = "W(x)";
+			ButtonD2.CalculatorTask.Add(Productlog);
+			ButtonD2.SecondaryCalculatorTask.Name = "sinc";
+			ButtonD2.SecondaryCalculatorTask.Add(Sinc);
+			ButtonD3.CalculatorTask.Name = "sinh";
+			ButtonD3.CalculatorTask.Add(Sinh);
+			ButtonD3.SecondaryCalculatorTask.Name = "asinh";
+			ButtonD3.SecondaryCalculatorTask.Add(Asinh);
+			ButtonD4.CalculatorTask.Name = "cosh";
+			ButtonD4.CalculatorTask.Add(Cosh);
+			ButtonD4.SecondaryCalculatorTask.Name = "acosh";
+			ButtonD4.SecondaryCalculatorTask.Add(Acosh);
+			ButtonD5.CalculatorTask.Name = "tanh";
+			ButtonD5.CalculatorTask.Add(Tanh);
+			ButtonD5.SecondaryCalculatorTask.Name = "atanh";
+			ButtonD5.SecondaryCalculatorTask.Add(Atanh);
 		}
 
 		public void ScientificButton_Click(object sender, RoutedEventArgs e)

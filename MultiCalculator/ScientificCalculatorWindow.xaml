@@ -7,7 +7,22 @@
         xmlns:calculatorbuttons="clr-namespace:MultiCalculator.Controls"
         mc:Ignorable="d"
         Title="ScientificCalculatorWindow" Height="600" Width="320">
-    <StackPanel HorizontalAlignment="Center">
+    <Grid>
+        <Button Content="←" Height="70" Width="35" FontSize="20" Margin="100,0,144,240" Padding="1" Panel.ZIndex="10">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Content="→" Height="70" Width="35" FontSize="20" Margin="144,0,100,240" Padding="1" Panel.ZIndex="10">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <StackPanel HorizontalAlignment="Center" Panel.ZIndex="1">
         <TextBlock x:Name="ExpressionBox" Height="70"/>
         <TextBlock x:Name="ResultBox" Height="30" Width="100" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" TextAlignment="Right"/>
         <Separator/>
@@ -17,6 +32,8 @@
         <Separator Height="10" Background="Transparent"/>
         <calculatorbuttons:PrimaryFunctions x:Name="PrimaryButtonsGrid"/>
     </StackPanel>
+        
+    </Grid>
     
     <!--<Grid>
         <Grid.RowDefinitions>

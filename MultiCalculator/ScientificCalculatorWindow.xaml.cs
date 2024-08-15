@@ -2,21 +2,10 @@
 using MultiCalculator.Controls;
 using MultiCalculator.Implementations;
 using MultiCalculator.Utilities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
+using static MultiCalculator.Definitions.OperationDefinitions;
 
 namespace MultiCalculator
 {
@@ -83,16 +72,16 @@ namespace MultiCalculator
 		{
 			var button = sender as ICalculatorButton;
 			_ = button ?? throw new ArgumentNullException(nameof(button));
-			CalculatorExpression.Add(button.Token);
+			CalculatorExpression.Add(button.CalculatorTask.Tokens);
 		}
 
 		public void GetAnswer_Click()
 		{
 			//Replace this with real answer when we have a history service or something- maybe we need a history model?
 			//Also move explicit references to token to service maybe. the view should not know about the impelemtnation details.
-			CalculatorExpression.Add(BracketToken.ClosedBracket);
-			CalculatorExpression.Add(NullaryOperationToken.GetNullaryOperationFromDouble());
-			CalculatorExpression.Add(BracketToken.OpenBracket);
+			CalculatorExpression.Add(OpenBracket);
+			CalculatorExpression.Add(NullaryOperationToken.GetConstFromDouble());
+			CalculatorExpression.Add(ClosedBracket);
 		}
 
 		public void EvaluateExpression_Click()
@@ -100,10 +89,11 @@ namespace MultiCalculator
 			var isValid = CalculatorExpression.IsValid();
 			if (!isValid)
 			{
-				CalculatorAnswer = "exp ill formed";
+				CalculatorAnswer = "Syntax Error";
 			}
 			else
 			{
+				//TODO: insert multiplication signs
 				var result = CalculatorExpression.Parse();
 				CalculatorAnswer = result.ToString();
 			}

@@ -1,7 +1,9 @@
 ﻿using MultiCalculator.Abstractions;
+using MultiCalculator.Definitions;
 using MultiCalculator.Delegates;
 using MultiCalculator.Enums;
 using MultiCalculator.Implementations;
+using System.Windows.Controls;
 
 namespace MultiCalculator.Utilities
 {
@@ -24,10 +26,29 @@ namespace MultiCalculator.Utilities
 			this.operations = operations.ToList();
 		}
 
+		public override string ToString()
+		{
+			return string.Join(" ", operations.Select(o => o.TokenSymbol));
+		}
+
 		public void Add(IToken button)
 		{
 			operations.Insert(Cursor, button);
 			Cursor++;
+			OperationsUpdated?.Invoke();
+		}
+
+		public void Add(IEnumerable<IToken> operations)
+		{
+			foreach (var operation in operations)
+			{
+				Add(operation);
+			}
+		}
+
+		public void InsertAt(int index, IToken button)
+		{
+			operations.Insert(index, button);
 			OperationsUpdated?.Invoke();
 		}
 
@@ -48,30 +69,20 @@ namespace MultiCalculator.Utilities
 			OperationsUpdated?.Invoke();
 		}
 
-		public override string ToString()
-		{
-			return string.Join(string.Empty, operations.Select(t => t.DisplayName));
-		}
-
 		public bool IsValid()
 		{
-			var a = HasMatchingAndNonEmptyBraces();
-			var b = NumbersExistAndAreWellFormed();
-			var c = NoConsecutiveBinaryOperations();
-			var d = NoDigitsFollowClosingBrace();
-			var e = ExpressionDoesNotEndInOperation();
-
-			return HasMatchingAndNonEmptyBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
+			return HasNonEmptyAndNonNegativeOpenBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
 		}
 
 		public double Parse()
 		{
-			return ParseFromIndexToIndex(0, operations.Count).Calculate();
+			return 0;
+			//return ParseFromIndexToIndex(0, operations.Count).Calculate();
 		}
 
 		//Still cannot handle 2 x ----4
 		//Also not sure if (2 x 2, missing brackets, parses correctly
-		NullaryOperationToken ParseFromIndexToIndex(int startIndex, int indexEndExclusive)
+		/*NullaryOperationToken ParseFromIndexToIndex(int startIndex, int indexEndExclusive)
 		{
 			var currentIndex = startIndex;
 			var numStack = new Stack<NullaryOperationToken>();
@@ -89,12 +100,20 @@ namespace MultiCalculator.Utilities
 					numStack.Push(parsedNumberAsNullary);
 					currentIndex += lengthOfNumber - 1;
 				}
-				//we shouldnt ever reach a closing brace but whatever
 				else if (operations[currentIndex] is BracketToken openingBracket && openingBracket.BracketType == BracketType.Open)
 				{
 					int nextClosingBraceDistance = 1;
-					while (currentIndex + nextClosingBraceDistance < indexEndExclusive && !(operations[currentIndex + nextClosingBraceDistance] is BracketToken bracket && bracket.BracketType == BracketType.Closed))
+					int unmatchedOpenBracketCount = 1;
+					while (currentIndex + nextClosingBraceDistance < indexEndExclusive && unmatchedOpenBracketCount > 0)
 					{
+						if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.ClosedBracket)
+						{
+							unmatchedOpenBracketCount -= 1;
+						}
+						else if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.OpenBracket || operations[currentIndex + nextClosingBraceDistance] is UnaryOperationToken)
+						{
+							unmatchedOpenBracketCount += 1;
+						}
 						nextClosingBraceDistance++;
 					}
 
@@ -103,16 +122,35 @@ namespace MultiCalculator.Utilities
 				}
 				else if (operations[currentIndex] is UnaryOperationToken unaryOperation)
 				{
-					int nextClosingBraceDistance = 1;
-					while (currentIndex + nextClosingBraceDistance < indexEndExclusive && !(operations[currentIndex + nextClosingBraceDistance] is BracketToken bracket && bracket.BracketType == BracketType.Closed))
+					if (unaryOperation.Position == OperandPosition.Postfix)
 					{
-						nextClosingBraceDistance++;
+						var operand = numStack.Pop();
+						numStack.Push(NullaryOperationToken.GetConstFromDouble(unaryOperation.CalculateUnary(operand.Calculate()));
 					}
+					else
+					{
+						int nextClosingBraceDistance = 1;
+						int unmatchedOpenBracketCount = 1;
+						while (currentIndex + nextClosingBraceDistance < indexEndExclusive && unmatchedOpenBracketCount > 0)
+						{
+							if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.ClosedBracket)
+							{
+								unmatchedOpenBracketCount -= 1;
+							}
+							else if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.OpenBracket || operations[currentIndex + nextClosingBraceDistance] is UnaryOperationToken)
+							{
+								unmatchedOpenBracketCount += 1;
+							}
+							nextClosingBraceDistance++;
+						}
 
-					var nullaryResultFromBraces = ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance);
-					numStack.Push(new NullaryOperationToken() { Calculate = () => unaryOperation.CalculateUnary(nullaryResultFromBraces.Calculate()) });
-					currentIndex += nextClosingBraceDistance;
+						var nullaryResultFromBraces = ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance);
+						numStack.Push(new NullaryOperationToken() { Calculate = () => unaryOperation.CalculateUnary(nullaryResultFromBraces.Calculate()) });
+						currentIndex += nextClosingBraceDistance;
+					}
 				}
+				else if (operations)
+				/*
 				//Note: this doesnt properly work haha
 				else if (operations[currentIndex] is IBinaryOperation binaryOperation)
 				{
@@ -175,17 +213,34 @@ namespace MultiCalculator.Utilities
 			}
 
 			return numStack.Pop();
+		}*/
+
+		//Write test cases
+		public void InsertMultiplicationSigns()
+		{
+			IToken currentToken, nextToken;
+			for (int i = 0; i < operations.Count; i++)
+			{
+				currentToken = operations[i];
+				nextToken = operations[i + 1];
+
+				if ((currentToken == OperationDefinitions.ClosedBracket || currentToken is NullaryOperationToken or DigitToken) &&
+					(nextToken == OperationDefinitions.OpenBracket || nextToken is NullaryOperationToken or UnaryOperationToken))
+				{
+					InsertAt(i, OperationDefinitions.Multiplication);
+				}
+			}
 		}
 
 		NullaryOperationToken ParseDoubleFromIndex(int index, out int lengthParsed)
 		{
-			var resultAsString = (operations[index] as DigitToken)!.DisplayName;
+			var resultAsString = (operations[index] as DigitToken)!.TokenSymbol;
 			index++;
 			lengthParsed = 1;
 
 			while (index < operations.Count && operations[index] is DigitToken digit)
 			{
-				resultAsString += digit.DisplayName;
+				resultAsString += digit.TokenSymbol;
 				lengthParsed++;
 			}
 
@@ -242,7 +297,7 @@ namespace MultiCalculator.Utilities
 			return true;
 		}
 
-		bool HasMatchingAndNonEmptyBraces()
+		bool HasNonEmptyAndNonNegativeOpenBraces()
 		{
 			var bracketStack = new Stack<int>();
 
@@ -296,7 +351,7 @@ namespace MultiCalculator.Utilities
 					atLeastOneIntInNumber = false;
 					while (currentTokenIndex < operations.Count && operations[currentTokenIndex] is DigitToken digit)
 					{
-						if (digit.DisplayName.Equals("."))
+						if (digit.TokenSymbol.Equals("."))
 						{
 							if (encounteredDecimalPointInNumber)
 							{

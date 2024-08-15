@@ -3,17 +3,10 @@ using MultiCalculator.Enums;
 
 namespace MultiCalculator.Implementations
 {
+	//TODO: after IToken has been replaced with attribute, make this an enum
 	public class BracketToken : IToken
     {
-		static readonly BracketToken closedBracket = new() { DisplayName = ")", BracketType = BracketType.Closed };
-
-		static readonly BracketToken openBracket = new() { DisplayName = "(", BracketType = BracketType.Open };
-
-		public static BracketToken ClosedBracket { get => closedBracket; }
-
-		public static BracketToken OpenBracket { get => openBracket; }
-
-		public string DisplayName { get; init; } = "[";
+		public string TokenSymbol { get; init; } = string.Empty;
 
 		public BracketType BracketType { get; init; } = BracketType.Open;
     }
