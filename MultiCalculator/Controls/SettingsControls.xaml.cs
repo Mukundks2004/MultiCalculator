@@ -26,9 +26,16 @@ namespace MultiCalculator.Controls
             InitializeComponent();
         }
 
+        public void SettingsControls_Loaded(object sender, RoutedEventArgs e)
+        {
+            var savedUsername = ((App)Application.Current).Username ?? string.Empty;
+			UsernameInput.Text = savedUsername;
+
+		}
+
 		private void ThemeChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-            var selectedTheme = (string)ThemeChoice.SelectedItem;
+			var selectedTheme = (string)ThemeChoice.SelectedItem;
             switch (selectedTheme)
             {
                 case "Dark":
@@ -51,9 +58,14 @@ namespace MultiCalculator.Controls
             Application.Current.Resources.MergedDictionaries.Clear();
             Application.Current.Resources.MergedDictionaries.Add(themeDict);
         }
+
+		private void UsernameInput_TextChanged(object sender, TextChangedEventArgs e)
+		{
+            ((App)Application.Current).Username = (string)UsernameInput.Text;
+        }
     }
 
-    class Themes : ObservableCollection<string>
+	class Themes : ObservableCollection<string>
     {
         public Themes()
         {

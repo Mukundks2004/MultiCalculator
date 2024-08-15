@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MultiCalculator.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="SettingsControls_Loaded">
     <UserControl.Resources>
         <local:Themes x:Key="myThemes"/>
         <Style TargetType="ComboBoxItem">
@@ -15,6 +16,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -37,5 +39,42 @@
                   VerticalContentAlignment="Center"
                   ItemsSource="{Binding Source={StaticResource myThemes}}"
                   SelectionChanged="ThemeChoice_SelectionChanged"/>
+        <TextBlock x:Name="UsernameLabel"
+           Text="Edit Username:"
+           FontSize="12"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Grid.Column="0"
+           Grid.Row="1"/>
+        
+        <Grid Grid.Column="1"
+              Grid.Row="1"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBox x:Name="UsernameInput"
+                     Height="30"
+                     Width="150"
+                     Grid.Column="1"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     HorizontalContentAlignment="Center"
+                     VerticalContentAlignment="Center" TextChanged="UsernameInput_TextChanged"/>
+            <Button x:Name="UsernameSave"
+                    Content="Save"
+                    Height="20"
+                    Width="50"
+                    Grid.Column="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="10,0,0,0"/>
+        </Grid>
+        
     </Grid>
 </UserControl>
