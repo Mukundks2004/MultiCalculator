@@ -1,5 +1,13 @@
-﻿using System.Windows;
+﻿using Microsoft.Extensions.Hosting;
+using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Extensions.DependencyInjection;
+using MultiCalculator.Database;
+using MultiCalculator.Extensions;
+using MultiCalculator.Database.Services;
+using MultiCalculator.Database.Repositories;
+using MultiCalculator.Database.Models;
+using MultiCalculator.Helpers;
 
 namespace MultiCalculator
 {
@@ -10,8 +18,16 @@ namespace MultiCalculator
 	{
 		public MainWindow()
 		{
-			InitializeComponent();
-		}
+            InitializeComponent();
+
+            var builder = Host.CreateApplicationBuilder();
+            builder.Services.AddDependencyGroup();
+
+            using (var context = new CalculatorDbContext())
+            {
+                context.Database.EnsureCreated();
+            }
+        }
 
 		void OpenWindowButton_Click(object sender, RoutedEventArgs e)
 		{

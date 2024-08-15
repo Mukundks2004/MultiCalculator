@@ -73,32 +73,50 @@ namespace MultiCalculator.Controls
 
 		public void PrimaryButton_Click(object sender, RoutedEventArgs e)
 		{
-			WriteTokenToScreen?.Invoke(sender, EventArgs.Empty);
+			if (sender is SingleTokenButton)
+			{
+				WriteTokenToScreen?.Invoke(sender, EventArgs.Empty);
+			}
 		}
 
 		public void ToggleShift_Click(object sender, RoutedEventArgs e)
 		{
-			ToggleShiftables?.Invoke();
+			if (sender is RoundedButton button && button.Name == "Shift")
+			{
+				ToggleShiftables?.Invoke();
+			}
 		}
 
 		public void Delete_Click(object sender, RoutedEventArgs e)
 		{
-			BackspaceToken?.Invoke();
+			if (sender is RoundedButton button && button.Name == "Backspace")
+			{
+				BackspaceToken?.Invoke();
+			}
 		}
 
 		public void ClearAll_Click(object sender, RoutedEventArgs e)
 		{
-			ClearEntireExpression?.Invoke();
+			if (sender is RoundedButton button && button.Name == "AllClear")
+			{
+				ClearEntireExpression?.Invoke();
+			}
 		}
 
 		public void EvaluateExpression_Click(object sender, RoutedEventArgs e)
 		{
-			EvaluateExpression?.Invoke();
+			if (sender is RoundedButton button && button.Name == "Equals")
+			{
+				EvaluateExpression?.Invoke();
+			}
 		}
 
 		public void GetLastAnswer_Click(object sender, RoutedEventArgs e)
 		{
-			GetLastAnswer?.Invoke();
+			if (sender is RoundedButton button && button.Name == "Answer")
+			{
+				GetLastAnswer?.Invoke();
+			}
 		}
 	}
 }
