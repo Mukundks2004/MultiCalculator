@@ -41,7 +41,7 @@
                     Padding="10,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Grid.ColumnSpan="2"/>
+                    Grid.ColumnSpan="2" Click="Button_Click"/>
 
             <StackPanel Orientation="Horizontal"
                         Grid.Column="1"
@@ -53,7 +53,7 @@
 
                 <TextBox x:Name="EmailTextBox"
                          Width="200"
-                         Margin="5"/>
+                         Margin="5" TextChanged="EmailTextBox_TextChanged"/>
             </StackPanel>
         </Grid>
     </Grid>

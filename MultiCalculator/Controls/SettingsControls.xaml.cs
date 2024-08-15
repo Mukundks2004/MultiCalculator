@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultiCalculator.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -30,38 +31,18 @@ namespace MultiCalculator.Controls
         {
             var savedUsername = ((App)Application.Current).Username ?? string.Empty;
 			UsernameInput.Text = savedUsername;
-
 		}
 
 		private void ThemeChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var selectedTheme = (string)ThemeChoice.SelectedItem;
-            switch (selectedTheme)
-            {
-                case "Dark":
-                    ChangeTheme("DarkTheme.xaml");
-                    break;
-                case "Default":
-                default:
-                    Application.Current.Resources.MergedDictionaries.Clear();
-                    break;
-            }
-        }
-
-        void ChangeTheme(string themeResourceDictionary)
-        {
-            var themeDict = new ResourceDictionary
-            {
-                Source = new Uri($"pack://application:,,,/Themes/{themeResourceDictionary}", UriKind.Absolute)
-            };
-
-            Application.Current.Resources.MergedDictionaries.Clear();
-            Application.Current.Resources.MergedDictionaries.Add(themeDict);
+            SettingsHelper.ChangeTheme(selectedTheme);
         }
 
 		private void UsernameInput_TextChanged(object sender, TextChangedEventArgs e)
 		{
-            ((App)Application.Current).Username = (string)UsernameInput.Text;
+			var newUsername = (string)UsernameInput.Text;
+			SettingsHelper.ChangeUsername(newUsername);
         }
     }
 
