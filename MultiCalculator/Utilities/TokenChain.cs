@@ -107,23 +107,23 @@ namespace MultiCalculator.Utilities
 
 				else if (currentToken == OperationDefinitions.OpenBracket)
 				{
-					var nextClosingBraceDistance = 0;
+					var nextClosingBraceDistance = 1;
 					var unmatchedOpenBracketCount = 1;
-					while (currentIndex + nextClosingBraceDistance < endIndexExclusive && unmatchedOpenBracketCount > 0)
+					while (unmatchedOpenBracketCount > 0)
 					{
-						nextClosingBraceDistance++;
 						if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.ClosedBracket)
 						{
 							unmatchedOpenBracketCount--;
 						}
-						else if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.OpenBracket || operations[currentIndex + nextClosingBraceDistance] is UnaryOperationToken)
+						else if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.OpenBracket)
 						{
 							unmatchedOpenBracketCount++;
 						}
+						nextClosingBraceDistance++;
 					}
 
-					numStack.Push(ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance));
-					currentIndex += nextClosingBraceDistance;
+					numStack.Push(ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
+					currentIndex += nextClosingBraceDistance - 1;
 				}
 
 				//We can never evaluate unaries until we encounter postfix operators or binaries
@@ -319,7 +319,7 @@ namespace MultiCalculator.Utilities
 						isInOperationString = true;
 					}
 				}
-				else if (operations[i] is IOperation)
+				else if (operations[i] is IOperation || operations[i] == OperationDefinitions.OpenBracket)
 				{
 					isInOperationString = true;
 				}
@@ -349,7 +349,7 @@ namespace MultiCalculator.Utilities
 			}
 
 			var result = double.Parse(resultAsString);
-			return new NullaryOperationToken() { Calculate = () => result };
+			return NullaryOperationToken.GetConstFromDouble(result);
 		}
 
 		bool NoDigitsFollowClosingBrace()
