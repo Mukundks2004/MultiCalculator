@@ -217,6 +217,9 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([Nine, Times, Nine, C, Minus, Two]), -162).SetDescription("9 x 9(-2 = -162");
 				yield return new TestCaseData(new TokenChain([C, One, Plus, C, Minus, Minus, Minus, One, Plus, One, Times, C, Three, Plus, Plus, Four, Factorial, J, ToThePowerOf, Two]), 729).SetDescription("(1 + ( - - - 1 + 1 x (3 + + 4!) ^ 2 = 729");
 				yield return new TestCaseData(new TokenChain([C, Minus, Three, J, C, C, Pi, J, C, E, J, J, C, Four, Times, Plus, Four, J]), -48 * Math.PI * Math.E).SetDescription("(-3)((pi)(e))(4 x + 4)");
+				yield return new TestCaseData(new TokenChain([Nine, Times, Nine, Sin, One, Five]), 52.6733150527).SetDescription("9 x 9 sin 15");
+				yield return new TestCaseData(new TokenChain([Three, Zero, Minus, Pi, C, Pi, C, C, Pi, J, Times, Sin, C, Three, Factorial, J, J]), 38.6636342459).SetDescription("30 - pi(pi((pi)) x sin(3!))");
+
 			}
 		}
 	}
