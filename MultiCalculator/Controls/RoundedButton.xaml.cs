@@ -1,35 +1,34 @@
-﻿using MultiCalculator.Abstractions;
-using MultiCalculator.Implementations;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace MultiCalculator.Controls
 {
 	/// <summary>
 	/// Interaction logic for RoundedButton.xaml
 	/// </summary>
-	public partial class RoundedButton : UserControl, ICalculatorButton
+	public partial class RoundedButton : UserControl
 	{
-        public RoundedButton()
-        {
-            InitializeComponent();
-			ButtonOperation = new UnaryOperationToken() { DisplayName = "S" };
-			DataContext = this;
-        }
-
-		public static readonly DependencyProperty ButtonOperationProperty = DependencyProperty.Register("ButtonOperation", typeof(IToken), typeof(RoundedButton), new PropertyMetadata(new UnaryOperationToken(), ValueChanged));
-
-		public IToken ButtonOperation
+		public RoundedButton()
 		{
-			get => (IToken)GetValue(ButtonOperationProperty);
-			set => SetValue(ButtonOperationProperty, value);
+			InitializeComponent();
 		}
 
-		static void ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		public void Rename(string newName)
 		{
-			var control = d as RoundedButton;
-			_ = control ?? throw new ArgumentNullException(nameof(control));
-			control.Button.Content = ((IToken)e.NewValue).DisplayName;
+			Button.Content = newName;
 		}
 	}
 }

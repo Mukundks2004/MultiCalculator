@@ -4,11 +4,11 @@ namespace MultiCalculator.Implementations
 {
 	public class DigitToken : IToken
     {
-        public string DisplayName { get; init; } = "1";
+        public string TokenSymbol { get; init; } = string.Empty;
 
         public override string ToString()
         {
-            return DisplayName;
+            return TokenSymbol;
         }
     }
 }

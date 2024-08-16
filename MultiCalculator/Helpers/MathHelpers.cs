@@ -4,7 +4,7 @@
     {
         public static double Factorial(double n)
         {
-            if (n % 1 == 0 || n < 0)
+            if (n % 1 != 0 || n < 0)
             {
                 return double.NaN;
             }
@@ -17,7 +17,6 @@
             return n * Factorial(n - 1);
         }
 
-        //TODO: investigate if can be simplified, and if works
         public static double P(double n, double r)
         {
             return Factorial(n) / Factorial(n - r);

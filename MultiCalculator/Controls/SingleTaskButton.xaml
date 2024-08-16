@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MultiCalculator.Controls.RoundedButton"
+﻿<UserControl x:Class="MultiCalculator.Controls.SingleTaskButton"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,6 +6,7 @@
 			 xmlns:local="clr-namespace:MultiCalculator.Controls"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="50" d:DesignWidth="50">
+
     <Button x:Name="Button" Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Height="30" Width="40" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold">
         <Button.Resources>
             <Style TargetType="Border">

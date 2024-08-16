@@ -1,14 +1,19 @@
 ﻿using MultiCalculator.Abstractions;
+using MultiCalculator.Definitions;
+using MultiCalculator.Delegates;
 using MultiCalculator.Enums;
 using MultiCalculator.Implementations;
+using OpenAI_API.Moderation;
 
 namespace MultiCalculator.Utilities
 {
 	public class TokenChain
 	{
-		public int Cursor { get; private set; }
+		public event SimpleEventHandler? OperationsUpdated;
 
 		List<IToken> operations;
+
+		public int Cursor { get; private set; }
 
 		public TokenChain()
 		{
@@ -21,35 +26,56 @@ namespace MultiCalculator.Utilities
 			this.operations = operations.ToList();
 		}
 
+		public override string ToString()
+		{
+			return string.Join(" ", operations.Select(o => o.TokenSymbol));
+		}
+
 		public void Add(IToken button)
 		{
 			operations.Insert(Cursor, button);
 			Cursor++;
+			OperationsUpdated?.Invoke();
 		}
 
-		public void Remove()
+		public void Add(IEnumerable<IToken> operations)
+		{
+			foreach (var operation in operations)
+			{
+				Add(operation);
+			}
+		}
+
+		public void InsertAt(int index, IToken button)
+		{
+			operations.Insert(index, button);
+			if (index < Cursor)
+			{
+				Cursor++;
+			}
+			OperationsUpdated?.Invoke();
+		}
+
+		public void RemoveLastBeforeCursor()
 		{
 			if (!(Cursor == 0))
 			{
 				operations.RemoveAt(Cursor - 1);
 				Cursor--;
+				OperationsUpdated?.Invoke();
 			}
 		}
 
-		public override string ToString()
+		public void MakeEmpty()
 		{
-			return string.Join(string.Empty, operations.Select(t => t.DisplayName));
+			operations = [];
+			Cursor = 0;
+			OperationsUpdated?.Invoke();
 		}
 
 		public bool IsValid()
 		{
-			var a = HasMatchingAndNonEmptyBraces();
-			var b = NumbersExistAndAreWellFormed();
-			var c = NoConsecutiveBinaryOperations();
-			var d = NoDigitsFollowClosingBrace();
-			var e = ExpressionDoesNotEndInOperation();
-
-			return HasMatchingAndNonEmptyBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
+			return HasNonEmptyAndNonNegativeOpenBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
 		}
 
 		public double Parse()
@@ -57,96 +83,167 @@ namespace MultiCalculator.Utilities
 			return ParseFromIndexToIndex(0, operations.Count).Calculate();
 		}
 
-		//Still cannot handle 2 x ----4
-		//Also not sure if (2 x 2, missing brackets, parses correctly
-		NullaryOperationToken ParseFromIndexToIndex(int startIndex, int indexEndExclusive)
+		NullaryOperationToken ParseFromIndexToIndex(int startIndex, int endIndexExclusive)
 		{
 			var currentIndex = startIndex;
 			var numStack = new Stack<NullaryOperationToken>();
-			var opStack = new Stack<IBinaryOperation>();
+			var opStack = new Stack<IOperation>();
 
-			while (currentIndex < indexEndExclusive)
+			while (currentIndex < endIndexExclusive)
 			{
-				if (operations[currentIndex] is NullaryOperationToken nullaryOperation)
+				var currentToken = operations[currentIndex];
+
+				if (currentToken is NullaryOperationToken constant)
 				{
-					numStack.Push(nullaryOperation);
+					numStack.Push(constant);
 				}
-				else if (operations[currentIndex] is DigitToken)
+
+				else if (currentToken is DigitToken)
 				{
-					var parsedNumberAsNullary = ParseDoubleFromIndex(currentIndex, out int lengthOfNumber);
-					numStack.Push(parsedNumberAsNullary);
+					var parsedNumberAsConst = ParseDoubleFromIndex(currentIndex, out int lengthOfNumber);
+					numStack.Push(parsedNumberAsConst);
 					currentIndex += lengthOfNumber - 1;
 				}
-				//we shouldnt ever reach a closing brace but whatever
-				else if (operations[currentIndex] is BracketToken openingBracket && openingBracket.BracketType == BracketType.Open)
+
+				else if (currentToken == OperationDefinitions.OpenBracket)
 				{
-					int nextClosingBraceDistance = 1;
-					while (currentIndex + nextClosingBraceDistance < indexEndExclusive && !(operations[currentIndex + nextClosingBraceDistance] is BracketToken bracket && bracket.BracketType == BracketType.Closed))
+					var nextClosingBraceDistance = 0;
+					var unmatchedOpenBracketCount = 1;
+					while (currentIndex + nextClosingBraceDistance < endIndexExclusive && unmatchedOpenBracketCount > 0)
 					{
 						nextClosingBraceDistance++;
+						if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.ClosedBracket)
+						{
+							unmatchedOpenBracketCount--;
+						}
+						else if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.OpenBracket || operations[currentIndex + nextClosingBraceDistance] is UnaryOperationToken)
+						{
+							unmatchedOpenBracketCount++;
+						}
 					}
 
 					numStack.Push(ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance));
 					currentIndex += nextClosingBraceDistance;
 				}
-				else if (operations[currentIndex] is UnaryOperationToken unaryOperation)
-				{
-					int nextClosingBraceDistance = 1;
-					while (currentIndex + nextClosingBraceDistance < indexEndExclusive && !(operations[currentIndex + nextClosingBraceDistance] is BracketToken bracket && bracket.BracketType == BracketType.Closed))
-					{
-						nextClosingBraceDistance++;
-					}
 
-					var nullaryResultFromBraces = ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance);
-					numStack.Push(new NullaryOperationToken() { Calculate = () => unaryOperation.CalculateUnary(nullaryResultFromBraces.Calculate()) });
-					currentIndex += nextClosingBraceDistance;
+				//We can never evaluate unaries until we encounter postfix operators or binaries
+				//This system should hopefully allow duals to be postfix
+				else if (currentToken is UnaryOperationToken unaryPrefix && unaryPrefix.Fixity == Fixity.Prefix)
+				{
+					opStack.Push(unaryPrefix);
 				}
-				//Note: this doesnt properly work haha
-				else if (operations[currentIndex] is IBinaryOperation binaryOperation)
+
+				else if (currentToken is IOperation operation)
 				{
-					//Do a quick lookahead to eliminate + and - unaries
-					var unaryScanningIndex = 1;
-					Func<double, double> unaryDelegate = (x) => x;
-					var unaryStack = new Stack<Func<double, double>>();
-
-					while (currentIndex + unaryScanningIndex < operations.Count && operations[currentIndex + unaryScanningIndex] is DualArityOperationToken looseBinaryOperation)
+					//First operation is not postfix
+					if (opStack.Count == 0 && !(operation is UnaryOperationToken firstOperation && firstOperation.Fixity == Fixity.Postfix))
 					{
-						unaryScanningIndex++;
-						unaryStack.Push(looseBinaryOperation.CalculateUnary);
+						opStack.Push(operation);
+					}
+					//only operation is postfix
+					else if (opStack.Count == 0)
+					{
+						var unaryOperation = operation as UnaryOperationToken;
+						var unaryOperand = numStack.Pop();
+						var result = unaryOperation!.CalculateUnary(unaryOperand.Calculate());
+						numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
 					}
 
-					//Double check this logic
-					while (unaryStack.Count > 0)
-					{
-						var innerFunction = unaryStack.Pop();
-						unaryDelegate = (x) => innerFunction(unaryDelegate(x));
-					}
-
-					//For the above code: the FIRST operation is always the one to take. in fact, it is the only one we really care about
-					//sometimes ya gotta look through the negatives to apply them properly
-
-					if (opStack.Count == 0)
-					{
-						opStack.Push(binaryOperation);
-					}
+					//for a second, lets live in a world without dual arity operators.
+					//we have prefixes and postfixes and binaries, so sin, !, ^2 etc, but no - as a negative. therefore only one operation between operands
+					
+					//Important! there is no reason for postfix operators to accumulate, as they should happen before other postfixes. and after 
+					//prefixes
 					else
 					{
-						var mostRecentOperation = opStack.Peek();
-
-						//Having two operators with the same precedence but different associativity would create ambiguity in expressions (impossible)
-						//An expression like a op1 b op2 c would have conflicting evaluation orders
-						if (mostRecentOperation.Priority == binaryOperation.Priority && mostRecentOperation.Associativity == Associativity.Left || mostRecentOperation.Priority > binaryOperation.Priority)
+						if (operation is UnaryOperationToken unary && unary.Fixity == Fixity.Postfix)
 						{
-							var firstOperand = numStack.Pop();
-							var secondOperand = numStack.Pop();
-							opStack.Pop();
-							var result = mostRecentOperation.CalculateBinary(firstOperand.Calculate(), secondOperand.Calculate());
-							numStack.Push(new NullaryOperationToken() { Calculate = () => result });
+							//Operation is postfix eg ! so to deal with this, we will continue peeking and evaluating until we have an operation with lower precedence
+							//the goal is to get increasing chain +, *, ^ so we can retain preference when executing in reverse :)
+
+							//I currently dont have a way of *enforcing* this but if you put all the dual arities as dual arities when they are binary
+							//and put their unary properties when they are unary, you shouldnt have to deal with duals that are ambiguous
+							//ex in the below, they would be classified as binaries, fittingly.
+
+							//context: we have encountered a postfix, and we need to remove all the operations with higher priority before this.
+							//We know the postfix is not the only operator, or it would have been processed already. therefore there is at least one operator.
+							//keep going until there are no more operators, or the priority of the operator before is lower
+							var lastOperationBeforePostfix = opStack.Peek();
+							double result;
+							while (opStack.Count > 0 && opStack.Peek().Priority > unary.Priority)
+							{
+								var firstOperand = numStack.Pop();
+								lastOperationBeforePostfix = opStack.Pop();
+
+								if (lastOperationBeforePostfix is IBinaryOperation lastOperationBinary)
+								{
+									var secondOperand = numStack.Pop();
+									result = lastOperationBinary.CalculateBinary(firstOperand.Calculate(), secondOperand.Calculate());
+								}
+								else
+								{
+									var lastOperationUnary = lastOperationBeforePostfix as IUnaryOperation;
+									result = lastOperationUnary!.CalculateUnary(firstOperand.Calculate());
+								}
+
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+								if (opStack.Count == 0)
+								{
+									break;
+								}
+							}
+
+							var operand = numStack.Pop();
+							result = unary.CalculateUnary(operand.Calculate());
+							numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+						}
+
+						else if (operation is IBinaryOperation binaryOperation && binaryOperation.Associativity == Associativity.Left)
+						{
+							while (opStack.Count > 0 && opStack.Peek().Priority >= binaryOperation.Priority )
+							{
+								var op = opStack.Pop();
+								var latestOperand = numStack.Pop();
+								double result;
+								if (op is IBinaryOperation opBinary)
+								{
+									var earlierOperand = numStack.Pop();
+									result = opBinary!.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
+								}
+								else
+								{
+									var unaryOperation = op as IUnaryOperation;
+									result = unaryOperation!.CalculateUnary(latestOperand.Calculate());
+								}
+
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+							}
+
 							opStack.Push(binaryOperation);
 						}
-						else
+						else if (operation is IBinaryOperation binaryOperationRight)
 						{
-							opStack.Push(binaryOperation);
+							while (opStack.Count > 0 && opStack.Peek().Priority > binaryOperationRight.Priority)
+							{
+								var op = opStack.Pop();
+								var laterOperand = numStack.Pop();
+								double result;
+								if (op is IBinaryOperation binaryOperator)
+								{
+									var earlierOperand = numStack.Pop();
+									result = binaryOperator!.CalculateBinary(earlierOperand.Calculate(), laterOperand.Calculate());
+
+								}
+								else
+								{
+									var unaryOperation = op as IUnaryOperation;
+									result = unaryOperation!.CalculateUnary(laterOperand.Calculate());
+								}
+
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+							}
+
+							opStack.Push(binaryOperationRight);
 						}
 					}
 				}
@@ -154,27 +251,101 @@ namespace MultiCalculator.Utilities
 				currentIndex++;
 			}
 
+			//I think this works, but i am not sure
 			while (opStack.Count > 0)
 			{
-				var secondOperand = numStack.Pop();
-				var firstOperand = numStack.Pop();
-				var result = opStack.Pop().CalculateBinary(firstOperand.Calculate(), secondOperand.Calculate());
-				numStack.Push(new NullaryOperationToken() { Calculate = () => result });
+				var trailingOperation = opStack.Pop();
+				var latestOperand = numStack.Pop();
+				double result;
+
+				if (trailingOperation is IBinaryOperation binaryOperation)
+				{
+					var earlierOperand = numStack.Pop();
+					result = binaryOperation.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
+				}
+				else
+				{
+					//make sure this wont be null, as every operation should either be ibinary or iunary
+					var unaryOperation = trailingOperation as IUnaryOperation;
+					result = unaryOperation!.CalculateUnary(latestOperand.Calculate());
+				}
+
+				numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
 			}
 
 			return numStack.Pop();
 		}
 
+		//Write test cases
+		public void InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets()
+		{
+			IToken currentToken, nextToken;
+			var unmatchedOpenBraces = 0;
+			for (int i = 0; i < operations.Count - 1; i++)
+			{
+				currentToken = operations[i];
+				nextToken = operations[i + 1];
+
+				if ((currentToken == OperationDefinitions.ClosedBracket || currentToken is NullaryOperationToken or DigitToken || currentToken is UnaryOperationToken thisUnary && thisUnary.Fixity == Fixity.Postfix) &&
+					(nextToken == OperationDefinitions.OpenBracket || nextToken is NullaryOperationToken || nextToken is UnaryOperationToken nextUnary && nextUnary.Fixity == Fixity.Prefix))
+				{
+					InsertAt(i + 1, OperationDefinitions.Multiplication);
+					i++;
+				}
+			}
+
+			var isInOperationString = true;
+
+			for (int i = 0; i < operations.Count; i++)
+			{
+				if (operations[i] == OperationDefinitions.OpenBracket)
+				{
+					unmatchedOpenBraces++;
+				}
+				else if (operations[i] == OperationDefinitions.ClosedBracket)
+				{
+					unmatchedOpenBraces--;
+				}
+				//Logic: we can have an operation string. we enter a string by placing a dual, binary, or unary
+				//once one is entered, we set bool is in string to true, and when it is true, we only place unaries
+				if (operations[i] is DualArityOperationToken dual)
+				{
+					if (isInOperationString)
+					{
+						operations[i] = dual.UnaryOperation;
+					}
+					else
+					{
+						isInOperationString = true;
+					}
+				}
+				else if (operations[i] is IOperation)
+				{
+					isInOperationString = true;
+				}
+				else
+				{
+					isInOperationString = false;
+				}
+			}
+
+			for (int i = 0; i < unmatchedOpenBraces; i++)
+			{
+				Add(OperationDefinitions.ClosedBracket);
+			}
+		}
+
 		NullaryOperationToken ParseDoubleFromIndex(int index, out int lengthParsed)
 		{
-			var resultAsString = (operations[index] as DigitToken)!.DisplayName;
+			var resultAsString = (operations[index] as DigitToken)!.TokenSymbol;
 			index++;
 			lengthParsed = 1;
 
 			while (index < operations.Count && operations[index] is DigitToken digit)
 			{
-				resultAsString += digit.DisplayName;
+				resultAsString += digit.TokenSymbol;
 				lengthParsed++;
+				index++;
 			}
 
 			var result = double.Parse(resultAsString);
@@ -230,7 +401,7 @@ namespace MultiCalculator.Utilities
 			return true;
 		}
 
-		bool HasMatchingAndNonEmptyBraces()
+		bool HasNonEmptyAndNonNegativeOpenBraces()
 		{
 			var bracketStack = new Stack<int>();
 
@@ -284,7 +455,7 @@ namespace MultiCalculator.Utilities
 					atLeastOneIntInNumber = false;
 					while (currentTokenIndex < operations.Count && operations[currentTokenIndex] is DigitToken digit)
 					{
-						if (digit.DisplayName.Equals("."))
+						if (digit.TokenSymbol.Equals("."))
 						{
 							if (encounteredDecimalPointInNumber)
 							{

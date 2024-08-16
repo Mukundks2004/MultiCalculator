@@ -1,11 +1,17 @@
 ﻿using MultiCalculator.Abstractions;
+using MultiCalculator.Enums;
+using MultiCalculator.Exceptions;
 
 namespace MultiCalculator.Implementations
 {
 	public class UnaryOperationToken : IToken, IUnaryOperation
     {
-        public string DisplayName { get; init; } = "f(x)";
+		public string TokenSymbol { get; init; } = string.Empty;
 
-		public Func<double, double> CalculateUnary { get; init; } = (x) => x;
-    }
+		public Func<double, double> CalculateUnary { get; init; } = (x) => throw new MultiCalculatorException("Not implemented");
+
+		public int Priority { get; init; } = int.MinValue;
+
+		public Fixity Fixity { get; init; } = Fixity.Prefix;
+	}
 }

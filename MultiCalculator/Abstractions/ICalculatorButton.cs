@@ -1,7 +1,9 @@
-﻿namespace MultiCalculator.Abstractions
+﻿using MultiCalculator.Utilities;
+
+namespace MultiCalculator.Abstractions
 {
 	public interface ICalculatorButton
     {
-        IToken ButtonOperation { get; set; }
+        CalculatorTask CalculatorTask { get; set; }
     }
 }
