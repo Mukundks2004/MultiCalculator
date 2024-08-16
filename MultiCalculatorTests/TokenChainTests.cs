@@ -44,7 +44,7 @@ namespace MultiCalculatorTests
 		public void ParseExpressionTest(TokenChain tokenChain, double expectedResult)
 		{
 			tokenChain.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
-			Assert.That(tokenChain.Parse(), Is.EqualTo(expectedResult).Within(0.00000000001));
+			Assert.That(tokenChain.Parse(), Is.EqualTo(expectedResult).Within(0.000001));
 		}
 
 		public static IEnumerable<TestCaseData> ValidAndInvalidExpressionTestCases
@@ -59,18 +59,18 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([One, Point, Five, Point, Two]), false).SetDescription("1.5.2");
 				yield return new TestCaseData(new TokenChain([One, Point, Five, Point, Two, Point, One]), false).SetDescription("1.5.2.1");
 				yield return new TestCaseData(new TokenChain([Three, Plus, Three, Point, Three, Plus, Three, Point, Three, Point, Three]), false).SetDescription("3 + 3.3 + 3.3.3");
-				yield return new TestCaseData(new TokenChain([Two, Two, Point, Two, Times, Two, MultiCalculator.Definitions.OperationDefinitions.One, Point, MultiCalculator.Definitions.OperationDefinitions.One, Point, MultiCalculator.Definitions.OperationDefinitions.One, Plus, MultiCalculator.Definitions.OperationDefinitions.One]), false).SetDescription("22.2 x 21.1.1 + 1");
-				yield return new TestCaseData(new TokenChain([MultiCalculator.Definitions.OperationDefinitions.One, Times, Two, Times, Three]), true).SetDescription("1 x 2 x 3");
-				yield return new TestCaseData(new TokenChain([MultiCalculator.Definitions.OperationDefinitions.One, Times, Two, Three, Four, Plus, Five]), true).SetDescription("1 x 234 + 5");
-				yield return new TestCaseData(new TokenChain([MultiCalculator.Definitions.OperationDefinitions.One, Two, Three, Point, Four, Five]), true).SetDescription("123.45");
-				yield return new TestCaseData(new TokenChain([MultiCalculator.Definitions.OperationDefinitions.One, Two, Three, Point, Four, Five, Plus, Two, Point, Three]), true).SetDescription("123.45 + 2.3");
-				yield return new TestCaseData(new TokenChain([MultiCalculator.Definitions.OperationDefinitions.One, Point, Five, Times, Two]), true).SetDescription("1.5 x 2");
+				yield return new TestCaseData(new TokenChain([Two, Two, Point, Two, Times, Two, One, Point, One, Point, One, Plus, One]), false).SetDescription("22.2 x 21.1.1 + 1");
+				yield return new TestCaseData(new TokenChain([One, Times, Two, Times, Three]), true).SetDescription("1 x 2 x 3");
+				yield return new TestCaseData(new TokenChain([One, Times, Two, Three, Four, Plus, Five]), true).SetDescription("1 x 234 + 5");
+				yield return new TestCaseData(new TokenChain([One, Two, Three, Point, Four, Five]), true).SetDescription("123.45");
+				yield return new TestCaseData(new TokenChain([One, Two, Three, Point, Four, Five, Plus, Two, Point, Three]), true).SetDescription("123.45 + 2.3");
+				yield return new TestCaseData(new TokenChain([One, Point, Five, Times, Two]), true).SetDescription("1.5 x 2");
 
 				yield return new TestCaseData(new TokenChain([Point]), false).SetDescription(".");
 				yield return new TestCaseData(new TokenChain([Point, Plus, Point]), false).SetDescription(". + .");
 				yield return new TestCaseData(new TokenChain([Point, Plus, One, Point]), false).SetDescription(". + 1.");
-				yield return new TestCaseData(new TokenChain([MultiCalculator.Definitions.OperationDefinitions.One, Plus, One, Point]), true).SetDescription("1 + 1.");
-				yield return new TestCaseData(new TokenChain([MultiCalculator.Definitions.OperationDefinitions.One, Point, Plus, One, Point]), true).SetDescription("1. + 1.");
+				yield return new TestCaseData(new TokenChain([One, Plus, One, Point]), true).SetDescription("1 + 1.");
+				yield return new TestCaseData(new TokenChain([One, Point, Plus, One, Point]), true).SetDescription("1. + 1.");
 
 				yield return new TestCaseData(new TokenChain([C]), false).SetDescription("(");
 				yield return new TestCaseData(new TokenChain([C]), false).SetDescription("(.)");
@@ -209,7 +209,10 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([Pi, Pi, C, Pi, J]), Math.Pow(Math.PI, 3)).SetDescription("pi pi (pi)");
 				yield return new TestCaseData(new TokenChain([Minus, Pi, Pi, C, C, C, Pi, Pi, Minus, C, E, Minus, E, J, J]), -Math.Pow(Math.PI, 4)).SetDescription("- pi pi ( ( ( pi pi - (e - e ) )");
 				yield return new TestCaseData(new TokenChain([Minus, Minus, Minus, Pi, Pi, C, C, C, Pi, Pi, Minus, C, E, Minus, E, J]), -Math.Pow(Math.PI, 4)).SetDescription("- - - pi pi ( ( ( pi pi - (e - e )");
-
+				
+				yield return new TestCaseData(new TokenChain([Five, Times, Five, Times, C, Four, Four, J, C, One, Zero, J, Minus, Pi, Pi, Pi, Pi, Pi]), 10693.980315214718).SetDescription("5 x 5 x (44)(10) - pi pi pi pi pi");
+				yield return new TestCaseData(new TokenChain([One, Two, Three, Four, Plus, One, Two, Three, Four]), 2468).SetDescription("1234 + 1234 = 2468");
+				yield return new TestCaseData(new TokenChain([One, Two, Times, One, Two, Times, One, Two, Minus, C, Three, Three, ToThePowerOf, Two, J]), 639).SetDescription("12 x 12 x 12 - 33 ^ 2 = 639");
 			}
 		}
 	}

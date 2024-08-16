@@ -345,6 +345,7 @@ namespace MultiCalculator.Utilities
 			{
 				resultAsString += digit.TokenSymbol;
 				lengthParsed++;
+				index++;
 			}
 
 			var result = double.Parse(resultAsString);
