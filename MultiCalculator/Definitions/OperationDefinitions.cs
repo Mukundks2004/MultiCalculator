@@ -64,7 +64,7 @@ namespace MultiCalculator.Definitions
 		static readonly UnaryOperationToken erf = new() { CalculateUnary = MathHelpers.Erf, Fixity = Fixity.Prefix, TokenSymbol = "erf", Priority = 2 };
 
 		static readonly BinaryOperationToken multiplication = new() { CalculateBinary = (a, b) => a * b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "×" };
-        static readonly BinaryOperationToken division = new() { CalculateBinary = (a, b) => a / b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "÷" };
+        static readonly BinaryOperationToken division = new() { CalculateBinary = (a, b) => b == 0 ? double.NaN : a / b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "÷" };
 
 		static readonly DualArityOperationToken addition = new() { CalculateBinary = (a, b) => a + b, CalculateUnary = (a) => a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "+", UnaryOperation = p };
 		static readonly DualArityOperationToken subtraction = new() { CalculateBinary = (a, b) => a - b, CalculateUnary = (a) => -a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "-", UnaryOperation = u };

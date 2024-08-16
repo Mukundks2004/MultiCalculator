@@ -95,9 +95,16 @@ namespace MultiCalculator
 			}
 			else
 			{
-				//TODO: insert multiplication signs
+				CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
 				var result = CalculatorExpression.Parse();
-				CalculatorAnswer = result.ToString();
+				if (double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity)
+				{
+					CalculatorAnswer = "Math Error";
+				}
+				else
+				{
+					CalculatorAnswer = result.ToString();
+				}
 			}
 
 			CalculatorExpression.MakeEmpty();

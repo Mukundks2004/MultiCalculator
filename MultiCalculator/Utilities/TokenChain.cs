@@ -49,6 +49,10 @@ namespace MultiCalculator.Utilities
 		public void InsertAt(int index, IToken button)
 		{
 			operations.Insert(index, button);
+			if (index < Cursor)
+			{
+				Cursor++;
+			}
 			OperationsUpdated?.Invoke();
 		}
 
@@ -198,13 +202,21 @@ namespace MultiCalculator.Utilities
 						{
 							while (opStack.Count > 0 && opStack.Peek().Priority >= binaryOperation.Priority )
 							{
-								var latestOperand = numStack.Pop();
-								var earlierOperand = numStack.Pop();
 								var op = opStack.Pop();
-								var opBinary = op as IBinaryOperation;
+								var latestOperand = numStack.Pop();
+								double result;
+								if (op is IBinaryOperation opBinary)
+								{
+									var earlierOperand = numStack.Pop();
+									result = opBinary!.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
+								}
+								else
+								{
+									var unaryOperation = op as IUnaryOperation;
+									result = unaryOperation!.CalculateUnary(latestOperand.Calculate());
+								}
 
-								var binaryResult = opBinary!.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
-								numStack.Push(NullaryOperationToken.GetConstFromDouble(binaryResult));
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
 							}
 
 							opStack.Push(binaryOperation);
@@ -213,13 +225,22 @@ namespace MultiCalculator.Utilities
 						{
 							while (opStack.Count > 0 && opStack.Peek().Priority > binaryOperationRight.Priority)
 							{
-								var firstOperand = numStack.Pop();
-								var secondOperand = numStack.Pop();
 								var op = opStack.Pop();
-								var opBinary = op as IBinaryOperation;
+								var laterOperand = numStack.Pop();
+								double result;
+								if (op is IBinaryOperation binaryOperator)
+								{
+									var earlierOperand = numStack.Pop();
+									result = binaryOperator!.CalculateBinary(earlierOperand.Calculate(), laterOperand.Calculate());
 
-								var binaryResult = opBinary!.CalculateBinary(firstOperand.Calculate(), secondOperand.Calculate());
-								numStack.Push(NullaryOperationToken.GetConstFromDouble(binaryResult));
+								}
+								else
+								{
+									var unaryOperation = op as IUnaryOperation;
+									result = unaryOperation!.CalculateUnary(laterOperand.Calculate());
+								}
+
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
 							}
 
 							opStack.Push(binaryOperationRight);
@@ -268,7 +289,8 @@ namespace MultiCalculator.Utilities
 				if ((currentToken == OperationDefinitions.ClosedBracket || currentToken is NullaryOperationToken or DigitToken || currentToken is UnaryOperationToken thisUnary && thisUnary.Fixity == Fixity.Postfix) &&
 					(nextToken == OperationDefinitions.OpenBracket || nextToken is NullaryOperationToken || nextToken is UnaryOperationToken nextUnary && nextUnary.Fixity == Fixity.Prefix))
 				{
-					InsertAt(i, OperationDefinitions.Multiplication);
+					InsertAt(i + 1, OperationDefinitions.Multiplication);
+					i++;
 				}
 			}
 
