@@ -11,7 +11,7 @@ using MultiCalculator.Database;
 namespace MultiCalculator.Migrations
 {
     [DbContext(typeof(CalculatorDbContext))]
-    [Migration("20240812113506_InitialMigration")]
+    [Migration("20240814122542_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -77,11 +77,18 @@ namespace MultiCalculator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AmountOfGeneratedPdfs")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GeneratedPdfLocations")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

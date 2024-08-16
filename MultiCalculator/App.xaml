@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:MultiCalculator"
              StartupUri="ScientificCalculatorWindow.xaml">
     <Application.Resources>
-
     </Application.Resources>
 </Application>
