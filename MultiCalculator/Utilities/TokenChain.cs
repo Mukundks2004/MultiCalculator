@@ -164,12 +164,13 @@ namespace MultiCalculator.Utilities
 							//context: we have encountered a postfix, and we need to remove all the operations with higher priority before this.
 							//We know the postfix is not the only operator, or it would have been processed already. therefore there is at least one operator.
 							//keep going until there are no more operators, or the priority of the operator before is lower
-							var lastOperationBeforePostfix = opStack.Pop();
+							var lastOperationBeforePostfix = opStack.Peek();
 							double result;
-							while (opStack.Count > 0 && lastOperationBeforePostfix.Priority > unary.Priority)
+							while (opStack.Count > 0 && opStack.Peek().Priority > unary.Priority)
 							{
 								var firstOperand = numStack.Pop();
-								
+								lastOperationBeforePostfix = opStack.Pop();
+
 								if (lastOperationBeforePostfix is IBinaryOperation lastOperationBinary)
 								{
 									var secondOperand = numStack.Pop();
@@ -185,10 +186,6 @@ namespace MultiCalculator.Utilities
 								if (opStack.Count == 0)
 								{
 									break;
-								}
-								else
-								{
-									lastOperationBeforePostfix = opStack.Pop();
 								}
 							}
 
