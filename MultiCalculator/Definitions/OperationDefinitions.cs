@@ -28,7 +28,8 @@ namespace MultiCalculator.Definitions
 		static readonly UnaryOperationToken factorial = new() { CalculateUnary = MathHelpers.Factorial, Fixity = Fixity.Postfix, TokenSymbol = "!", Priority = 6 };
 
 		static readonly BinaryOperationToken exponentiation = new() { CalculateBinary = Math.Pow, Associativity = Associativity.Right, Priority = 5, TokenSymbol = "^" };
-		
+		static readonly UnaryOperationToken antilog = new() { CalculateUnary = (x) => Math.Pow(10, x), Fixity = Fixity.Prefix, TokenSymbol = "10^", Priority = 5 };
+
 		//Requires special attention
 		static readonly BinaryOperationToken nthroot = new() { CalculateBinary = (a, b) => Math.Pow(a, 1 / b), Associativity = Associativity.Right, Priority = 5, TokenSymbol = "√" };
 
@@ -52,22 +53,21 @@ namespace MultiCalculator.Definitions
 		static readonly UnaryOperationToken acosh = new() { CalculateUnary = Math.Acosh, Fixity = Fixity.Prefix, TokenSymbol = "acosh", Priority = 2 };
 		static readonly UnaryOperationToken atanh = new() { CalculateUnary = Math.Atanh, Fixity = Fixity.Prefix, TokenSymbol = "atanh", Priority = 2 };
 
+		static readonly UnaryOperationToken abs = new() { CalculateUnary = Math.Abs, Fixity = Fixity.Prefix, TokenSymbol = "abs", Priority = 2 };
+		static readonly UnaryOperationToken sqrt = new() { CalculateUnary = Math.Sqrt, Fixity = Fixity.Prefix, TokenSymbol = "sqrt", Priority = 2 };
+		static readonly UnaryOperationToken cbrt = new() { CalculateUnary = Math.Cbrt, Fixity = Fixity.Prefix, TokenSymbol = "cbrt", Priority = 2 };
+		static readonly UnaryOperationToken log = new() { CalculateUnary = Math.Log10, Fixity = Fixity.Prefix, TokenSymbol = "log", Priority = 2 };
+		static readonly UnaryOperationToken ln = new() { CalculateUnary = Math.Log, Fixity = Fixity.Prefix, TokenSymbol = "ln", Priority = 2 };
+		static readonly UnaryOperationToken productlog = new() { CalculateUnary = MathHelpers.LambertW, Fixity = Fixity.Prefix, TokenSymbol = "W", Priority = 2 };
+		static readonly UnaryOperationToken sinc = new() { CalculateUnary = (x) => x == 0 ? double.NaN : Math.Sin(x) / x, Fixity = Fixity.Prefix, TokenSymbol = "sinc", Priority = 2 };
+		static readonly UnaryOperationToken exp = new() { CalculateUnary = Math.Exp, Fixity = Fixity.Prefix, TokenSymbol = "exp", Priority = 2 };
+		static readonly UnaryOperationToken erf = new() { CalculateUnary = MathHelpers.Erf, Fixity = Fixity.Prefix, TokenSymbol = "erf", Priority = 2 };
+
 		static readonly BinaryOperationToken multiplication = new() { CalculateBinary = (a, b) => a * b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "×" };
         static readonly BinaryOperationToken division = new() { CalculateBinary = (a, b) => a / b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "÷" };
 
 		static readonly DualArityOperationToken addition = new() { CalculateBinary = (a, b) => a + b, CalculateUnary = (a) => a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "+", UnaryOperation = p };
 		static readonly DualArityOperationToken subtraction = new() { CalculateBinary = (a, b) => a - b, CalculateUnary = (a) => -a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "-", UnaryOperation = u };
-
-		static readonly UnaryOperationToken abs = new() { CalculateUnary = Math.Abs, Fixity = Fixity.Prefix, TokenSymbol = "abs" };
-		static readonly UnaryOperationToken sqrt = new() { CalculateUnary = Math.Sqrt, Fixity = Fixity.Prefix, TokenSymbol = "sqrt" };
-		static readonly UnaryOperationToken cbrt = new() { CalculateUnary = Math.Cbrt, Fixity = Fixity.Prefix, TokenSymbol = "cbrt" };
-		static readonly UnaryOperationToken log = new() { CalculateUnary = Math.Log10, Fixity = Fixity.Prefix, TokenSymbol = "log" };
-		static readonly UnaryOperationToken ln = new() { CalculateUnary = Math.Log, Fixity = Fixity.Prefix, TokenSymbol = "ln" };
-		static readonly UnaryOperationToken antilog = new() { CalculateUnary = (x) => Math.Pow(10, x), Fixity = Fixity.Prefix, TokenSymbol = "10^" };
-		static readonly UnaryOperationToken exp = new() { CalculateUnary = Math.Exp, Fixity = Fixity.Prefix, TokenSymbol = "exp" };
-		static readonly UnaryOperationToken erf = new() { CalculateUnary = MathHelpers.Erf, Fixity = Fixity.Prefix, TokenSymbol = "erf" };
-		static readonly UnaryOperationToken productlog = new() { CalculateUnary = MathHelpers.LambertW, Fixity = Fixity.Prefix, TokenSymbol = "W" };
-		static readonly UnaryOperationToken sinc = new() { CalculateUnary = (x) => x == 0 ? double.NaN : Math.Sin(x) / x, Fixity = Fixity.Prefix, TokenSymbol = "sinc" };
 
 		public static DualArityOperationToken Addition => addition;
 

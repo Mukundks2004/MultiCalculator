@@ -20,6 +20,10 @@ namespace MultiCalculatorTests
 
 		static BinaryOperationToken ToThePowerOf { get => Exponentiation; }
 
+		static BinaryOperationToken P { get => Permuations; }
+
+		static BinaryOperationToken Choose { get => Combinations; }
+
 		static DigitToken One { get => MultiCalculator.Definitions.OperationDefinitions.One; }
 
 		static DigitToken Two { get => MultiCalculator.Definitions.OperationDefinitions.Two; }
@@ -178,7 +182,10 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([C, One, Plus, One, J, Times, C, One, Plus, One]), 4).SetDescription("(1 + 1) x (1 + 1 = 4");
 
 				yield return new TestCaseData(new TokenChain([One, Factorial]), 1).SetDescription("1! = 1");
+				yield return new TestCaseData(new TokenChain([Four, P, Four]), 24).SetDescription("4 P 4 = 24");
+				yield return new TestCaseData(new TokenChain([Four, Choose, Four]), 1).SetDescription("4 C 4 = 1");
 				yield return new TestCaseData(new TokenChain([C, One, Plus, One, J, Factorial]), 2).SetDescription("(1 + 1)! = 2");
+				yield return new TestCaseData(new TokenChain([Minus, C, Three, Times, Two, ToThePowerOf, Two, ToThePowerOf, One, J, Factorial]), -479001600).SetDescription("-(3 x 2 ^ 2 ^ 1)! = -479001600");
 				yield return new TestCaseData(new TokenChain([C, One, Minus, One, J, Factorial]), 1).SetDescription("(1 - 1)! = 1");
 				yield return new TestCaseData(new TokenChain([C, One, Plus, One, J, Factorial, Factorial, Factorial]), 2).SetDescription("(1 + 1)!!! = 2");
 				yield return new TestCaseData(new TokenChain([Sin, C, One, Minus, One, J]), 0).SetDescription("sin(1 - 1) = 0");
@@ -195,6 +202,11 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([One, Plus, Two, Times, Three, ToThePowerOf, Four, Plus, C, Two, Times, Two, Times, Two, J]), 171).SetDescription("1 + 2 x 3 ^ 4 + (2 x 2 x 2)");
 				yield return new TestCaseData(new TokenChain([One, Plus, Two, Times, Three, ToThePowerOf, Four, Plus, Minus, C, Two, Times, Two, J]), 159).SetDescription("1 + 2 x 3 ^ 4 + -(2 x 2)");
 				yield return new TestCaseData(new TokenChain([One, Plus, Two, Times, Three, ToThePowerOf, Four, Plus, Minus, C, Two, Times, Two, J, Factorial]), 139).SetDescription("1 + 2 x 3 ^ 4 + -(2 x 2)!");
+
+				yield return new TestCaseData(new TokenChain([One, ToThePowerOf, E]), 1).SetDescription("1 ^ e = 1");
+				yield return new TestCaseData(new TokenChain([E, ToThePowerOf, One]), Math.E).SetDescription("e ^ 1 = e");
+				yield return new TestCaseData(new TokenChain([E, ToThePowerOf, Two]), Math.E * Math.E).SetDescription("e ^ 2 = e^2");
+
 			}
 		}
 	}
