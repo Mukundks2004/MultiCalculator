@@ -11,7 +11,7 @@ namespace MultiCalculator.Implementations
 
 		public static NullaryOperationToken GetConstFromDouble(double value = 0)
 		{
-			return new NullaryOperationToken() { Calculate = () => value };
+			return new NullaryOperationToken() { Calculate = () => value, TokenSymbol = value.ToString() };
 		}
 	}
 }

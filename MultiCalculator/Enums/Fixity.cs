@@ -1,6 +1,6 @@
 ﻿namespace MultiCalculator.Enums
 {
-	public enum OperandPosition
+	public enum Fixity
 	{
 		Prefix,
 		Postfix

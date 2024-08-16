@@ -72,11 +72,13 @@ namespace MultiCalculator
 		{
 			var button = sender as ICalculatorButton;
 			_ = button ?? throw new ArgumentNullException(nameof(button));
+			CalculatorAnswer = string.Empty;
 			CalculatorExpression.Add(button.CalculatorTask.Tokens);
 		}
 
 		public void GetAnswer_Click()
 		{
+			CalculatorAnswer = string.Empty;
 			//Replace this with real answer when we have a history service or something- maybe we need a history model?
 			//Also move explicit references to token to service maybe. the view should not know about the impelemtnation details.
 			CalculatorExpression.Add(OpenBracket);

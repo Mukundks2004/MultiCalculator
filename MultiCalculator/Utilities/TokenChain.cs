@@ -3,7 +3,7 @@ using MultiCalculator.Definitions;
 using MultiCalculator.Delegates;
 using MultiCalculator.Enums;
 using MultiCalculator.Implementations;
-using System.Windows.Controls;
+using OpenAI_API.Moderation;
 
 namespace MultiCalculator.Utilities
 {
@@ -79,33 +79,185 @@ namespace MultiCalculator.Utilities
 			return ParseFromIndexToIndex(0, operations.Count).Calculate();
 		}
 
-		NullaryOperationToken ParseFromIndexToIndex(int startIndex, int EndIndexExclusive)
+		NullaryOperationToken ParseFromIndexToIndex(int startIndex, int endIndexExclusive)
 		{
 			var currentIndex = startIndex;
 			var numStack = new Stack<NullaryOperationToken>();
-			var opStack = new Stack<IBinaryOperation>();
-			return new NullaryOperationToken();
-		}
-		//Still cannot handle 2 x ----4
-		//Also not sure if (2 x 2, missing brackets, parses correctly
-		/*NullaryOperationToken ParseFromIndexToIndex(int startIndex, int indexEndExclusive)
-		{
-			var currentIndex = startIndex;
-			var numStack = new Stack<NullaryOperationToken>();
-			var opStack = new Stack<IBinaryOperation>();
+			var opStack = new Stack<IOperation>();
 
-			while (currentIndex < indexEndExclusive)
+			while (currentIndex < endIndexExclusive)
 			{
-				if (operations[currentIndex] is NullaryOperationToken nullaryOperation)
+				var currentToken = operations[currentIndex];
+
+				if (currentToken is NullaryOperationToken constant)
 				{
-					numStack.Push(nullaryOperation);
+					numStack.Push(constant);
 				}
-				else if (operations[currentIndex] is DigitToken)
+
+				else if (currentToken is DigitToken)
 				{
-					var parsedNumberAsNullary = ParseDoubleFromIndex(currentIndex, out int lengthOfNumber);
-					numStack.Push(parsedNumberAsNullary);
+					var parsedNumberAsConst = ParseDoubleFromIndex(currentIndex, out int lengthOfNumber);
+					numStack.Push(parsedNumberAsConst);
 					currentIndex += lengthOfNumber - 1;
 				}
+
+				else if (currentToken == OperationDefinitions.OpenBracket)
+				{
+					var nextClosingBraceDistance = 0;
+					var unmatchedOpenBracketCount = 1;
+					while (currentIndex + nextClosingBraceDistance < endIndexExclusive && unmatchedOpenBracketCount > 0)
+					{
+						nextClosingBraceDistance++;
+						if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.ClosedBracket)
+						{
+							unmatchedOpenBracketCount--;
+						}
+						else if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.OpenBracket || operations[currentIndex + nextClosingBraceDistance] is UnaryOperationToken)
+						{
+							unmatchedOpenBracketCount++;
+						}
+					}
+
+					numStack.Push(ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance));
+					currentIndex += nextClosingBraceDistance;
+				}
+
+				//We can never evaluate unaries until we encounter postfix operators or binaries
+				//This system should hopefully allow duals to be postfix
+				else if (currentToken is UnaryOperationToken unaryPrefix && unaryPrefix.Fixity == Fixity.Prefix)
+				{
+					opStack.Push(unaryPrefix);
+				}
+
+				else if (currentToken is IOperation operation)
+				{
+					//First operation is not postfix
+					if (opStack.Count == 0 && !(operation is UnaryOperationToken firstOperation && firstOperation.Fixity == Fixity.Postfix))
+					{
+						opStack.Push(operation);
+					}
+					//only operation is postfix
+					else if (opStack.Count == 0)
+					{
+						var unaryOperation = operation as UnaryOperationToken;
+						var unaryOperand = numStack.Pop();
+						var result = unaryOperation!.CalculateUnary(unaryOperand.Calculate());
+						numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+					}
+
+					//for a second, lets live in a world without dual arity operators.
+					//we have prefixes and postfixes and binaries, so sin, !, ^2 etc, but no - as a negative. therefore only one operation between operands
+					
+					//Important! there is no reason for postfix operators to accumulate, as they should happen before other postfixes. and after 
+					//prefixes
+					else
+					{
+						if (operation is UnaryOperationToken unary && unary.Fixity == Fixity.Postfix)
+						{
+							//Operation is postfix eg ! so to deal with this, we will continue peeking and evaluating until we have an operation with lower precedence
+							//the goal is to get increasing chain +, *, ^ so we can retain preference when executing in reverse :)
+
+							//I currently dont have a way of *enforcing* this but if you put all the dual arities as dual arities when they are binary
+							//and put their unary properties when they are unary, you shouldnt have to deal with duals that are ambiguous
+							//ex in the below, they would be classified as binaries, fittingly.
+
+							//context: we have encountered a postfix, and we need to remove all the operations with higher priority before this.
+							//We know the postfix is not the only operator, or it would have been processed already. therefore there is at least one operator.
+							//keep going until there are no more operators, or the priority of the operator before is lower
+							var lastOperationBeforePostfix = opStack.Pop();
+							double result;
+							while (opStack.Count > 0 && lastOperationBeforePostfix.Priority > unary.Priority)
+							{
+								var firstOperand = numStack.Pop();
+								
+								if (lastOperationBeforePostfix is IBinaryOperation lastOperationBinary)
+								{
+									var secondOperand = numStack.Pop();
+									result = lastOperationBinary.CalculateBinary(firstOperand.Calculate(), secondOperand.Calculate());
+								}
+								else
+								{
+									var lastOperationUnary = lastOperationBeforePostfix as IUnaryOperation;
+									result = lastOperationUnary!.CalculateUnary(firstOperand.Calculate());
+								}
+
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+								if (opStack.Count == 0)
+								{
+									break;
+								}
+								else
+								{
+									lastOperationBeforePostfix = opStack.Pop();
+								}
+							}
+
+							var operand = numStack.Pop();
+							result = unary.CalculateUnary(operand.Calculate());
+							numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+						}
+
+						else if (operation is IBinaryOperation binaryOperation && binaryOperation.Associativity == Associativity.Left)
+						{
+							while (opStack.Count > 0 && opStack.Peek().Priority >= binaryOperation.Priority )
+							{
+								var latestOperand = numStack.Pop();
+								var earlierOperand = numStack.Pop();
+								var op = opStack.Pop();
+								var opBinary = op as IBinaryOperation;
+
+								var binaryResult = opBinary!.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(binaryResult));
+							}
+
+							opStack.Push(binaryOperation);
+						}
+						else if (operation is IBinaryOperation binaryOperationRight)
+						{
+							while (opStack.Count > 0 && opStack.Peek().Priority > binaryOperationRight.Priority)
+							{
+								var firstOperand = numStack.Pop();
+								var secondOperand = numStack.Pop();
+								var op = opStack.Pop();
+								var opBinary = op as IBinaryOperation;
+
+								var binaryResult = opBinary!.CalculateBinary(firstOperand.Calculate(), secondOperand.Calculate());
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(binaryResult));
+							}
+
+							opStack.Push(binaryOperationRight);
+						}
+					}
+				}
+
+				currentIndex++;
+			}
+
+			//I think this works, but i am not sure
+			while (opStack.Count > 0)
+			{
+				var trailingOperation = opStack.Pop();
+				var latestOperand = numStack.Pop();
+				double result;
+
+				if (trailingOperation is IBinaryOperation binaryOperation)
+				{
+					var earlierOperand = numStack.Pop();
+					result = binaryOperation.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
+				}
+				else
+				{
+					//make sure this wont be null, as every operation should either be ibinary or iunary
+					var unaryOperation = trailingOperation as IUnaryOperation;
+					result = unaryOperation!.CalculateUnary(latestOperand.Calculate());
+				}
+
+				numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+			}
+
+			return numStack.Pop();
+		}
+		/*
 				else if (operations[currentIndex] is BracketToken openingBracket && openingBracket.BracketType == BracketType.Open)
 				{
 					int nextClosingBraceDistance = 1;
@@ -222,19 +374,60 @@ namespace MultiCalculator.Utilities
 		}*/
 
 		//Write test cases
-		public void InsertMultiplicationSigns()
+		public void InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets()
 		{
 			IToken currentToken, nextToken;
-			for (int i = 0; i < operations.Count; i++)
+			var unmatchedOpenBraces = 0;
+			for (int i = 0; i < operations.Count - 1; i++)
 			{
 				currentToken = operations[i];
 				nextToken = operations[i + 1];
 
-				if ((currentToken == OperationDefinitions.ClosedBracket || currentToken is NullaryOperationToken or DigitToken) &&
-					(nextToken == OperationDefinitions.OpenBracket || nextToken is NullaryOperationToken or UnaryOperationToken))
+				if ((currentToken == OperationDefinitions.ClosedBracket || currentToken is NullaryOperationToken or DigitToken || currentToken is UnaryOperationToken thisUnary && thisUnary.Fixity == Fixity.Postfix) &&
+					(nextToken == OperationDefinitions.OpenBracket || nextToken is NullaryOperationToken || nextToken is UnaryOperationToken nextUnary && nextUnary.Fixity == Fixity.Prefix))
 				{
 					InsertAt(i, OperationDefinitions.Multiplication);
 				}
+			}
+
+			var isInOperationString = true;
+
+			for (int i = 0; i < operations.Count; i++)
+			{
+				if (operations[i] == OperationDefinitions.OpenBracket)
+				{
+					unmatchedOpenBraces++;
+				}
+				else if (operations[i] == OperationDefinitions.ClosedBracket)
+				{
+					unmatchedOpenBraces--;
+				}
+				//Logic: we can have an operation string. we enter a string by placing a dual, binary, or unary
+				//once one is entered, we set bool is in string to true, and when it is true, we only place unaries
+				if (operations[i] is DualArityOperationToken dual)
+				{
+					if (isInOperationString)
+					{
+						operations[i] = dual.UnaryOperation;
+					}
+					else
+					{
+						isInOperationString = true;
+					}
+				}
+				else if (operations[i] is IOperation)
+				{
+					isInOperationString = true;
+				}
+				else
+				{
+					isInOperationString = false;
+				}
+			}
+
+			for (int i = 0; i < unmatchedOpenBraces; i++)
+			{
+				Add(OperationDefinitions.ClosedBracket);
 			}
 		}
 

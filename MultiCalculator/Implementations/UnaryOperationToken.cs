@@ -10,6 +10,8 @@ namespace MultiCalculator.Implementations
 
 		public Func<double, double> CalculateUnary { get; init; } = (x) => throw new MultiCalculatorException("Not implemented");
 
-		public OperandPosition Position { get; init; } = OperandPosition.Prefix;
+		public int Priority { get; init; } = int.MinValue;
+
+		public Fixity Fixity { get; init; } = Fixity.Prefix;
 	}
 }

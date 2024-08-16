@@ -73,7 +73,7 @@ namespace MultiCalculator.Controls
 
 		public void PrimaryButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender is SingleTokenButton)
+			if (sender is SingleTaskButton)
 			{
 				WriteTokenToScreen?.Invoke(sender, EventArgs.Empty);
 			}
