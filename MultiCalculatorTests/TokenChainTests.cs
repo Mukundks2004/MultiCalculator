@@ -195,9 +195,6 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([One, Plus, Two, Times, Three, ToThePowerOf, Four, Plus, C, Two, Times, Two, Times, Two, J]), 171).SetDescription("1 + 2 x 3 ^ 4 + (2 x 2 x 2)");
 				yield return new TestCaseData(new TokenChain([One, Plus, Two, Times, Three, ToThePowerOf, Four, Plus, Minus, C, Two, Times, Two, J]), 159).SetDescription("1 + 2 x 3 ^ 4 + -(2 x 2)");
 				yield return new TestCaseData(new TokenChain([One, Plus, Two, Times, Three, ToThePowerOf, Four, Plus, Minus, C, Two, Times, Two, J, Factorial]), 139).SetDescription("1 + 2 x 3 ^ 4 + -(2 x 2)!");
-
-
-
 			}
 		}
 	}
