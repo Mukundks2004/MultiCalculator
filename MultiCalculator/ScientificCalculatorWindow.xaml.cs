@@ -81,9 +81,7 @@ namespace MultiCalculator
 			CalculatorAnswer = string.Empty;
 			//Replace this with real answer when we have a history service or something- maybe we need a history model?
 			//Also move explicit references to token to service maybe. the view should not know about the impelemtnation details.
-			CalculatorExpression.Add(OpenBracket);
-			CalculatorExpression.Add(NullaryOperationToken.GetConstFromDouble());
-			CalculatorExpression.Add(ClosedBracket);
+			CalculatorExpression.Add(new NullaryOperationToken() { Calculate = () => 0, TokenSymbol = "Ans"});
 		}
 
 		public void EvaluateExpression_Click()
