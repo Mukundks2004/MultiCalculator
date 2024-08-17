@@ -15,20 +15,6 @@
         </Grid.ColumnDefinitions>
 
         <ComboBox Height="30" Grid.Column="0"/>
-        <!--<Button Content="←" Height="45" Width="30" Grid.Column="1" FontSize="20">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="8"/>
-                </Style>
-            </Button.Resources>
-        </Button>
-        <Button Content="→" Height="45" Width="30" Grid.Column="2" FontSize="20">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="8"/>
-                </Style>
-            </Button.Resources>
-        </Button>-->
         <Button Content="Copy" Height="30" Width="80" Grid.Column="3" FontSize="14" FontFamily="MS Gothic"/>
     </Grid>
 </UserControl>

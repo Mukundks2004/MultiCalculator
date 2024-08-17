@@ -1,4 +1,5 @@
-﻿using MultiCalculator.Delegates;
+﻿using ceTe.DynamicPDF.PageElements.BarCoding;
+using MultiCalculator.Delegates;
 using MultiCalculator.Implementations;
 using System.Windows;
 using System.Windows.Controls;
@@ -64,7 +65,7 @@ namespace MultiCalculator.Controls
 			ButtonW1.CalculatorTask.Name = ".";
 			ButtonW1.CalculatorTask.Add(Definitions.OperationDefinitions.Point);
 
-			Equals.Rename("=");
+			Evaluate.Rename("=");
 			Answer.Rename("Ans");
 			Shift.Rename("Shift");
 			Backspace.Rename("C");
@@ -105,7 +106,7 @@ namespace MultiCalculator.Controls
 
 		public void EvaluateExpression_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender is RoundedButton button && button.Name == "Equals")
+			if (sender is RoundedButton button && button.Name == "Evaluate")
 			{
 				EvaluateExpression?.Invoke();
 			}

@@ -8,14 +8,14 @@
         mc:Ignorable="d"
         Title="ScientificCalculatorWindow" Height="600" Width="320">
     <Grid>
-        <Button Content="←" Height="70" Width="35" FontSize="20" Margin="100,0,144,240" Padding="1" Panel.ZIndex="10">
+        <Button Content="←" Height="70" Width="35" FontSize="20" Margin="100,0,144,240" Padding="1" Panel.ZIndex="10" Click="MoveLeft_Click">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="8"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Content="→" Height="70" Width="35" FontSize="20" Margin="144,0,100,240" Padding="1" Panel.ZIndex="10">
+        <Button Content="→" Height="70" Width="35" FontSize="20" Margin="144,0,100,240" Padding="1" Panel.ZIndex="10" Click="MoveRight_Click">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="8"/>
@@ -23,52 +23,14 @@
             </Button.Resources>
         </Button>
         <StackPanel HorizontalAlignment="Center" Panel.ZIndex="1">
-        <TextBlock x:Name="ExpressionBox" Height="70"/>
-        <TextBlock x:Name="ResultBox" Height="30" Width="100" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" TextAlignment="Right"/>
-        <Separator/>
-        <Separator Height="10" Background="Transparent"/>
-        <calculatorbuttons:CalculatorControlBar/>
-        <calculatorbuttons:ScientificFunctions x:Name="ScientificButtonsGrid"/>
-        <Separator Height="10" Background="Transparent"/>
-        <calculatorbuttons:PrimaryFunctions x:Name="PrimaryButtonsGrid"/>
-    </StackPanel>
-        
+            <TextBlock x:Name="ExpressionBox" Height="70"/>
+            <TextBlock x:Name="ResultBox" Height="30" Width="100" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" TextAlignment="Right"/>
+            <Separator/>
+            <Separator Height="10" Background="Transparent"/>
+            <calculatorbuttons:CalculatorControlBar/>
+            <calculatorbuttons:ScientificFunctions x:Name="ScientificButtonsGrid"/>
+            <Separator Height="10" Background="Transparent"/>
+            <calculatorbuttons:PrimaryFunctions x:Name="PrimaryButtonsGrid"/>
+        </StackPanel>
     </Grid>
-    
-    <!--<Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-
-        <TextBlock x:Name="ExpressionBox" Height="100" Grid.Row="0" Panel.ZIndex="1"/>
-        <Separator Grid.Row="1"/>
-        <Separator Height="10" Background="Transparent" Grid.Row="2"/>
-        <calculatorbuttons:CalculatorControlBar Grid.Row="3"/>
-        <calculatorbuttons:ScientificFunctions x:Name="ScientificButtonsGrid" Grid.Row="4"/>
-        <Separator Height="10" Background="Transparent" Grid.Row="5"/>
-        <calculatorbuttons:PrimaryFunctions x:Name="PrimaryButtonsGrid" Grid.Row="6"/>
-
-        --><!--<Button Content="←" Height="70" Width="35" FontSize="20" Margin="109,20,156,165" Grid.Row="3" Grid.RowSpan="2">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="8"/>
-                </Style>
-            </Button.Resources>
-        </Button>
-        <Button Content="→" Height="70" Width="35" FontSize="20" Margin="156,20,109,165" Grid.Row="3" Grid.RowSpan="2">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="8"/>
-                </Style>
-            </Button.Resources>
-        </Button>--><!--
-
-        <TextBlock x:Name="ResultBox" Height="30" Width="100" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Panel.ZIndex="2"/>
-    </Grid>-->
 </Window>
