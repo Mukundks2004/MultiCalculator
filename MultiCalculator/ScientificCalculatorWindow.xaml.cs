@@ -51,13 +51,14 @@ namespace MultiCalculator
 			var isValid = CalculatorExpression.IsValid();
 			if (isValid)
 			{
-				ExpressionBox.Visibility = Visibility.Collapsed;
+				CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
+				ExpressionBoxContainer.Visibility = Visibility.Collapsed;
 				FormulaBoxContainer.Visibility = Visibility.Visible;
 				FormulaBox.Formula = CalculatorExpression.GetLatexString();
 			}
 			else
 			{
-				ExpressionBox.Visibility = Visibility.Visible;
+				ExpressionBoxContainer.Visibility = Visibility.Visible;
 				FormulaBoxContainer.Visibility = Visibility.Collapsed;
 				ExpressionBox.Text = CalculatorExpression.ToString();
 			}
@@ -108,12 +109,11 @@ namespace MultiCalculator
 				else
 				{
 					CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
-					//var result = CalculatorExpression.Parse();
 					var result = CalculatorExpression.ParseTree();
 					CalculatorAnswer = double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity ? "Math Error" : result.ToString();
 				}
 			}
-			catch (Exception ex)
+			catch (Exception myException)
 			{
 				CalculatorAnswer = "Bad expression!";
 			}
