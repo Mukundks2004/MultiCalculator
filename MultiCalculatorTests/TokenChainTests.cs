@@ -43,6 +43,8 @@ namespace MultiCalculatorTests
 		[Test, TestCaseSource(typeof(TokenChainTests), nameof(ParseExpressionTestCases))]
 		public void ParseExpressionTest(TokenChain tokenChain, double expectedResult)
 		{
+			Assert.That(tokenChain.IsValid(), Is.True);
+
 			tokenChain.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
 			Assert.That(tokenChain.Parse(), Is.EqualTo(expectedResult).Within(0.000001));
 		}
@@ -115,15 +117,23 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([C, Three, J, C, Three, J]), true).SetDescription("(3)(3)");
 
 				yield return new TestCaseData(new TokenChain([Sin, Three]), true).SetDescription("sin 3");
-				yield return new TestCaseData(new TokenChain([Sin, J]), false).SetDescription("sin()");
-				yield return new TestCaseData(new TokenChain([Sin, Pi, J]), true).SetDescription("sin(pi)");
-				yield return new TestCaseData(new TokenChain([Sin, Pi]), true).SetDescription("sin(pi");
-				yield return new TestCaseData(new TokenChain([Sin, Point, J]), false).SetDescription("sin(.)");
+				yield return new TestCaseData(new TokenChain([Sin, J]), false).SetDescription("sin)");
+				yield return new TestCaseData(new TokenChain([Sin, C]), false).SetDescription("sin(");
+				yield return new TestCaseData(new TokenChain([Sin, Pi, J]), false).SetDescription("sin pi)");
+				yield return new TestCaseData(new TokenChain([Sin, Pi]), true).SetDescription("sin pi");
+				yield return new TestCaseData(new TokenChain([Sin, E, Pi]), true).SetDescription("sin e pi");
+				yield return new TestCaseData(new TokenChain([Sin, Point, J]), false).SetDescription("sin.)");
+				yield return new TestCaseData(new TokenChain([Sin, C, Point]), false).SetDescription("sin(.");
+				yield return new TestCaseData(new TokenChain([Sin, C, Point, J]), false).SetDescription("sin(.)");
+				yield return new TestCaseData(new TokenChain([Sin, C, Zero, J]), true).SetDescription("sin(0)");
+				yield return new TestCaseData(new TokenChain([Sin, Zero]), true).SetDescription("sin 0");
 				yield return new TestCaseData(new TokenChain([Three, Sin, Three]), true).SetDescription("3 sin 3");
 				yield return new TestCaseData(new TokenChain([Sin, Three, Three]), true).SetDescription("sin 33");
-				yield return new TestCaseData(new TokenChain([Sin, Three, J, Three]), false).SetDescription("sin(3)3");
-				yield return new TestCaseData(new TokenChain([Three, Sin, Three, J, Three]), false).SetDescription("3sin(3)3");
-				yield return new TestCaseData(new TokenChain([Three, Sin, Three, J, Times, Three]), true).SetDescription("3sin(3) x 3");
+				yield return new TestCaseData(new TokenChain([Sin, Three, J, Three]), false).SetDescription("sin3)3");
+				yield return new TestCaseData(new TokenChain([Sin, C, Three, J, C, Three, J]), true).SetDescription("sin(3)(3)");
+				yield return new TestCaseData(new TokenChain([Three, Sin, Three, J, Three]), false).SetDescription("3sin 3)3");
+				yield return new TestCaseData(new TokenChain([Three, Sin, C, Three, J, Times, Three]), true).SetDescription("3sin(3) x 3");
+				yield return new TestCaseData(new TokenChain([Three, Sin, Three, Times, Three]), true).SetDescription("3sin3 x 3");
 
 				yield return new TestCaseData(new TokenChain([Pi]), true).SetDescription("pi");
 				yield return new TestCaseData(new TokenChain([Pi, Pi]), true).SetDescription("pi pi");
@@ -147,6 +157,8 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([Pi, Minus]), false).SetDescription("pi -");
 				yield return new TestCaseData(new TokenChain([Four, Choose]), false).SetDescription("4C");
 				yield return new TestCaseData(new TokenChain([E, Times]), false).SetDescription("e x");
+
+				yield return new TestCaseData(new TokenChain([Six, Factorial]), true).SetDescription("6!");
 			}
 		}
 
@@ -175,6 +187,7 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([C, One, Plus, One, J, Times, C, One, Plus, One]), 4).SetDescription("(1 + 1) x (1 + 1 = 4");
 
 				yield return new TestCaseData(new TokenChain([One, Factorial]), 1).SetDescription("1! = 1");
+				yield return new TestCaseData(new TokenChain([Six, Factorial]), 720).SetDescription("6! = 120");
 				yield return new TestCaseData(new TokenChain([Four, P, Four]), 24).SetDescription("4 P 4 = 24");
 				yield return new TestCaseData(new TokenChain([Four, Choose, Four]), 1).SetDescription("4 C 4 = 1");
 				yield return new TestCaseData(new TokenChain([C, One, Plus, One, J, Factorial]), 2).SetDescription("(1 + 1)! = 2");
@@ -220,6 +233,31 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([Nine, Times, Nine, Sin, One, Five]), 52.6733150527).SetDescription("9 x 9 sin 15");
 				yield return new TestCaseData(new TokenChain([Three, Zero, Minus, Pi, C, Pi, C, C, Pi, J, Times, Sin, C, Three, Factorial, J, J]), 38.6636342459).SetDescription("30 - pi(pi((pi)) x sin(3!))");
 
+				yield return new TestCaseData(new TokenChain([Minus, One, Plus, One]), 0).SetDescription("-1 + 1");
+				yield return new TestCaseData(new TokenChain([Minus, Sin, Two, Minus, Minus, Three]), 2.09070257317).SetDescription("-sin 2 - - 3");
+				yield return new TestCaseData(new TokenChain([Minus, C, Pi, J, ToThePowerOf, Two]), -Math.PI * Math.PI).SetDescription("-(pi) ^ 2");
+				yield return new TestCaseData(new TokenChain([C, Minus, Pi, J, ToThePowerOf, Two]), Math.PI * Math.PI).SetDescription("(-pi) ^ 2");
+				yield return new TestCaseData(new TokenChain([Minus, C, Pi, ToThePowerOf, Two]), -Math.PI * Math.PI).SetDescription("-(pi ^ 2");
+				yield return new TestCaseData(new TokenChain([C, Minus, Pi, ToThePowerOf, Two]), -Math.PI * Math.PI).SetDescription("(-pi ^ 2");
+				yield return new TestCaseData(new TokenChain([Sin, Pi]), 0).SetDescription("sin pi");
+				yield return new TestCaseData(new TokenChain([Sin, C, Two, Pi]), 0).SetDescription("sin(2pi");
+				yield return new TestCaseData(new TokenChain([Sin, C, Two, Times, Pi]), 0).SetDescription("sin(2 * pi");
+				yield return new TestCaseData(new TokenChain([Three, E, Pi]), 3 * Math.E * Math.PI).SetDescription("3epi");
+				yield return new TestCaseData(new TokenChain([Three, Pi, E]), 3 * Math.E * Math.PI).SetDescription("3epi");
+				
+				yield return new TestCaseData(new TokenChain([Pi, Dividedby, Two]), Math.PI/2).SetDescription("pi / 2 = pi/2");
+				yield return new TestCaseData(new TokenChain([Pi, Pi]), Math.PI * Math.PI).SetDescription("pipi = pi * pi");
+				yield return new TestCaseData(new TokenChain([Minus, Sin, C, Minus, Five, Times, Four]), -Math.Sin(-20)).SetDescription("-sin(-5 x 4");
+				yield return new TestCaseData(new TokenChain([Minus, Sin, Minus, Five, Times, Four]), 4 * Math.Sin(5)).SetDescription("-sin(-5 x 4)");
+				yield return new TestCaseData(new TokenChain([Minus, Pi, Dividedby, Two]), -Math.PI/2).SetDescription("-pi / 2 = -pi/2");
+				yield return new TestCaseData(new TokenChain([Sqrt, Ln, Pi]), Math.Sqrt(Math.Log(Math.PI))).SetDescription("sqrt ln pi = 1.06");
+				yield return new TestCaseData(new TokenChain([Ln, E, Plus, Ln, E]), 2).SetDescription("ln e + ln e = 2");
+				yield return new TestCaseData(new TokenChain([One, Zero, Times, One, Zero, Times, One, Zero, C, One, Zero]), 10000).SetDescription("10 x 10 x 10(10 = 10000");
+				yield return new TestCaseData(new TokenChain([One, Zero, Times, One, Zero, Times, One, Zero]), 1000).SetDescription("10 x 10 x 10 = 1000");
+				yield return new TestCaseData(new TokenChain([One, Zero, Plus, One, Zero, Plus, One, Zero]), 30).SetDescription("10 + 10 + 10 = 30");
+				yield return new TestCaseData(new TokenChain([One, Zero, Times, One, Zero, Times, One, Zero, Plus, One, Zero, Plus, One, Zero, Plus, One, Zero, Plus, One, Zero, Times, One, Zero, Times, One, Zero]), 2030).SetDescription("10 x 10 x 10 + 10 + 10 + 10 + 10 x 10 x 10 = 2030");
+				
+				yield return new TestCaseData(new TokenChain([One, Two, Three, Four, Five, Times, One, Two, Three, ToThePowerOf, Two]), 186767505).SetDescription("12345 x 123 ^ 2 = 186767505");
 			}
 		}
 	}
