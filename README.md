@@ -2,12 +2,13 @@
 
 ## WHAT EVERYONE IS WORKING ON
 - Mukund:
-  - Pretty printing expression and answer via wpf math
-  - Parser outputs nullary lambda rather than double
-  - Estimated time till completiong: 2:30pm
+  - Plugins (estimated time: 60 min)
 - Dennis: Setup OPENAI, has $10 credit, we still need testing. AI/Database basically has been setup.
 
 ## TODO
 Mukund:
-- Plugins (estimated time: 30 min)
+
 - Graphing calculator (estimated time: 3 hrs)
+- General cleaning (estimated time: 90 min)
+  - Pretty printing expression and answer via wpf math
+  - Parser outputs nullary lambda rather than double
