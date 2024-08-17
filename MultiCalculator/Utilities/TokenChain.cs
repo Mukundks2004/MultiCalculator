@@ -27,8 +27,22 @@ namespace MultiCalculator.Utilities
 
 		public override string ToString()
 		{
-			var joinedExpression = string.Join("", operations.Select(o => o.TokenSymbol));
-			return joinedExpression.Insert(Cursor, "|");
+			var hasCursorBeenPlaced = false;
+			var result = string.Empty;
+			for (int i = 0; i < operations.Count; i++)
+			{
+				if (i == Cursor)
+				{
+					result += "|";
+					hasCursorBeenPlaced = true;
+				}
+				result += operations[i].TokenSymbol;
+			}
+			if (!hasCursorBeenPlaced)
+			{
+				result += "|";
+			}
+			return result;
 		}
 
 		public void MoveCursorLeft()
@@ -96,15 +110,23 @@ namespace MultiCalculator.Utilities
 			return HasNonEmptyAndNonNegativeOpenBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
 		}
 
-		public double Parse()
+		//This is only called on valid strings
+		public string GetLatexString()
 		{
-			return ParseFromIndexToIndex(0, operations.Count).Calculate();
+			var tree = ParseFromIndexToIndexKeepInTreeForm(0, operations.Count);
+			var latexString = tree.GetLatexString();
+			return latexString;
 		}
 
-		NullaryOperationToken ParseFromIndexToIndex(int startIndex, int endIndexExclusive)
+		public double ParseTree()
 		{
+			return ParseFromIndexToIndexProductConst(0, operations.Count).Evaluate().Calculate();
+		}
+
+		TreeNode<IToken> ParseFromIndexToIndexProductConst(int startIndex, int endIndexExclusive)
+		{
+			var numStackIncludingTrees = new Stack<TreeNode<IToken>>();
 			var currentIndex = startIndex;
-			var numStack = new Stack<NullaryOperationToken>();
 			var opStack = new Stack<IOperation>();
 
 			while (currentIndex < endIndexExclusive)
@@ -113,13 +135,13 @@ namespace MultiCalculator.Utilities
 
 				if (currentToken is NullaryOperationToken constant)
 				{
-					numStack.Push(constant);
+					numStackIncludingTrees.Push(new TreeNode<IToken>(constant));
 				}
 
 				else if (currentToken is DigitToken)
 				{
 					var parsedNumberAsConst = ParseDoubleFromIndex(currentIndex, out int lengthOfNumber);
-					numStack.Push(parsedNumberAsConst);
+					numStackIncludingTrees.Push(new TreeNode<IToken>(parsedNumberAsConst));
 					currentIndex += lengthOfNumber - 1;
 				}
 
@@ -140,12 +162,10 @@ namespace MultiCalculator.Utilities
 						nextClosingBraceDistance++;
 					}
 
-					numStack.Push(ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
+					numStackIncludingTrees.Push(ParseFromIndexToIndexProductConst(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
 					currentIndex += nextClosingBraceDistance - 1;
 				}
 
-				//We can never evaluate unaries until we encounter postfix operators or binaries
-				//This system should hopefully allow duals to be postfix
 				else if (currentToken is UnaryOperationToken unaryPrefix && unaryPrefix.Fixity == Fixity.Prefix)
 				{
 					opStack.Push(unaryPrefix);
@@ -153,50 +173,35 @@ namespace MultiCalculator.Utilities
 
 				else if (currentToken is IOperation operation)
 				{
-					//First operation is not postfix
 					if (opStack.Count == 0 && !(operation is UnaryOperationToken firstOperation && firstOperation.Fixity == Fixity.Postfix))
 					{
 						opStack.Push(operation);
 					}
-					//only operation is postfix
+
 					else if (opStack.Count == 0)
 					{
 						var unaryOperation = operation as UnaryOperationToken;
-						var unaryOperand = numStack.Pop();
+						var unaryOperand = numStackIncludingTrees.Pop().Evaluate();
 						var result = unaryOperation!.CalculateUnary(unaryOperand.Calculate());
-						numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+						numStackIncludingTrees.Push(new TreeNode<IToken>(NullaryOperationToken.GetConstFromDouble(result)));
 					}
 
-					//for a second, lets live in a world without dual arity operators.
-					//we have prefixes and postfixes and binaries, so sin, !, ^2 etc, but no - as a negative. therefore only one operation between operands
-					
-					//Important! there is no reason for postfix operators to accumulate, as they should happen before other postfixes. and after 
-					//prefixes
 					else
 					{
 						if (operation is UnaryOperationToken unary && unary.Fixity == Fixity.Postfix)
 						{
-							//Operation is postfix eg ! so to deal with this, we will continue peeking and evaluating until we have an operation with lower precedence
-							//the goal is to get increasing chain +, *, ^ so we can retain preference when executing in reverse :)
-
-							//I currently dont have a way of *enforcing* this but if you put all the dual arities as dual arities when they are binary
-							//and put their unary properties when they are unary, you shouldnt have to deal with duals that are ambiguous
-							//ex in the below, they would be classified as binaries, fittingly.
-
-							//context: we have encountered a postfix, and we need to remove all the operations with higher priority before this.
-							//We know the postfix is not the only operator, or it would have been processed already. therefore there is at least one operator.
-							//keep going until there are no more operators, or the priority of the operator before is lower
 							var lastOperationBeforePostfix = opStack.Peek();
 							double result;
 							while (opStack.Count > 0 && opStack.Peek().Priority > unary.Priority)
 							{
-								var firstOperand = numStack.Pop();
+								//Mukund: these operands are the wrong way!
+								var firstOperand = numStackIncludingTrees.Pop().Evaluate();
 								lastOperationBeforePostfix = opStack.Pop();
 
 								if (lastOperationBeforePostfix is IBinaryOperation lastOperationBinary)
 								{
-									var secondOperand = numStack.Pop();
-									result = lastOperationBinary.CalculateBinary(firstOperand.Calculate(), secondOperand.Calculate());
+									var secondOperand = numStackIncludingTrees.Pop().Evaluate();
+									result = lastOperationBinary.CalculateBinary(secondOperand.Calculate(), firstOperand.Calculate());
 								}
 								else
 								{
@@ -204,28 +209,28 @@ namespace MultiCalculator.Utilities
 									result = lastOperationUnary!.CalculateUnary(firstOperand.Calculate());
 								}
 
-								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+								numStackIncludingTrees.Push(new TreeNode<IToken>(NullaryOperationToken.GetConstFromDouble(result)));
 								if (opStack.Count == 0)
 								{
 									break;
 								}
 							}
 
-							var operand = numStack.Pop();
+							var operand = numStackIncludingTrees.Pop().Evaluate();
 							result = unary.CalculateUnary(operand.Calculate());
-							numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+							numStackIncludingTrees.Push(new TreeNode<IToken>(NullaryOperationToken.GetConstFromDouble(result)));
 						}
 
 						else if (operation is IBinaryOperation binaryOperation && binaryOperation.Associativity == Associativity.Left)
 						{
-							while (opStack.Count > 0 && opStack.Peek().Priority >= binaryOperation.Priority )
+							while (opStack.Count > 0 && opStack.Peek().Priority >= binaryOperation.Priority)
 							{
 								var op = opStack.Pop();
-								var latestOperand = numStack.Pop();
+								var latestOperand = numStackIncludingTrees.Pop().Evaluate();
 								double result;
 								if (op is IBinaryOperation opBinary)
 								{
-									var earlierOperand = numStack.Pop();
+									var earlierOperand = numStackIncludingTrees.Pop().Evaluate();
 									result = opBinary!.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
 								}
 								else
@@ -234,7 +239,7 @@ namespace MultiCalculator.Utilities
 									result = unaryOperation!.CalculateUnary(latestOperand.Calculate());
 								}
 
-								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+								numStackIncludingTrees.Push(new TreeNode<IToken>(NullaryOperationToken.GetConstFromDouble(result)));
 							}
 
 							opStack.Push(binaryOperation);
@@ -244,11 +249,11 @@ namespace MultiCalculator.Utilities
 							while (opStack.Count > 0 && opStack.Peek().Priority > binaryOperationRight.Priority)
 							{
 								var op = opStack.Pop();
-								var laterOperand = numStack.Pop();
+								var laterOperand = numStackIncludingTrees.Pop().Evaluate();
 								double result;
 								if (op is IBinaryOperation binaryOperator)
 								{
-									var earlierOperand = numStack.Pop();
+									var earlierOperand = numStackIncludingTrees.Pop().Evaluate();
 									result = binaryOperator!.CalculateBinary(earlierOperand.Calculate(), laterOperand.Calculate());
 
 								}
@@ -258,7 +263,7 @@ namespace MultiCalculator.Utilities
 									result = unaryOperation!.CalculateUnary(laterOperand.Calculate());
 								}
 
-								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+								numStackIncludingTrees.Push(new TreeNode<IToken>(NullaryOperationToken.GetConstFromDouble(result)));
 							}
 
 							opStack.Push(binaryOperationRight);
@@ -269,32 +274,196 @@ namespace MultiCalculator.Utilities
 				currentIndex++;
 			}
 
-			//I think this works, but i am not sure
 			while (opStack.Count > 0)
 			{
 				var trailingOperation = opStack.Pop();
-				var latestOperand = numStack.Pop();
+				var latestOperand = numStackIncludingTrees.Pop().Evaluate();
 				double result;
+
+				var trailingTreeNode = new TreeNode<IToken>(trailingOperation);
+				trailingTreeNode.AddChild(latestOperand);
 
 				if (trailingOperation is IBinaryOperation binaryOperation)
 				{
-					var earlierOperand = numStack.Pop();
+					var earlierOperand = numStackIncludingTrees.Pop().Evaluate();
 					result = binaryOperation.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
+					trailingTreeNode.InsertChildAt(earlierOperand, 0);
 				}
 				else
 				{
-					//make sure this wont be null, as every operation should either be ibinary or iunary
 					var unaryOperation = trailingOperation as IUnaryOperation;
 					result = unaryOperation!.CalculateUnary(latestOperand.Calculate());
 				}
 
-				numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+				numStackIncludingTrees.Push(new TreeNode<IToken>(NullaryOperationToken.GetConstFromDouble(result)));
 			}
 
-			return numStack.Pop();
+			return numStackIncludingTrees.Pop();
 		}
 
-		//Write test cases
+		TreeNode<IToken> ParseFromIndexToIndexKeepInTreeForm(int startIndex, int endIndexExclusive)
+		{
+			var numStackIncludingTrees = new Stack<TreeNode<IToken>>();
+			var currentIndex = startIndex;
+			var opStack = new Stack<IOperation>();
+
+			while (currentIndex < endIndexExclusive)
+			{
+				var currentToken = operations[currentIndex];
+
+				if (currentToken is NullaryOperationToken constant)
+				{
+					numStackIncludingTrees.Push(new TreeNode<IToken>(constant));
+				}
+
+				else if (currentToken is DigitToken)
+				{
+					var parsedNumberAsConst = ParseDoubleFromIndex(currentIndex, out int lengthOfNumber);
+					numStackIncludingTrees.Push(new TreeNode<IToken>(parsedNumberAsConst));
+					currentIndex += lengthOfNumber - 1;
+				}
+
+				else if (currentToken == OperationDefinitions.OpenBracket)
+				{
+					var nextClosingBraceDistance = 1;
+					var unmatchedOpenBracketCount = 1;
+					while (unmatchedOpenBracketCount > 0)
+					{
+						if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.ClosedBracket)
+						{
+							unmatchedOpenBracketCount--;
+						}
+						else if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.OpenBracket)
+						{
+							unmatchedOpenBracketCount++;
+						}
+						nextClosingBraceDistance++;
+					}
+
+					numStackIncludingTrees.Push(ParseFromIndexToIndexProductConst(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
+					currentIndex += nextClosingBraceDistance - 1;
+				}
+
+				else if (currentToken is UnaryOperationToken unaryPrefix && unaryPrefix.Fixity == Fixity.Prefix)
+				{
+					opStack.Push(unaryPrefix);
+				}
+
+				else if (currentToken is IOperation operation)
+				{
+					if (opStack.Count == 0 && !(operation is UnaryOperationToken firstOperation && firstOperation.Fixity == Fixity.Postfix))
+					{
+						opStack.Push(operation);
+					}
+
+					else if (opStack.Count == 0)
+					{
+						var unaryOperation = operation as UnaryOperationToken;
+						var unaryOperand = numStackIncludingTrees.Pop().Evaluate();
+						var resultTree = new TreeNode<IToken>(unaryOperation!);
+						resultTree.AddChild(unaryOperand);
+						numStackIncludingTrees.Push(resultTree);
+					}
+
+					else
+					{
+						if (operation is UnaryOperationToken unary && unary.Fixity == Fixity.Postfix)
+						{
+							var lastOperationBeforePostfix = opStack.Peek();
+							var unaryPostfixTree = new TreeNode<IToken>(unary);
+							while (opStack.Count > 0 && opStack.Peek().Priority > unary.Priority)
+							{
+								var laterOperand = numStackIncludingTrees.Pop();
+								lastOperationBeforePostfix = opStack.Pop();
+
+								var resultTree = new TreeNode<IToken>(lastOperationBeforePostfix);
+								resultTree.AddTree(laterOperand);
+
+								if (lastOperationBeforePostfix is IBinaryOperation lastOperationBinary)
+								{
+									var earlierOperand = numStackIncludingTrees.Pop();
+									resultTree.InsertTreeAt(earlierOperand, 0);
+								}
+
+								numStackIncludingTrees.Push(resultTree);
+								if (opStack.Count == 0)
+								{
+									break;
+								}
+							}
+
+							var operand = numStackIncludingTrees.Pop();
+							unaryPostfixTree.AddTree(operand);
+
+							numStackIncludingTrees.Push(unaryPostfixTree);
+						}
+
+						else if (operation is IBinaryOperation binaryOperation && binaryOperation.Associativity == Associativity.Left)
+						{
+							while (opStack.Count > 0 && opStack.Peek().Priority >= binaryOperation.Priority)
+							{
+								var op = opStack.Pop();
+								var latestOperand = numStackIncludingTrees.Pop();
+								var resultTree = new TreeNode<IToken>(op);
+								resultTree.AddTree(latestOperand);
+
+								if (op is IBinaryOperation)
+								{
+									var earlierOperand = numStackIncludingTrees.Pop();
+									resultTree.InsertTreeAt(earlierOperand, 0);
+								}
+
+								numStackIncludingTrees.Push(resultTree);
+							}
+
+							opStack.Push(binaryOperation);
+						}
+						else if (operation is IBinaryOperation binaryOperationRight)
+						{
+							while (opStack.Count > 0 && opStack.Peek().Priority > binaryOperationRight.Priority)
+							{
+								var op = opStack.Pop();
+								var resultTree = new TreeNode<IToken>(op);
+								var laterOperand = numStackIncludingTrees.Pop();
+								resultTree.AddTree(laterOperand);
+
+								if (op is IBinaryOperation)
+								{
+									var earlierOperand = numStackIncludingTrees.Pop();
+									resultTree.InsertTreeAt(earlierOperand, 0);
+								}
+
+								numStackIncludingTrees.Push(resultTree);
+							}
+
+							opStack.Push(binaryOperationRight);
+						}
+					}
+				}
+
+				currentIndex++;
+			}
+
+			while (opStack.Count > 0)
+			{
+				var trailingOperation = opStack.Pop();
+				var latestOperand = numStackIncludingTrees.Pop();
+
+				var trailingTreeNode = new TreeNode<IToken>(trailingOperation);
+				trailingTreeNode.AddTree(latestOperand);
+
+				if (trailingOperation is IBinaryOperation)
+				{
+					var earlierOperand = numStackIncludingTrees.Pop();
+					trailingTreeNode.InsertTreeAt(earlierOperand, 0);
+				}
+
+				numStackIncludingTrees.Push(trailingTreeNode);
+			}
+
+			return numStackIncludingTrees.Pop();
+		}
+
 		public void InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets()
 		{
 			IToken currentToken, nextToken;
@@ -324,8 +493,6 @@ namespace MultiCalculator.Utilities
 				{
 					unmatchedOpenBraces--;
 				}
-				//Logic: we can have an operation string. we enter a string by placing a dual, binary, or unary
-				//once one is entered, we set bool is in string to true, and when it is true, we only place unaries
 				if (operations[i] is DualArityOperationToken dual)
 				{
 					if (isInOperationString)
@@ -349,7 +516,7 @@ namespace MultiCalculator.Utilities
 
 			for (int i = 0; i < unmatchedOpenBraces; i++)
 			{
-				Add(OperationDefinitions.ClosedBracket);
+				InsertAt(operations.Count, OperationDefinitions.ClosedBracket);
 			}
 		}
 
@@ -401,7 +568,7 @@ namespace MultiCalculator.Utilities
 
 			foreach (var operation in operations)
 			{
-				if (operation is BinaryOperationToken && currentOperationIsBinary)
+				if ((operation is BinaryOperationToken || operation is UnaryOperationToken unary && unary.Fixity == Fixity.Postfix) && currentOperationIsBinary)
 				{
 					return false;
 				}

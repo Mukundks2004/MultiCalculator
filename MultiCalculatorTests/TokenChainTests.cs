@@ -46,7 +46,9 @@ namespace MultiCalculatorTests
 			Assert.That(tokenChain.IsValid(), Is.True);
 
 			tokenChain.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
-			Assert.That(tokenChain.Parse(), Is.EqualTo(expectedResult).Within(0.000001));
+			//Assert.That(tokenChain.Parse(), Is.EqualTo(expectedResult).Within(0.000001));
+
+			Assert.That(tokenChain.ParseTree(), Is.EqualTo(expectedResult).Within(0.000001));
 		}
 
 		public static IEnumerable<TestCaseData> ValidAndInvalidExpressionTestCases
@@ -159,6 +161,7 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([E, Times]), false).SetDescription("e x");
 
 				yield return new TestCaseData(new TokenChain([Six, Factorial]), true).SetDescription("6!");
+				yield return new TestCaseData(new TokenChain([Nine, Times, Six, Plus, Factorial]), false).SetDescription("9 x 6 + !");
 			}
 		}
 
@@ -258,6 +261,10 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([One, Zero, Times, One, Zero, Times, One, Zero, Plus, One, Zero, Plus, One, Zero, Plus, One, Zero, Plus, One, Zero, Times, One, Zero, Times, One, Zero]), 2030).SetDescription("10 x 10 x 10 + 10 + 10 + 10 + 10 x 10 x 10 = 2030");
 				
 				yield return new TestCaseData(new TokenChain([One, Two, Three, Four, Five, Times, One, Two, Three, ToThePowerOf, Two]), 186767505).SetDescription("12345 x 123 ^ 2 = 186767505");
+
+				yield return new TestCaseData(new TokenChain([Nine, Minus, Three, Tanh, Minus, Minus, Minus, E]), 9 - 3 * Math.Tanh(-Math.E)).SetDescription("9 - 3 tanh---e");
+				yield return new TestCaseData(new TokenChain([Three, Nthroot, Two, Seven]), 3).SetDescription("3 nthroot 27");
+				yield return new TestCaseData(new TokenChain([Three, Nthroot, Two, Seven, Plus, Six]), 9).SetDescription("3 nthroot 27 + 6");
 			}
 		}
 	}

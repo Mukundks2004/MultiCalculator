@@ -1,0 +1,193 @@
+﻿This is unused but useful code:
+
+		NullaryOperationToken ParseFromIndexToIndex(int startIndex, int endIndexExclusive)
+		{
+			var currentIndex = startIndex;
+			var numStack = new Stack<NullaryOperationToken>();
+			var opStack = new Stack<IOperation>();
+
+			while (currentIndex < endIndexExclusive)
+			{
+				var currentToken = operations[currentIndex];
+
+				if (currentToken is NullaryOperationToken constant)
+				{
+					numStack.Push(constant);
+				}
+
+				else if (currentToken is DigitToken)
+				{
+					var parsedNumberAsConst = ParseDoubleFromIndex(currentIndex, out int lengthOfNumber);
+					numStack.Push(parsedNumberAsConst);
+					currentIndex += lengthOfNumber - 1;
+				}
+
+				else if (currentToken == OperationDefinitions.OpenBracket)
+				{
+					var nextClosingBraceDistance = 1;
+					var unmatchedOpenBracketCount = 1;
+					while (unmatchedOpenBracketCount > 0)
+					{
+						if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.ClosedBracket)
+						{
+							unmatchedOpenBracketCount--;
+						}
+						else if (operations[currentIndex + nextClosingBraceDistance] == OperationDefinitions.OpenBracket)
+						{
+							unmatchedOpenBracketCount++;
+						}
+						nextClosingBraceDistance++;
+					}
+
+					numStack.Push(ParseFromIndexToIndex(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
+					currentIndex += nextClosingBraceDistance - 1;
+				}
+
+				else if (currentToken is UnaryOperationToken unaryPrefix && unaryPrefix.Fixity == Fixity.Prefix)
+				{
+					opStack.Push(unaryPrefix);
+				}
+
+				else if (currentToken is IOperation operation)
+				{
+					if (opStack.Count == 0 && !(operation is UnaryOperationToken firstOperation && firstOperation.Fixity == Fixity.Postfix))
+					{
+						opStack.Push(operation);
+					}
+
+					else if (opStack.Count == 0)
+					{
+						var unaryOperation = operation as UnaryOperationToken;
+						var unaryOperand = numStack.Pop();
+						var result = unaryOperation!.CalculateUnary(unaryOperand.Calculate());
+						numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+					}
+					
+					else
+					{
+						if (operation is UnaryOperationToken unary && unary.Fixity == Fixity.Postfix)
+						{
+							//Operation is postfix eg ! so to deal with this, we will continue peeking and evaluating until we have an operation with lower precedence
+							//the goal is to get increasing chain +, *, ^ so we can retain preference when executing in reverse :)
+
+							//I currently dont have a way of *enforcing* this but if you put all the dual arities as dual arities when they are binary
+							//and put their unary properties when they are unary, you shouldnt have to deal with duals that are ambiguous
+							//ex in the below, they would be classified as binaries, fittingly.
+
+							//context: we have encountered a postfix, and we need to remove all the operations with higher priority before this.
+							//We know the postfix is not the only operator, or it would have been processed already. therefore there is at least one operator.
+							//keep going until there are no more operators, or the priority of the operator before is lower
+							var lastOperationBeforePostfix = opStack.Peek();
+							double result;
+							while (opStack.Count > 0 && opStack.Peek().Priority > unary.Priority)
+							{
+								var firstOperand = numStack.Pop();
+								lastOperationBeforePostfix = opStack.Pop();
+
+								if (lastOperationBeforePostfix is IBinaryOperation lastOperationBinary)
+								{
+									var secondOperand = numStack.Pop();
+									result = lastOperationBinary.CalculateBinary(firstOperand.Calculate(), secondOperand.Calculate());
+								}
+								else
+								{
+									var lastOperationUnary = lastOperationBeforePostfix as IUnaryOperation;
+									result = lastOperationUnary!.CalculateUnary(firstOperand.Calculate());
+								}
+
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+								if (opStack.Count == 0)
+								{
+									break;
+								}
+							}
+
+							var operand = numStack.Pop();
+							result = unary.CalculateUnary(operand.Calculate());
+							numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+						}
+
+						else if (operation is IBinaryOperation binaryOperation && binaryOperation.Associativity == Associativity.Left)
+						{
+							while (opStack.Count > 0 && opStack.Peek().Priority >= binaryOperation.Priority )
+							{
+								var op = opStack.Pop();
+								var latestOperand = numStack.Pop();
+								double result;
+								if (op is IBinaryOperation opBinary)
+								{
+									var earlierOperand = numStack.Pop();
+									result = opBinary!.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
+								}
+								else
+								{
+									var unaryOperation = op as IUnaryOperation;
+									result = unaryOperation!.CalculateUnary(latestOperand.Calculate());
+								}
+
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+							}
+
+							opStack.Push(binaryOperation);
+						}
+						else if (operation is IBinaryOperation binaryOperationRight)
+						{
+							while (opStack.Count > 0 && opStack.Peek().Priority > binaryOperationRight.Priority)
+							{
+								var op = opStack.Pop();
+								var laterOperand = numStack.Pop();
+								double result;
+								if (op is IBinaryOperation binaryOperator)
+								{
+									var earlierOperand = numStack.Pop();
+									result = binaryOperator!.CalculateBinary(earlierOperand.Calculate(), laterOperand.Calculate());
+
+								}
+								else
+								{
+									var unaryOperation = op as IUnaryOperation;
+									result = unaryOperation!.CalculateUnary(laterOperand.Calculate());
+								}
+
+								numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+							}
+
+							opStack.Push(binaryOperationRight);
+						}
+					}
+				}
+
+				currentIndex++;
+			}
+
+			while (opStack.Count > 0)
+			{
+				var trailingOperation = opStack.Pop();
+				var latestOperand = numStack.Pop();
+				double result;
+
+				var trailingTreeNode = new TreeNode<IToken>(trailingOperation);
+				trailingTreeNode.AddChild(latestOperand);
+
+				if (trailingOperation is IBinaryOperation binaryOperation)
+				{
+					var earlierOperand = numStack.Pop();
+					result = binaryOperation.CalculateBinary(earlierOperand.Calculate(), latestOperand.Calculate());
+					trailingTreeNode.InsertChildAt(earlierOperand, 0);
+				}
+				else
+				{
+					var unaryOperation = trailingOperation as IUnaryOperation;
+					result = unaryOperation!.CalculateUnary(latestOperand.Calculate());
+				}
+
+				numStack.Push(NullaryOperationToken.GetConstFromDouble(result));
+			}
+
+			return numStack.Pop();
+		}
+
+		public double Parse()
+		{
+			return ParseFromIndexToIndex(0, operations.Count).Calculate();
+		}

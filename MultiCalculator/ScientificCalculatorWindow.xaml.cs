@@ -4,6 +4,7 @@ using MultiCalculator.Database.Services;
 using MultiCalculator.Implementations;
 using MultiCalculator.Utilities;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace MultiCalculator
@@ -51,14 +52,27 @@ namespace MultiCalculator
 
 		public void UpdateExpressionBox()
 		{
-			ExpressionBox.Text = CalculatorExpression.ToString();
+			var isValid = CalculatorExpression.IsValid();
+			if (isValid)
+			{
+				CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
+				ExpressionBoxContainer.Visibility = Visibility.Collapsed;
+				FormulaBoxContainer.Visibility = Visibility.Visible;
+				FormulaBox.Formula = CalculatorExpression.GetLatexString();
+			}
+			else
+			{
+				ExpressionBoxContainer.Visibility = Visibility.Visible;
+				FormulaBoxContainer.Visibility = Visibility.Collapsed;
+				ExpressionBox.Text = CalculatorExpression.ToString();
+			}
 		}
 
 		static void ExpressionValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			var control = d as ScientificCalculatorWindow;
 			_ = control ?? throw new ArgumentNullException(nameof(control));
-			control.ExpressionBox.Text = ((TokenChain)e.NewValue).ToString();
+			control.UpdateExpressionBox();
 		}
 
 		static void AnswerValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -67,7 +81,8 @@ namespace MultiCalculator
 			_ = control ?? throw new ArgumentNullException(nameof(control));
 
 			//Need to change this to something else when ans box made
-			control.ResultBox.Text = e.NewValue.ToString();
+			//control.ResultBox.Text = e.NewValue.ToString();
+			control.FormulaResult.Formula = (string)e.NewValue;
 		}
 
 		void TokenButton_Clicked(object? sender, EventArgs e)
@@ -83,28 +98,28 @@ namespace MultiCalculator
 			CalculatorAnswer = string.Empty;
 			//Replace this with real answer when we have a history service or something- maybe we need a history model?
 			//Also move explicit references to token to service maybe. the view should not know about the impelemtnation details.
-			CalculatorExpression.Add(new NullaryOperationToken() { Calculate = () => 0, TokenSymbol = "Ans"});
+			CalculatorExpression.Add(new NullaryOperationToken() { Calculate = () => 0, TokenSymbol = "Ans", LatexString = "{Ans}"});
 		}
 
 		public void EvaluateExpression_Click()
 		{
-			var isValid = CalculatorExpression.IsValid();
-			if (!isValid)
+			try
 			{
-				CalculatorAnswer = "Syntax Error";
-			}
-			else
-			{
-				CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
-				var result = CalculatorExpression.Parse();
-				if (double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity)
+				var isValid = CalculatorExpression.IsValid();
+				if (!isValid)
 				{
-					CalculatorAnswer = "Math Error";
+					CalculatorAnswer = "Syntax Error";
 				}
 				else
 				{
-					CalculatorAnswer = result.ToString();
+					CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
+					var result = CalculatorExpression.ParseTree();
+					CalculatorAnswer = double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity ? "Math Error" : result.ToString();
 				}
+			}
+			catch (Exception myException)
+			{
+				CalculatorAnswer = "Bad expression!";
 			}
 
 			CalculatorExpression.MakeEmpty();

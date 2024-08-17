@@ -4,9 +4,11 @@ using MultiCalculator.Exceptions;
 
 namespace MultiCalculator.Implementations
 {
-	public class UnaryOperationToken : IToken, IUnaryOperation
+	public class UnaryOperationToken : IUnaryOperation
     {
 		public string TokenSymbol { get; init; } = string.Empty;
+
+		public Func<string, string> LatexString { get; init; } = (x) => throw new MultiCalculatorException("Not implemented");
 
 		public Func<double, double> CalculateUnary { get; init; } = (x) => throw new MultiCalculatorException("Not implemented");
 
