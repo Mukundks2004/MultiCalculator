@@ -353,7 +353,10 @@ namespace MultiCalculator.Utilities
 						nextClosingBraceDistance++;
 					}
 
-					numStackIncludingTrees.Push(ParseFromIndexToIndexKeepInTreeForm(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
+					var nestedTreeResult = ParseFromIndexToIndexKeepInTreeForm(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1);
+					var bracketWrapper = new TreeNode<IToken>(OperationDefinitions.Braces);
+					bracketWrapper.AddTree(nestedTreeResult);
+					numStackIncludingTrees.Push(bracketWrapper);
 					currentIndex += nextClosingBraceDistance - 1;
 				}
 
