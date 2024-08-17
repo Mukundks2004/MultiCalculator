@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MultiCalculator.Database.Models;
 using MultiCalculator.Database.Repositories;
+using MultiCalculator.Database.Services;
 using MultiCalculator.Helpers;
 
 namespace MultiCalculator
@@ -24,21 +25,38 @@ namespace MultiCalculator
 	/// </summary>
 	public partial class PracticeProblemsWindow : Window
 	{
-		public PracticeProblemsWindow()
+		private string question;
+		private string answer;
+		readonly IDatabaseService _databaseService;
+		readonly UserModel user;
+		PracticeProblemsHelper helper;
+
+		public PracticeProblemsWindow(IDatabaseService databaseService, UserModel user)
 		{
 			InitializeComponent();
+			helper = new PracticeProblemsHelper(databaseService);
+			_databaseService = databaseService;
+			user = user;
 		}
 
-		private void EmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		void GeneratePracticeProblem_Click(object sender, RoutedEventArgs e)
 		{
-			var user = new UserModel(); // this isn't done, idk how to get the currently logged-in user tho so someone gotta fix this up rq
-			PracticeProblemsHelper.SendPracticeProblemEmail(user, (string)EmailTextBox.Text);
+			(question, answer) = helper.GeneratePracticeProblem();
+			QuestionTextBlock.Text = question;
+			answerLabel.Content = string.Empty;
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			var practiceProblem = PracticeProblemsHelper.GeneratePracticeProblem();
-			QuestionTextBlock.Text = practiceProblem;
-		}
-	}
+        void ShowAnswer_Click(object sender, RoutedEventArgs e)
+        {
+			if (question != null && question != string.Empty)
+			{
+				answerLabel.Content = "Answer: " + answer;
+			}
+        }
+
+        void SendEmail_Click(object sender, RoutedEventArgs e)
+        {
+            helper.SendPracticeProblemEmail(user, EmailTextBox.Text);
+        }
+    }
 }

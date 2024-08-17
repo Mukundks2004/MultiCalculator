@@ -23,9 +23,9 @@ namespace MultiCalculator.Database.Services
             _openAiQuestionsRepository = openAiQuestionsRepository;
         }
 
-        public UserModel LoadUserById(int id)
+        public UserModel? LoadUserById(int id)
         {
-            return _userRepository.GetUserById(id);    
+            return _userRepository.GetUserById(id);
         }
 
         public CalculationHistoryModel LoadCalculationHistoryById(Guid id)
@@ -71,6 +71,89 @@ namespace MultiCalculator.Database.Services
         public void AddOpenAiQuestion(OpenAiQuestionsModel openAiQuestion)
         {
             _openAiQuestionsRepository.Add(openAiQuestion);
+        }
+
+        public void SeedData()
+        {
+            var users = new List<UserModel>() {
+                new UserModel() { Id = 11111, Password = "11111", FirstName = "Admin", LastName = "Admin", Username = "Admin101", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
+                new UserModel() { Id = 22222, Password = "22222", FirstName = "Dennis", LastName = "Hsu", Username = "Dennis", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
+                new UserModel() { Id = 33333, Password = "33333", FirstName = "Mukund", LastName = "Srinivasan", Username = "Mukund", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
+                new UserModel() { Id = 44444, Password = "44444", FirstName = "Matt", LastName = "Lam", Username = "Matt", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
+            };
+
+            var randomQuestions = new List<CalculationHistoryModel>()
+            {
+                new CalculationHistoryModel() { Id = new Guid(), Question = "5 + 5", Answer = "10", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "34 + 17", Answer = "51", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "29 - 7", Answer = "22", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "8 * 6", Answer = "48", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "56 / 8", Answer = "7", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "12 + 45", Answer = "57", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "100 - 39", Answer = "61", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "9 * 7", Answer = "63", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "81 / 9", Answer = "9", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "23 + 34", Answer = "57", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "50 - 25", Answer = "25", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "7 * 11", Answer = "77", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "72 / 8", Answer = "9", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "15 + 22", Answer = "37", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "99 - 33", Answer = "66", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "5 * 9", Answer = "45", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "90 / 10", Answer = "9", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "37 + 44", Answer = "81", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "80 - 29", Answer = "51", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "6 * 12", Answer = "72", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "56 / 7", Answer = "8", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "27 + 18", Answer = "45", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "40 - 19", Answer = "21", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "8 * 8", Answer = "64", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "96 / 12", Answer = "8", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "14 + 31", Answer = "45", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "72 - 28", Answer = "44", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "4 * 15", Answer = "60", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "81 / 9", Answer = "9", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "50 + 22", Answer = "72", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "65 - 24", Answer = "41", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "3 * 19", Answer = "57", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "84 / 7", Answer = "12", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "30 + 45", Answer = "75", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "60 - 22", Answer = "38", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "7 * 9", Answer = "63", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "66 / 6", Answer = "11", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "41 + 18", Answer = "59", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "72 - 15", Answer = "57", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "5 * 13", Answer = "65", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "90 / 5", Answer = "18", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "19 + 24", Answer = "43", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "56 - 33", Answer = "23", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "8 * 14", Answer = "112", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "64 / 8", Answer = "8", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "21 + 36", Answer = "57", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "80 - 29", Answer = "51", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "6 * 10", Answer = "60", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "90 / 15", Answer = "6", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "24 + 55", Answer = "79", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "88 - 40", Answer = "48", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "9 * 7", Answer = "63", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "54 / 9", Answer = "6", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "14 + 26", Answer = "40", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "91 - 22", Answer = "69", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "7 * 11", Answer = "77", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "72 / 8", Answer = "9", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "45 + 32", Answer = "77", QuestionSender = users[0] },
+                new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "64 - 21", Answer = "43", QuestionSender = users[0] },
+            };
+
+            users.ForEach(u => AddUser(u));
+            randomQuestions.ForEach(q => AddCalculationHistory(q));
+        }
+
+        public void ClearData()
+        {
+            _userRepository.ClearDatabase();
+            _calculationHistoryRepository.ClearDatabase();
+            _openAiQuestionsRepository.ClearDatabase();
         }
     }
 }

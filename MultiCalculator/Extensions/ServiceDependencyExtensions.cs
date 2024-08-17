@@ -2,6 +2,7 @@
 using MultiCalculator.Database;
 using MultiCalculator.Database.Models;
 using MultiCalculator.Database.Repositories;
+using MultiCalculator.Database.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,9 @@ namespace MultiCalculator.Extensions
         {
             services.AddDbContext<CalculatorDbContext>()
                 .AddScoped<CalculationHistoryRepository>()
-                .AddScoped<UserRepository>();
+                .AddScoped<UserRepository>()
+                .AddScoped<OpenAiQuestionsRepository>()
+                .AddTransient<IDatabaseService, DatabaseService>();
 
             return services;
         }

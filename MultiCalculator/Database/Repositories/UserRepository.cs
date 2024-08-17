@@ -24,9 +24,16 @@ namespace MultiCalculator.Database.Repositories
             return CalculatorDbContext.User;
         }
 
-        public UserModel GetUserById(int id)
+        public UserModel? GetUserById(int id)
         {
-            return CalculatorDbContext.User.Where(a => a.Id == id).Include(a => a.openAiQuestions).Include(a => a.calculationHistory).First();
+            try
+            {
+                return CalculatorDbContext.User.Where(a => a.Id == id).Include(a => a.openAiQuestions).Include(a => a.calculationHistory).First();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
         }
 
         public void UpdateUser(UserModel updatedUser)
