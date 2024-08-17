@@ -14,12 +14,9 @@ namespace MultiCalculator
 	/// </summary>
 	public partial class ScientificCalculatorWindow : Window
 	{
-		readonly IDatabaseService _databaseService;
-
-		public ScientificCalculatorWindow(IDatabaseService databaseService)
+		public ScientificCalculatorWindow()
 		{
 			InitializeComponent();
-			_databaseService = databaseService;
 			CalculatorExpression = new TokenChain();
 			CalculatorExpression.OperationsUpdated += UpdateExpressionBox;
 			DataContext = this;

@@ -41,13 +41,16 @@ namespace MultiCalculator
 			switch (windowTag)
 			{
 				case "ScientificCalculator":
-					windowToOpen = new ScientificCalculatorWindow(_databaseService);
+					windowToOpen = new ScientificCalculatorWindow();
 					break;
 				case "Settings":
 					windowToOpen = new SettingsWindow();
 					break;
 				case "PracticeProblems":
 					windowToOpen = new PracticeProblemsWindow(_databaseService, loggedUser);
+					break;
+				case "PluginsWindow":
+					windowToOpen = new PluginsWindow();
 					break;
 				default:
 					MessageBox.Show($"Unknown window tag: {windowTag ?? "Empty"}");

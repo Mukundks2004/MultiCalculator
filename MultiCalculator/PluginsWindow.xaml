@@ -1,0 +1,42 @@
+﻿<Window x:Class="MultiCalculator.PluginsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MultiCalculator"
+        mc:Ignorable="d"
+        Title="PluginsWindow" Height="350" Width="640">
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Label Content="To upload your code click here"></Label>
+            <Button Content="Upload" Width="100" Height="30" Click="UploadButton_Click"/>
+            <Separator Height="5" Background="Transparent"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label Content="File:"/>
+                <TextBox Name="FilePathTextBox" IsReadOnly="True" Width="250" Height="50" TextWrapping="Wrap"/>
+            </StackPanel>
+            <Separator Height="20" Background="Transparent"/>
+
+            <Label Content="X-pos" Margin="10,0,0,0"/>
+            <TextBox x:Name="XPosBox" Width="150" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting"/>
+            <Label Content="Y-pos" Margin="10,0,0,0"/>
+            <TextBox x:Name="YPosBox" Width="150" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting"/>
+            <Separator Height="10" Background="Transparent"/>
+            <Button Content="Add" Margin="10" Height="30" Click="AddPlugin_Click"/>
+
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <Canvas>
+                <Button Content="Button 1" Width="100" Height="50" Canvas.Left="50" Canvas.Top="50" Background="LightBlue"/>
+                <Button Content="Button 2" Width="100" Height="50" Canvas.Left="80" Canvas.Top="80" Background="LightCoral"/>
+                <TextBox Width="150" Height="30" Canvas.Left="100" Canvas.Top="100" Text="Overlapping TextBox"/>
+            </Canvas>
+        </StackPanel>
+           
+    </Grid>
+</Window>
