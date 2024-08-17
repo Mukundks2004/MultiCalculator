@@ -28,7 +28,7 @@
                    Margin="10"
                    HorizontalAlignment="Center"
                    Grid.Row="1"/>
-        <Button x:Name="answerBtn" Content="Show Answer" HorizontalAlignment="Center" Margin="0,137,0,0" Grid.Row="2" VerticalAlignment="Top" Click="ShowAnswer_Click" Height="30" Width="183"/>
+        <Button x:Name="answerBtn" Content="Show Answer" HorizontalAlignment="Center" Margin="0,137,0,0" Grid.Row="2" VerticalAlignment="Top" Click="HandleAnswer_Click" Height="30" Width="183"/>
         <Label x:Name="answerLabel" Content="" HorizontalAlignment="Center" Margin="0,95,0,0" Grid.Row="2" VerticalAlignment="Top" RenderTransformOrigin="-1.743,0.53"/>
         <Button Content="Click Here For Question" HorizontalAlignment="Center" Margin="0,32,0,0" Grid.Row="2" VerticalAlignment="Top" Height="30" Width="183" RenderTransformOrigin="2.076,-3.14" Click="GeneratePracticeProblem_Click"/>
         <Label Content="Email:" HorizontalAlignment="Left" Margin="276,218,0,0" Grid.Row="2" VerticalAlignment="Top"/>

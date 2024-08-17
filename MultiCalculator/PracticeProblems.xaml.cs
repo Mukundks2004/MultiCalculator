@@ -44,13 +44,24 @@ namespace MultiCalculator
 			(question, answer) = helper.GeneratePracticeProblem();
 			QuestionTextBlock.Text = question;
 			answerLabel.Content = string.Empty;
+			answerBtn.Content = "Show Answer";
 		}
 
-        void ShowAnswer_Click(object sender, RoutedEventArgs e)
+        void HandleAnswer_Click(object sender, RoutedEventArgs e)
         {
 			if (question != null && question != string.Empty)
 			{
-				answerLabel.Content = "Answer: " + answer;
+				if (answerLabel.Content == string.Empty)
+				{
+					answerLabel.Content = "Answer: " + answer;
+					answerBtn.Content = "Hide Answer";
+				}
+				else
+				{
+
+                    answerLabel.Content = string.Empty;
+                    answerBtn.Content = "Show Answer";
+                }
 			}
         }
 
