@@ -3,7 +3,6 @@ using MultiCalculator.Definitions;
 using MultiCalculator.Delegates;
 using MultiCalculator.Enums;
 using MultiCalculator.Implementations;
-using OpenAI_API.Moderation;
 
 namespace MultiCalculator.Utilities
 {
@@ -75,11 +74,6 @@ namespace MultiCalculator.Utilities
 
 		public bool IsValid()
 		{
-			var a = HasNonEmptyAndNonNegativeOpenBraces();
-			var b = NumbersExistAndAreWellFormed();
-			var c = NoConsecutiveBinaryOperations();
-			var d = NoDigitsFollowClosingBrace();
-			var e = ExpressionDoesNotEndInOperation();
 			return HasNonEmptyAndNonNegativeOpenBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
 		}
 
