@@ -31,6 +31,16 @@ namespace MultiCalculator.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<CalculationHistoryModel>()
+                .HasOne(a => a.QuestionSender)
+                .WithMany(q => q.calculationHistory)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OpenAiQuestionsModel>()
+                .HasOne(a => a.QuestionSender)
+                .WithMany(q => q.openAiQuestions)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

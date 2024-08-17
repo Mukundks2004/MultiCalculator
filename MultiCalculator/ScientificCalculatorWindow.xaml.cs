@@ -1,5 +1,6 @@
 ﻿using MultiCalculator.Abstractions;
 using MultiCalculator.Controls;
+using MultiCalculator.Database.Services;
 using MultiCalculator.Implementations;
 using MultiCalculator.Utilities;
 using System.Windows;
@@ -12,9 +13,12 @@ namespace MultiCalculator
 	/// </summary>
 	public partial class ScientificCalculatorWindow : Window
 	{
-		public ScientificCalculatorWindow()
+		readonly IDatabaseService _databaseService;
+
+		public ScientificCalculatorWindow(IDatabaseService databaseService)
 		{
 			InitializeComponent();
+			_databaseService = databaseService;
 			CalculatorExpression = new TokenChain();
 			CalculatorExpression.OperationsUpdated += UpdateExpressionBox;
 			DataContext = this;

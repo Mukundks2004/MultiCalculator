@@ -16,7 +16,7 @@ namespace MultiCalculator.Database.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public int AmountOfGeneratedPdfs { get; set; }
-        public ICollection<string> GeneratedPdfLocations { get; set; } = new List<string>();
+        public List<string> GeneratedPdfLocations { get; set; } = new List<string>();
 
         [InverseProperty("QuestionSender")]
         public ICollection<CalculationHistoryModel> calculationHistory { get; set; } = new List<CalculationHistoryModel>();

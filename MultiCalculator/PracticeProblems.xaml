@@ -28,34 +28,13 @@
                    Margin="10"
                    HorizontalAlignment="Center"
                    Grid.Row="1"/>
-
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="480"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Content="Click for Question"
-                    Grid.Column="0"
-                    Margin="5"
-                    Padding="10,5"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Grid.ColumnSpan="2" Click="Button_Click"/>
-
-            <StackPanel Orientation="Horizontal"
-                        Grid.Column="1"
-                        VerticalAlignment="Center"
-                        Margin="5">
-                <TextBlock Text="Send to email:"
-                           VerticalAlignment="Center"
-                           Margin="5"/>
-
-                <TextBox x:Name="EmailTextBox"
-                         Width="200"
-                         Margin="5" TextChanged="EmailTextBox_TextChanged"/>
-            </StackPanel>
-        </Grid>
+        <Button x:Name="answerBtn" Content="Show Answer" HorizontalAlignment="Center" Margin="0,137,0,0" Grid.Row="2" VerticalAlignment="Top" Click="ShowAnswer_Click" Height="30" Width="183"/>
+        <Label x:Name="answerLabel" Content="" HorizontalAlignment="Center" Margin="0,95,0,0" Grid.Row="2" VerticalAlignment="Top" RenderTransformOrigin="-1.743,0.53"/>
+        <Button Content="Click Here For Question" HorizontalAlignment="Center" Margin="0,32,0,0" Grid.Row="2" VerticalAlignment="Top" Height="30" Width="183" RenderTransformOrigin="2.076,-3.14" Click="GeneratePracticeProblem_Click"/>
+        <Label Content="Email:" HorizontalAlignment="Left" Margin="276,218,0,0" Grid.Row="2" VerticalAlignment="Top"/>
+        <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" Margin="322,222,0,0" Grid.Row="2" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="194"/>
+        <Button Content="Click Here To Send Email" HorizontalAlignment="Center" Margin="0,263,0,0" Grid.Row="2" VerticalAlignment="Top" Height="30" Width="184" Click="SendEmail_Click"/>
+        <Label Content="Send practice question to an email." HorizontalAlignment="Center" Margin="0,191,0,0" Grid.Row="2" VerticalAlignment="Top"/>
     </Grid>
 
 </Window>

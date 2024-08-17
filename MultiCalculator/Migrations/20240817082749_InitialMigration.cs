@@ -20,6 +20,7 @@ namespace MultiCalculator.Migrations
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", nullable: false),
                     LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    Username = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Phone = table.Column<string>(type: "TEXT", nullable: false),
                     AmountOfGeneratedPdfs = table.Column<int>(type: "INTEGER", nullable: false),
@@ -48,7 +49,7 @@ namespace MultiCalculator.Migrations
                         column: x => x.QuestionSenderId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,7 +69,7 @@ namespace MultiCalculator.Migrations
                         column: x => x.QuestionSenderId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

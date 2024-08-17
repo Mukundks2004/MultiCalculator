@@ -12,7 +12,7 @@ namespace MultiCalculator.Helpers
         {
             var document = new Document();
             var listOfPages = new List<Page>();
-            for (var i = 0; i < questionAndAnswer.Count / 5; i++)
+            for (var i = 0; i < (questionAndAnswer.Count / 5) * 2; i++)
             {
                 var page = new Page(PageSize.Letter, PageOrientation.Portrait, 54.0f);
                 listOfPages.Add(page);
@@ -44,14 +44,19 @@ namespace MultiCalculator.Helpers
 
         private void PdfWriter(List<(string, string)> questionAndAnswer, List<Page> pages)
         {
+            var answerStart = (questionAndAnswer.Count / 5) * 2;
             for (var i = 0; i < questionAndAnswer.Count; i++)
             {
                 pages[i/5].Elements.Add(new Label($"Question {i + 1}:\t\t{questionAndAnswer[i].Item1}", 0, 40 + (i%5 != 0 ? (700/5) * (i%5) : 0), 504, 100, Font.Helvetica, 16, TextAlign.Left));
-                pages[i/5].Elements.Add(new Label($"Answer {i + 1}:\t\t{questionAndAnswer[i].Item2}", 0, 90 + (i % 5 != 0 ? (700 / 5)*(i%5) : 0), 504, 100, Font.Helvetica, 16, TextAlign.Left));
+                pages[i/5].Elements.Add(new Label($"Answer {i + 1}:", 0, 90 + (i % 5 != 0 ? (700 / 5)*(i%5) : 0), 504, 100, Font.Helvetica, 16, TextAlign.Left));
+                pages[i/5 + answerStart].Elements.Add(new Label($"Answer {i + 1}:\t\t{questionAndAnswer[i].Item2}", 0, 40 + (i % 5 != 0 ? (700 / 5) * (i % 5) : 0), 504, 100, Font.Helvetica, 16, TextAlign.Left));
+
                 if (i % 5 == 0)
                 {
-                    pages[i / 5].Elements.Add(new Label($"Page {i / 5 + 1}", 0, 0, 504, 100, Font.Helvetica, 16, TextAlign.Left));
+                    pages[i / 5].Elements.Add(new Label($"Page {i / 5 + 1}", 0, 0, 504, 100, Font.Helvetica, 16, TextAlign.Right));
                     pages[i / 5].Elements.Add(new Label("By MDM Calculator", 0, 670, 504, 100, Font.Helvetica, 16, TextAlign.Right));
+                    pages[i / 5 + answerStart].Elements.Add(new Label($"Page {i / 5 + 1}", 0, 0, 504, 100, Font.Helvetica, 16, TextAlign.Right));
+                    pages[i / 5 + answerStart].Elements.Add(new Label("By MDM Calculator", 0, 670, 504, 100, Font.Helvetica, 16, TextAlign.Right));
                 }
             }
         }

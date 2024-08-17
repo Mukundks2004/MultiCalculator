@@ -9,7 +9,7 @@ namespace MultiCalculator.Database.Services
 {
     public interface IDatabaseService
     {
-        UserModel LoadUserById(int id);
+        UserModel? LoadUserById(int id);
         CalculationHistoryModel LoadCalculationHistoryById(Guid id);
         OpenAiQuestionsModel LoadOpenAiQuestionsById(Guid id);
         List<CalculationHistoryModel> LoadAllCalculationHistory();
@@ -19,5 +19,7 @@ namespace MultiCalculator.Database.Services
         void AddUser(UserModel user);
         void AddCalculationHistory(CalculationHistoryModel calculationHistory);
         void AddOpenAiQuestion(OpenAiQuestionsModel openAiQuestion);
+        void SeedData();
+        void ClearData();
     }
 }

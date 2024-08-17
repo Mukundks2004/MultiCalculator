@@ -101,6 +101,10 @@ namespace MultiCalculator.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("User");
@@ -111,7 +115,7 @@ namespace MultiCalculator.Migrations
                     b.HasOne("MultiCalculator.Database.Models.UserModel", "QuestionSender")
                         .WithMany("calculationHistory")
                         .HasForeignKey("QuestionSenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("QuestionSender");
@@ -122,7 +126,7 @@ namespace MultiCalculator.Migrations
                     b.HasOne("MultiCalculator.Database.Models.UserModel", "QuestionSender")
                         .WithMany("openAiQuestions")
                         .HasForeignKey("QuestionSenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("QuestionSender");

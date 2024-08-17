@@ -1,4 +1,5 @@
 ﻿using MultiCalculator.Database.Models;
+using MultiCalculator.Database.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,14 @@ namespace MultiCalculator.Helpers
 {
     public class PracticeProblemsHelper
     {
-        public static void SendPracticeProblemEmail(UserModel user, string practiceProblem)
+        readonly IDatabaseService _databaseService;
+
+        public PracticeProblemsHelper(IDatabaseService databaseService)
+        {
+            _databaseService = databaseService;
+        }
+
+        public void SendPracticeProblemEmail(UserModel user, string practiceProblem)
         {
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -36,11 +44,14 @@ namespace MultiCalculator.Helpers
             }
         }
 
-        public static string GeneratePracticeProblem()
+        public (string, string) GeneratePracticeProblem()
         {
             // TODO: CALL OpenAIHelper, method: SubmitAndGetApiResponse(string prompt, UserModel sendingUser) to generate question and then return it.
-            var practiceProblem = "";
-			return practiceProblem;
+            // Maybe not we could generate a random question from the calculation history model instead (Performs similar function and doesn't require chatgpt)
+            var allPreviousQuestions = _databaseService.LoadAllCalculationHistory();
+            var random = new Random();
+            var randomNumber = random.Next(0, allPreviousQuestions.Count);
+			return (allPreviousQuestions[randomNumber].Question, allPreviousQuestions[randomNumber].Answer);
         }
     }
 }

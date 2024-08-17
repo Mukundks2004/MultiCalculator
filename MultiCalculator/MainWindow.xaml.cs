@@ -16,17 +16,13 @@ namespace MultiCalculator
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public MainWindow()
+		public UserModel loggedUser { get; set; }
+		readonly IDatabaseService _databaseService;
+
+		public MainWindow(IDatabaseService databaseService)
 		{
             InitializeComponent();
-
-            var builder = Host.CreateApplicationBuilder();
-            builder.Services.AddDependencyGroup();
-
-            using (var context = new CalculatorDbContext())
-            {
-                context.Database.EnsureCreated();
-            }
+			_databaseService = databaseService;
         }
 
 		void OpenWindowButton_Click(object sender, RoutedEventArgs e)
@@ -45,13 +41,13 @@ namespace MultiCalculator
 			switch (windowTag)
 			{
 				case "ScientificCalculator":
-					windowToOpen = new ScientificCalculatorWindow();
+					windowToOpen = new ScientificCalculatorWindow(_databaseService);
 					break;
 				case "Settings":
 					windowToOpen = new SettingsWindow();
 					break;
 				case "PracticeProblems":
-					windowToOpen = new PracticeProblemsWindow();
+					windowToOpen = new PracticeProblemsWindow(_databaseService, loggedUser);
 					break;
 				default:
 					MessageBox.Show($"Unknown window tag: {windowTag ?? "Empty"}");
