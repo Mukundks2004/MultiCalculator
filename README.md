@@ -14,3 +14,4 @@ Mukund:
   - 
 - Make all windows look ok when resized or non resizeable otherwise
 - Hope the project can be net8.0-windows because it is
+- README make it good
