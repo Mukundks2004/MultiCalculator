@@ -3,7 +3,6 @@ using MultiCalculator.Definitions;
 using MultiCalculator.Delegates;
 using MultiCalculator.Enums;
 using MultiCalculator.Implementations;
-using OpenAI_API.Moderation;
 
 namespace MultiCalculator.Utilities
 {
@@ -407,11 +406,11 @@ namespace MultiCalculator.Utilities
 
 			for (int i = 0; i < operations.Count; i++)
 			{
-				if (operations[i] is BracketToken openBracket && openBracket.BracketType == BracketType.Open || operations[i] is UnaryOperationToken)
+				if (operations[i] == OperationDefinitions.OpenBracket)
 				{
 					bracketStack.Push(i);
 				}
-				else if (operations[i] is BracketToken closedBracket && closedBracket.BracketType == BracketType.Closed)
+				else if (operations[i] == OperationDefinitions.ClosedBracket)
 				{
 					if (bracketStack.Count == 0)
 					{
@@ -432,7 +431,7 @@ namespace MultiCalculator.Utilities
 		bool ExpressionDoesNotEndInOperation()
 		{
 			var finalToken = operations.Last();
-			return !(finalToken is BracketToken bracket && bracket.BracketType == BracketType.Open || finalToken is UnaryOperationToken || finalToken is BinaryOperationToken || finalToken is DualArityOperationToken);
+			return !(finalToken == OperationDefinitions.OpenBracket || finalToken is UnaryOperationToken finalUnary && finalUnary.Fixity == Fixity.Prefix || finalToken is BinaryOperationToken || finalToken is DualArityOperationToken dual && dual.UnaryOperation.Fixity == Fixity.Prefix);
 		}
 
 		bool NumbersExistAndAreWellFormed()
