@@ -55,7 +55,7 @@ namespace MultiCalculator.Definitions
 		static readonly UnaryOperationToken atanh = new() { CalculateUnary = Math.Atanh, Fixity = Fixity.Prefix, TokenSymbol = "atanh", Priority = 2, LatexString = (x) => "\\tanh^{-1}{" + x + "}" };
 
 		static readonly UnaryOperationToken abs = new() { CalculateUnary = Math.Abs, Fixity = Fixity.Prefix, TokenSymbol = "abs", Priority = 2, LatexString = (x) => "abs{" + x + "}" };
-		static readonly UnaryOperationToken sqrt = new() { CalculateUnary = Math.Sqrt, Fixity = Fixity.Prefix, TokenSymbol = "sqrt", Priority = 2, LatexString = (x) => "\\sqrt" + x + "}" };
+		static readonly UnaryOperationToken sqrt = new() { CalculateUnary = Math.Sqrt, Fixity = Fixity.Prefix, TokenSymbol = "sqrt", Priority = 2, LatexString = (x) => "\\sqrt{" + x + "}" };
 		static readonly UnaryOperationToken cbrt = new() { CalculateUnary = Math.Cbrt, Fixity = Fixity.Prefix, TokenSymbol = "cbrt", Priority = 2, LatexString = (x) => "\\surd[3]{" + x + "}" };
 		static readonly UnaryOperationToken log = new() { CalculateUnary = Math.Log10, Fixity = Fixity.Prefix, TokenSymbol = "log", Priority = 2, LatexString = (x) => "\\log{" + x + "}" };
 		static readonly UnaryOperationToken ln = new() { CalculateUnary = Math.Log, Fixity = Fixity.Prefix, TokenSymbol = "ln", Priority = 2, LatexString = (x) => "\\ln{" + x + "}" };
