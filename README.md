@@ -2,6 +2,7 @@
 
 ## WHAT EVERYONE IS WORKING ON
 - Mukund:
+  - Modify shunting yard to product AST
   - Plugins (estimated time: 60 min)
 - Dennis: Setup OPENAI, has $10 credit, we still need testing. AI/Database basically has been setup.
 
