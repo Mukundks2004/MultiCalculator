@@ -160,6 +160,9 @@ namespace MultiCalculatorTests
 
 				yield return new TestCaseData(new TokenChain([Six, Factorial]), true).SetDescription("6!");
 				yield return new TestCaseData(new TokenChain([Nine, Times, Six, Plus, Factorial]), false).SetDescription("9 x 6 + !");
+
+				yield return new TestCaseData(new TokenChain([Nine, Times, Two, Times, J]), false).SetDescription("9 x 2 x ]");
+				yield return new TestCaseData(new TokenChain([Nine, Times, C, Two, Times, J]), false).SetDescription("9 x 2 x ]");
 			}
 		}
 
@@ -268,7 +271,6 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([Nine, Pi, Times, Two]), 18 * Math.PI).SetDescription("9pi x 2");
 				yield return new TestCaseData(new TokenChain([Nine, Times, Pi, Times, Two]), 18 * Math.PI).SetDescription("9 x pi x 2");
 				yield return new TestCaseData(new TokenChain([Nine, Times, Pi, Times, C, Two]), 18 * Math.PI).SetDescription("9 x pi x (2");
-
 			}
 		}
 	}

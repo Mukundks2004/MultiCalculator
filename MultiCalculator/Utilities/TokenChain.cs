@@ -117,7 +117,7 @@ namespace MultiCalculator.Utilities
 
 		public bool IsValid()
 		{
-			return HasNonEmptyAndNonNegativeOpenBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
+			return HasNonEmptyAndNonNegativeOpenBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation() && NoIllegalConsecutiveTokens();
 		}
 
 		//This is only called on valid strings
@@ -353,7 +353,7 @@ namespace MultiCalculator.Utilities
 						nextClosingBraceDistance++;
 					}
 
-					numStackIncludingTrees.Push(ParseFromIndexToIndexProductConst(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
+					numStackIncludingTrees.Push(ParseFromIndexToIndexKeepInTreeForm(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
 					currentIndex += nextClosingBraceDistance - 1;
 				}
 
@@ -382,12 +382,11 @@ namespace MultiCalculator.Utilities
 					{
 						if (operation is UnaryOperationToken unary && unary.Fixity == Fixity.Postfix)
 						{
-							var lastOperationBeforePostfix = opStack.Peek();
 							var unaryPostfixTree = new TreeNode<IToken>(unary);
 							while (opStack.Count > 0 && opStack.Peek().Priority > unary.Priority)
 							{
 								var laterOperand = numStackIncludingTrees.Pop();
-								lastOperationBeforePostfix = opStack.Pop();
+								var lastOperationBeforePostfix = opStack.Pop();
 
 								var resultTree = new TreeNode<IToken>(lastOperationBeforePostfix);
 								resultTree.AddTree(laterOperand);
@@ -578,6 +577,29 @@ namespace MultiCalculator.Utilities
 						}
 					}
 					currentTokenIsClosingBrace = false;
+				}
+			}
+
+			return true;
+		}
+
+		bool NoIllegalConsecutiveTokens()
+		{
+			IToken currentToken, nextToken;
+			for (int i = 0; i < operations.Count - 1; i++)
+			{
+				currentToken = operations[i];
+				nextToken = operations[i + 1];
+
+				if ((currentToken == OperationDefinitions.OpenBracket || currentToken is BinaryOperationToken or DualArityOperationToken || currentToken is UnaryOperationToken unary && unary.Fixity == Fixity.Prefix)
+					&& (nextToken == OperationDefinitions.ClosedBracket || nextToken  is BinaryOperationToken || nextToken is UnaryOperationToken unaryPost && unaryPost.Fixity == Fixity.Postfix))
+				{
+					return false;
+				}
+
+				if ((currentToken == OperationDefinitions.ClosedBracket || currentToken is NullaryOperationToken || currentToken is UnaryOperationToken unaryPostFix && unaryPostFix.Fixity == Fixity.Postfix) && nextToken is DigitToken)
+				{
+					return false;
 				}
 			}
 
