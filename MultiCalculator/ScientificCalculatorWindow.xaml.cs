@@ -5,8 +5,6 @@ using MultiCalculator.Utilities;
 using System.Windows;
 using System.Windows.Media;
 
-using static MultiCalculator.Definitions.OperationDefinitions;
-
 namespace MultiCalculator
 {
 	/// <summary>
@@ -32,7 +30,7 @@ namespace MultiCalculator
 		}
 
 		public static readonly DependencyProperty CalculatorExpressionProperty = DependencyProperty.Register("CalculatorExpression", typeof(TokenChain), typeof(ScientificCalculatorWindow), new PropertyMetadata(null, ExpressionValueChanged));
-
+		
 		public static readonly DependencyProperty CalculatorAnswerProperty = DependencyProperty.Register("CalculatorAnswer", typeof(string), typeof(ScientificCalculatorWindow), new PropertyMetadata(string.Empty, AnswerValueChanged));
 
 		public TokenChain CalculatorExpression
@@ -120,7 +118,18 @@ namespace MultiCalculator
 
 		public void ClearAll_Click()
 		{
-			CalculatorExpression = new TokenChain();
+			CalculatorAnswer = string.Empty;
+			CalculatorExpression.MakeEmpty();
+		}
+
+		public void MoveLeft_Click(object sender, RoutedEventArgs e)
+		{
+			CalculatorExpression.MoveCursorLeft();
+		}
+
+		public void MoveRight_Click(object sender, RoutedEventArgs e)
+		{
+			CalculatorExpression.MoveCursorRight();
 		}
 
 		static void ToggleAllButtons(DependencyObject parent)

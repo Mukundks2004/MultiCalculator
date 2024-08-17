@@ -27,7 +27,26 @@ namespace MultiCalculator.Utilities
 
 		public override string ToString()
 		{
-			return string.Join(" ", operations.Select(o => o.TokenSymbol));
+			var joinedExpression = string.Join("", operations.Select(o => o.TokenSymbol));
+			return joinedExpression.Insert(Cursor, "|");
+		}
+
+		public void MoveCursorLeft()
+		{
+			if (Cursor > 0)
+			{
+				Cursor--;
+				OperationsUpdated?.Invoke();
+			}
+		}
+
+		public void MoveCursorRight()
+		{
+			if (Cursor < operations.Count)
+			{
+				Cursor++;
+				OperationsUpdated?.Invoke();
+			}
 		}
 
 		public void Add(IToken button)

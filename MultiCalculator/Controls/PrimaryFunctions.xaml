@@ -28,7 +28,7 @@
         <calculatorbuttons:SingleTaskButton x:Name="ButtonX2" Grid.Row="0" Grid.Column="2" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
 
         <calculatorbuttons:RoundedButton x:Name="Answer" Grid.Row="0" Grid.Column="3" ButtonBase.Click="GetLastAnswer_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold"/>
-        <calculatorbuttons:RoundedButton x:Name="Equals" Grid.Row="0" Grid.Column="4" ButtonBase.Click="EvaluateExpression_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold"/>
+        <calculatorbuttons:RoundedButton x:Name="Evaluate" Grid.Row="0" Grid.Column="4" ButtonBase.Click="EvaluateExpression_Click" Width="40" Height="30" FontFamily="MS Gothic" FontSize="14" FontWeight="Bold"/>
 
         <calculatorbuttons:SingleTaskButton x:Name="ButtonY0" Grid.Row="1" Grid.Column="0" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
         <calculatorbuttons:SingleTaskButton x:Name="ButtonY1" Grid.Row="1" Grid.Column="1" ButtonBase.Click="PrimaryButton_Click" VerticalAlignment="Center"/>
