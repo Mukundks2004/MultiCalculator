@@ -28,7 +28,7 @@
                 <importedcontrols:FormulaControl x:Name="FormulaBox" Formula="\left(x^2 + \frac{122}{2^3})" FontSize="20" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Scale="20"/>
             </ScrollViewer>
             <ScrollViewer x:Name="ExpressionBoxContainer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="70" Visibility="Visible">
-                <TextBlock x:Name="ExpressionBox" FontSize="12"/>
+                <TextBlock x:Name="ExpressionBox" FontSize="22"/>
             </ScrollViewer>
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="30">
                 <importedcontrols:FormulaControl x:Name="FormulaResult" Formula="" HorizontalAlignment="Right" VerticalAlignment="Bottom" Scale="20"/>
