@@ -6,7 +6,9 @@ namespace MultiCalculator.Implementations
     {
         public string TokenSymbol { get; init; } = string.Empty;
 
-        public override string ToString()
+		public string LatexString { get => TokenSymbol; init { } }
+
+		public override string ToString()
         {
             return TokenSymbol;
         }

@@ -46,7 +46,9 @@ namespace MultiCalculatorTests
 			Assert.That(tokenChain.IsValid(), Is.True);
 
 			tokenChain.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
-			Assert.That(tokenChain.Parse(), Is.EqualTo(expectedResult).Within(0.000001));
+			//Assert.That(tokenChain.Parse(), Is.EqualTo(expectedResult).Within(0.000001));
+
+			Assert.That(tokenChain.ParseTree(), Is.EqualTo(expectedResult).Within(0.000001));
 		}
 
 		public static IEnumerable<TestCaseData> ValidAndInvalidExpressionTestCases
@@ -159,6 +161,7 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([E, Times]), false).SetDescription("e x");
 
 				yield return new TestCaseData(new TokenChain([Six, Factorial]), true).SetDescription("6!");
+				yield return new TestCaseData(new TokenChain([Nine, Times, Six, Plus, Factorial]), false).SetDescription("9 x 6 + !");
 			}
 		}
 

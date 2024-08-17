@@ -18,56 +18,57 @@ namespace MultiCalculator.Definitions
 		static readonly DigitToken zero = new() { TokenSymbol = "0" };
 		static readonly DigitToken point = new() { TokenSymbol = "." };
 
-		static readonly NullaryOperationToken pi = new() { Calculate = () => Math.PI, TokenSymbol = "π" };
-		static readonly NullaryOperationToken e = new() { Calculate = () => Math.E, TokenSymbol = "e" };
-		static readonly NullaryOperationToken lemniscate = new() { Calculate = () => 2.6220575542921198, TokenSymbol = "ϖ" };
-		static readonly NullaryOperationToken mascheroni = new() { Calculate = () => 0.5772156649015329, TokenSymbol = "γ" };
-		static readonly NullaryOperationToken phi = new() { Calculate = () => (1 + Math.Sqrt(5)) / 2, TokenSymbol = "φ" };
+		static readonly NullaryOperationToken pi = new() { Calculate = () => Math.PI, TokenSymbol = "π", LatexString = "{\\pi}" };
+		static readonly NullaryOperationToken e = new() { Calculate = () => Math.E, TokenSymbol = "e", LatexString = "e" };
+		static readonly NullaryOperationToken lemniscate = new() { Calculate = () => 2.6220575542921198, TokenSymbol = "ϖ", LatexString = "{\\varpi}" };
+		static readonly NullaryOperationToken mascheroni = new() { Calculate = () => 0.5772156649015329, TokenSymbol = "γ", LatexString = "{\\gamma}" };
+		static readonly NullaryOperationToken phi = new() { Calculate = () => (1 + Math.Sqrt(5)) / 2, TokenSymbol = "φ", LatexString = "{\\phi}" };
 
 		//Mukund: fix associativity, precedence for all of these please
-		static readonly UnaryOperationToken factorial = new() { CalculateUnary = MathHelpers.Factorial, Fixity = Fixity.Postfix, TokenSymbol = "!", Priority = 6 };
+		static readonly UnaryOperationToken factorial = new() { CalculateUnary = MathHelpers.Factorial, Fixity = Fixity.Postfix, TokenSymbol = "!", Priority = 6, LatexString = (x) => "{" + x + "}!" };
 
-		static readonly BinaryOperationToken exponentiation = new() { CalculateBinary = Math.Pow, Associativity = Associativity.Right, Priority = 5, TokenSymbol = "^" };
-		static readonly UnaryOperationToken antilog = new() { CalculateUnary = (x) => Math.Pow(10, x), Fixity = Fixity.Prefix, TokenSymbol = "10^", Priority = 5 };
+		static readonly BinaryOperationToken exponentiation = new() { CalculateBinary = Math.Pow, Associativity = Associativity.Right, Priority = 5, TokenSymbol = "^", LatexString = (x, y) => "{" + x + "}^{" + y + "}"};
+		static readonly UnaryOperationToken antilog = new() { CalculateUnary = (x) => Math.Pow(10, x), Fixity = Fixity.Prefix, TokenSymbol = "10^", Priority = 5, LatexString = (x) => "10^{" + x + "}" };
 
 		//Requires special attention
-		static readonly BinaryOperationToken nthroot = new() { CalculateBinary = (a, b) => Math.Pow(a, 1 / b), Associativity = Associativity.Right, Priority = 5, TokenSymbol = "√" };
+		static readonly BinaryOperationToken nthroot = new() { CalculateBinary = (a, b) => Math.Pow(a, 1 / b), Associativity = Associativity.Right, Priority = 5, TokenSymbol = "√", LatexString = (x, y) => "\\sqrt{" + x + "}{" + y + "}" };
 
-		static readonly UnaryOperationToken p = new() { CalculateUnary = (x) => x, Fixity = Fixity.Prefix, TokenSymbol = "+", Priority = 4 };
-		static readonly UnaryOperationToken u = new() { CalculateUnary = (x) => -x, Fixity = Fixity.Prefix, TokenSymbol = "-", Priority = 4 };
+		static readonly UnaryOperationToken p = new() { CalculateUnary = (x) => x, Fixity = Fixity.Prefix, TokenSymbol = "+", Priority = 4 , LatexString = (x) => "+{" + x + "}" };
+		static readonly UnaryOperationToken u = new() { CalculateUnary = (x) => -x, Fixity = Fixity.Prefix, TokenSymbol = "-", Priority = 4, LatexString = (x) => "-{" + x + "}" };
 
-		static readonly BinaryOperationToken permutations = new() { CalculateBinary = MathHelpers.P, Associativity = Associativity.Left, Priority = 3, TokenSymbol = "P" };
-		static readonly BinaryOperationToken combinations = new() { CalculateBinary = MathHelpers.C, Associativity = Associativity.Left, Priority = 3, TokenSymbol = "C" };
+		static readonly BinaryOperationToken permutations = new() { CalculateBinary = MathHelpers.P, Associativity = Associativity.Left, Priority = 3, TokenSymbol = "P", LatexString = (x, y) => "{" + x + "}P{" + y + "}" };
 
-		static readonly UnaryOperationToken sin = new() { CalculateUnary = Math.Sin, Fixity = Fixity.Prefix, TokenSymbol = "sin", Priority = 2 };
-		static readonly UnaryOperationToken cos = new() { CalculateUnary = Math.Cos, Fixity = Fixity.Prefix, TokenSymbol = "cos", Priority = 2 };
-		static readonly UnaryOperationToken tan = new() { CalculateUnary = Math.Tan, Fixity = Fixity.Prefix, TokenSymbol = "tan", Priority = 2 };
-		static readonly UnaryOperationToken asin = new() { CalculateUnary = Math.Asin, Fixity = Fixity.Prefix, TokenSymbol = "asin", Priority = 2 };
-		static readonly UnaryOperationToken acos = new() { CalculateUnary = Math.Acos, Fixity = Fixity.Prefix, TokenSymbol = "acos", Priority = 2 };
-		static readonly UnaryOperationToken atan = new() { CalculateUnary = Math.Atan, Fixity = Fixity.Prefix, TokenSymbol = "atan", Priority = 2 };
+		static readonly BinaryOperationToken combinations = new() { CalculateBinary = MathHelpers.C, Associativity = Associativity.Left, Priority = 3, TokenSymbol = "C", LatexString = (x, y) => "{" + x + "}C{" + y + "}" };
 
-		static readonly UnaryOperationToken sinh = new() { CalculateUnary = Math.Sinh, Fixity = Fixity.Prefix, TokenSymbol = "sinh", Priority = 2 };
-		static readonly UnaryOperationToken cosh = new() { CalculateUnary = Math.Cosh, Fixity = Fixity.Prefix, TokenSymbol = "cosh", Priority = 2 };
-		static readonly UnaryOperationToken tanh = new() { CalculateUnary = Math.Tanh, Fixity = Fixity.Prefix, TokenSymbol = "tanh", Priority = 2 };
-		static readonly UnaryOperationToken asinh = new() { CalculateUnary = Math.Asinh, Fixity = Fixity.Prefix, TokenSymbol = "asinh", Priority = 2 };
-		static readonly UnaryOperationToken acosh = new() { CalculateUnary = Math.Acosh, Fixity = Fixity.Prefix, TokenSymbol = "acosh", Priority = 2 };
-		static readonly UnaryOperationToken atanh = new() { CalculateUnary = Math.Atanh, Fixity = Fixity.Prefix, TokenSymbol = "atanh", Priority = 2 };
+		static readonly UnaryOperationToken sin = new() { CalculateUnary = Math.Sin, Fixity = Fixity.Prefix, TokenSymbol = "sin", Priority = 2, LatexString = (x) => "\\sin{" + x + "}" };
+		static readonly UnaryOperationToken cos = new() { CalculateUnary = Math.Cos, Fixity = Fixity.Prefix, TokenSymbol = "cos", Priority = 2, LatexString = (x) => "\\cos{" + x + "}" };
+		static readonly UnaryOperationToken tan = new() { CalculateUnary = Math.Tan, Fixity = Fixity.Prefix, TokenSymbol = "tan", Priority = 2, LatexString = (x) => "\\tan{" + x + "}" };
+		static readonly UnaryOperationToken asin = new() { CalculateUnary = Math.Asin, Fixity = Fixity.Prefix, TokenSymbol = "asin", Priority = 2, LatexString = (x) => "\\sin^{-1}{" + x + "}" };
+		static readonly UnaryOperationToken acos = new() { CalculateUnary = Math.Acos, Fixity = Fixity.Prefix, TokenSymbol = "acos", Priority = 2, LatexString = (x) => "\\cos^{-1}{" + x + "}" };
+		static readonly UnaryOperationToken atan = new() { CalculateUnary = Math.Atan, Fixity = Fixity.Prefix, TokenSymbol = "atan", Priority = 2, LatexString = (x) => "\\tan^{-1}{" + x + "}" };
 
-		static readonly UnaryOperationToken abs = new() { CalculateUnary = Math.Abs, Fixity = Fixity.Prefix, TokenSymbol = "abs", Priority = 2 };
-		static readonly UnaryOperationToken sqrt = new() { CalculateUnary = Math.Sqrt, Fixity = Fixity.Prefix, TokenSymbol = "sqrt", Priority = 2 };
-		static readonly UnaryOperationToken cbrt = new() { CalculateUnary = Math.Cbrt, Fixity = Fixity.Prefix, TokenSymbol = "cbrt", Priority = 2 };
-		static readonly UnaryOperationToken log = new() { CalculateUnary = Math.Log10, Fixity = Fixity.Prefix, TokenSymbol = "log", Priority = 2 };
-		static readonly UnaryOperationToken ln = new() { CalculateUnary = Math.Log, Fixity = Fixity.Prefix, TokenSymbol = "ln", Priority = 2 };
-		static readonly UnaryOperationToken productlog = new() { CalculateUnary = MathHelpers.LambertW, Fixity = Fixity.Prefix, TokenSymbol = "W", Priority = 2 };
-		static readonly UnaryOperationToken sinc = new() { CalculateUnary = (x) => x == 0 ? double.NaN : Math.Sin(x) / x, Fixity = Fixity.Prefix, TokenSymbol = "sinc", Priority = 2 };
-		static readonly UnaryOperationToken exp = new() { CalculateUnary = Math.Exp, Fixity = Fixity.Prefix, TokenSymbol = "exp", Priority = 2 };
-		static readonly UnaryOperationToken erf = new() { CalculateUnary = MathHelpers.Erf, Fixity = Fixity.Prefix, TokenSymbol = "erf", Priority = 2 };
+		static readonly UnaryOperationToken sinh = new() { CalculateUnary = Math.Sinh, Fixity = Fixity.Prefix, TokenSymbol = "sinh", Priority = 2, LatexString = (x) => "\\sinh{" + x + "}" };
+		static readonly UnaryOperationToken cosh = new() { CalculateUnary = Math.Cosh, Fixity = Fixity.Prefix, TokenSymbol = "cosh", Priority = 2, LatexString = (x) => "\\cosh{" + x + "}" };
+		static readonly UnaryOperationToken tanh = new() { CalculateUnary = Math.Tanh, Fixity = Fixity.Prefix, TokenSymbol = "tanh", Priority = 2, LatexString = (x) => "\\tanh{" + x + "}" };
+		static readonly UnaryOperationToken asinh = new() { CalculateUnary = Math.Asinh, Fixity = Fixity.Prefix, TokenSymbol = "asinh", Priority = 2, LatexString = (x) => "\\sinh^{-1}{" + x + "}" };
+		static readonly UnaryOperationToken acosh = new() { CalculateUnary = Math.Acosh, Fixity = Fixity.Prefix, TokenSymbol = "acosh", Priority = 2, LatexString = (x) => "\\cosh^{-1}{" + x + "}" };
+		static readonly UnaryOperationToken atanh = new() { CalculateUnary = Math.Atanh, Fixity = Fixity.Prefix, TokenSymbol = "atanh", Priority = 2, LatexString = (x) => "\\tanh^{-1}{" + x + "}" };
 
-		static readonly BinaryOperationToken multiplication = new() { CalculateBinary = (a, b) => a * b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "×" };
-        static readonly BinaryOperationToken division = new() { CalculateBinary = (a, b) => b == 0 ? double.NaN : a / b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "÷" };
+		static readonly UnaryOperationToken abs = new() { CalculateUnary = Math.Abs, Fixity = Fixity.Prefix, TokenSymbol = "abs", Priority = 2, LatexString = (x) => "abs{" + x + "}" };
+		static readonly UnaryOperationToken sqrt = new() { CalculateUnary = Math.Sqrt, Fixity = Fixity.Prefix, TokenSymbol = "sqrt", Priority = 2, LatexString = (x) => "\\sqrt" + x + "}" };
+		static readonly UnaryOperationToken cbrt = new() { CalculateUnary = Math.Cbrt, Fixity = Fixity.Prefix, TokenSymbol = "cbrt", Priority = 2, LatexString = (x) => "\\surd[3]{" + x + "}" };
+		static readonly UnaryOperationToken log = new() { CalculateUnary = Math.Log10, Fixity = Fixity.Prefix, TokenSymbol = "log", Priority = 2, LatexString = (x) => "\\log{" + x + "}" };
+		static readonly UnaryOperationToken ln = new() { CalculateUnary = Math.Log, Fixity = Fixity.Prefix, TokenSymbol = "ln", Priority = 2, LatexString = (x) => "\\ln{" + x + "}" };
+		static readonly UnaryOperationToken productlog = new() { CalculateUnary = MathHelpers.LambertW, Fixity = Fixity.Prefix, TokenSymbol = "W", Priority = 2, LatexString = (x) => "W{" + x + "}" };
+		static readonly UnaryOperationToken sinc = new() { CalculateUnary = (x) => x == 0 ? double.NaN : Math.Sin(x) / x, Fixity = Fixity.Prefix, TokenSymbol = "sinc", Priority = 2, LatexString = (x) => "sinc{" + x + "}" };
+		static readonly UnaryOperationToken exp = new() { CalculateUnary = Math.Exp, Fixity = Fixity.Prefix, TokenSymbol = "exp", Priority = 2, LatexString = (x) => "\\exp{" + x + "}" };
+		static readonly UnaryOperationToken erf = new() { CalculateUnary = MathHelpers.Erf, Fixity = Fixity.Prefix, TokenSymbol = "erf", Priority = 2, LatexString = (x) => "\\erf{" + x + "}" };
 
-		static readonly DualArityOperationToken addition = new() { CalculateBinary = (a, b) => a + b, CalculateUnary = (a) => a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "+", UnaryOperation = p };
-		static readonly DualArityOperationToken subtraction = new() { CalculateBinary = (a, b) => a - b, CalculateUnary = (a) => -a, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "-", UnaryOperation = u };
+		static readonly BinaryOperationToken multiplication = new() { CalculateBinary = (a, b) => a * b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "×", LatexString = (x, y) => "{" + x + "}\\times{" + y + "}" };
+        static readonly BinaryOperationToken division = new() { CalculateBinary = (a, b) => b == 0 ? double.NaN : a / b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "÷", LatexString = (x, y) => "\\frac{" + x + "}{" + y + "}" };
+
+		static readonly DualArityOperationToken addition = new() { CalculateBinary = (a, b) => a + b, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "+", UnaryOperation = p, LatexString = (x, y) => "{" + x + "}+{" + y + "}" };
+		static readonly DualArityOperationToken subtraction = new() { CalculateBinary = (a, b) => a - b, Associativity = Associativity.Left, Priority = 0, TokenSymbol = "-", UnaryOperation = u, LatexString = (x, y) => "{" + x + "}-{" + y + "}" };
 
 		public static DualArityOperationToken Addition => addition;
 

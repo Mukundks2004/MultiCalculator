@@ -7,8 +7,8 @@ namespace MultiCalculator.Implementations
 	//For the meantime, singleton pattern
 	public class BracketToken : IToken
     {
-		static readonly BracketToken closedBracket = new() { BracketType = BracketType.Closed, TokenSymbol = "]" };
-		static readonly BracketToken openBracket = new() { BracketType = BracketType.Open, TokenSymbol = "[" };
+		static readonly BracketToken closedBracket = new() { BracketType = BracketType.Closed, TokenSymbol = "]", LatexString = "\\right)" };
+		static readonly BracketToken openBracket = new() { BracketType = BracketType.Open, TokenSymbol = "[", LatexString = "\\left(" };
 
 		BracketToken()
 		{
@@ -21,5 +21,7 @@ namespace MultiCalculator.Implementations
 		public static BracketToken ClosedBracket { get => closedBracket; }
 
 		public static BracketToken OpenBracket { get => openBracket; }
+
+		public string LatexString { get; init; } = string.Empty;
 	}
 }
