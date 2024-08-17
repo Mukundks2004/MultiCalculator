@@ -2,7 +2,7 @@
 
 ## WHAT EVERYONE IS WORKING ON
 - Mukund:
-  - Plugins (estimated time: 60 min)
+  - Plugins (estimated time: 200 min)
 - Dennis: Setup OPENAI, has $10 credit, we still need testing. AI/Database basically has been setup.
 
 ## TODO
