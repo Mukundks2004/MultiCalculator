@@ -25,6 +25,16 @@ namespace MultiCalculator.Utilities
 			this.operations = operations.ToList();
 		}
 
+		public static TokenChain Duplicate(TokenChain initial)
+		{
+			var result = new TokenChain();
+			foreach (var operation in initial.operations)
+			{
+				result.operations.Add(operation);
+			}
+			return result;
+		}
+
 		public override string ToString()
 		{
 			var hasCursorBeenPlaced = false;
@@ -113,7 +123,10 @@ namespace MultiCalculator.Utilities
 		//This is only called on valid strings
 		public string GetLatexString()
 		{
-			var tree = ParseFromIndexToIndexKeepInTreeForm(0, operations.Count);
+			var chainCopy = Duplicate(this);
+			chainCopy.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
+
+			var tree = chainCopy.ParseFromIndexToIndexKeepInTreeForm(0, chainCopy.operations.Count);
 			var latexString = tree.GetLatexString();
 			return latexString;
 		}
@@ -359,9 +372,9 @@ namespace MultiCalculator.Utilities
 					else if (opStack.Count == 0)
 					{
 						var unaryOperation = operation as UnaryOperationToken;
-						var unaryOperand = numStackIncludingTrees.Pop().Evaluate();
+						var unaryOperand = numStackIncludingTrees.Pop();
 						var resultTree = new TreeNode<IToken>(unaryOperation!);
-						resultTree.AddChild(unaryOperand);
+						resultTree.AddTree(unaryOperand);
 						numStackIncludingTrees.Push(resultTree);
 					}
 
@@ -466,8 +479,30 @@ namespace MultiCalculator.Utilities
 
 		public void InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets()
 		{
+			InsertMultiplicationSigns();
+			ConvertDualUnariesToUnariesAndPlaceClosingBrackets();
+		}
+
+		NullaryOperationToken ParseDoubleFromIndex(int index, out int lengthParsed)
+		{
+			var resultAsString = (operations[index] as DigitToken)!.TokenSymbol;
+			index++;
+			lengthParsed = 1;
+
+			while (index < operations.Count && operations[index] is DigitToken digit)
+			{
+				resultAsString += digit.TokenSymbol;
+				lengthParsed++;
+				index++;
+			}
+
+			var result = double.Parse(resultAsString);
+			return NullaryOperationToken.GetConstFromDouble(result);
+		}
+
+		public void InsertMultiplicationSigns()
+		{
 			IToken currentToken, nextToken;
-			var unmatchedOpenBraces = 0;
 			for (int i = 0; i < operations.Count - 1; i++)
 			{
 				currentToken = operations[i];
@@ -480,7 +515,11 @@ namespace MultiCalculator.Utilities
 					i++;
 				}
 			}
+		}
 
+		public void ConvertDualUnariesToUnariesAndPlaceClosingBrackets()
+		{
+			var unmatchedOpenBraces = 0;
 			var isInOperationString = true;
 
 			for (int i = 0; i < operations.Count; i++)
@@ -518,23 +557,6 @@ namespace MultiCalculator.Utilities
 			{
 				InsertAt(operations.Count, OperationDefinitions.ClosedBracket);
 			}
-		}
-
-		NullaryOperationToken ParseDoubleFromIndex(int index, out int lengthParsed)
-		{
-			var resultAsString = (operations[index] as DigitToken)!.TokenSymbol;
-			index++;
-			lengthParsed = 1;
-
-			while (index < operations.Count && operations[index] is DigitToken digit)
-			{
-				resultAsString += digit.TokenSymbol;
-				lengthParsed++;
-				index++;
-			}
-
-			var result = double.Parse(resultAsString);
-			return NullaryOperationToken.GetConstFromDouble(result);
 		}
 
 		bool NoDigitsFollowClosingBrace()

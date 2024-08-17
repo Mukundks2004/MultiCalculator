@@ -55,7 +55,6 @@ namespace MultiCalculator
 			var isValid = CalculatorExpression.IsValid();
 			if (isValid)
 			{
-				CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
 				ExpressionBoxContainer.Visibility = Visibility.Collapsed;
 				FormulaBoxContainer.Visibility = Visibility.Visible;
 				FormulaBox.Formula = CalculatorExpression.GetLatexString();
