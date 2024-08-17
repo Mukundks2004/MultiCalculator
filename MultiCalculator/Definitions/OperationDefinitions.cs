@@ -31,7 +31,7 @@ namespace MultiCalculator.Definitions
 		static readonly UnaryOperationToken antilog = new() { CalculateUnary = (x) => Math.Pow(10, x), Fixity = Fixity.Prefix, TokenSymbol = "10^", Priority = 5, LatexString = (x) => "10^{" + x + "}" };
 
 		//Requires special attention
-		static readonly BinaryOperationToken nthroot = new() { CalculateBinary = (a, b) => Math.Pow(a, 1 / b), Associativity = Associativity.Right, Priority = 5, TokenSymbol = "√", LatexString = (x, y) => "\\sqrt{" + x + "}{" + y + "}" };
+		static readonly BinaryOperationToken nthroot = new() { CalculateBinary = (a, b) => Math.Pow(b, 1 / a), Associativity = Associativity.Right, Priority = 5, TokenSymbol = "√", LatexString = (x, y) => "\\sqrt[" + x + "]{" + y + "}" };
 
 		static readonly UnaryOperationToken p = new() { CalculateUnary = (x) => x, Fixity = Fixity.Prefix, TokenSymbol = "+", Priority = 4 , LatexString = (x) => "+{" + x + "}" };
 		static readonly UnaryOperationToken u = new() { CalculateUnary = (x) => -x, Fixity = Fixity.Prefix, TokenSymbol = "-", Priority = 4, LatexString = (x) => "-{" + x + "}" };

@@ -263,6 +263,8 @@ namespace MultiCalculatorTests
 				yield return new TestCaseData(new TokenChain([One, Two, Three, Four, Five, Times, One, Two, Three, ToThePowerOf, Two]), 186767505).SetDescription("12345 x 123 ^ 2 = 186767505");
 
 				yield return new TestCaseData(new TokenChain([Nine, Minus, Three, Tanh, Minus, Minus, Minus, E]), 9 - 3 * Math.Tanh(-Math.E)).SetDescription("9 - 3 tanh---e");
+				yield return new TestCaseData(new TokenChain([Three, Nthroot, Two, Seven]), 3).SetDescription("3 nthroot 27");
+				yield return new TestCaseData(new TokenChain([Three, Nthroot, Two, Seven, Plus, Six]), 9).SetDescription("3 nthroot 27 + 6");
 			}
 		}
 	}
