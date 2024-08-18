@@ -3,6 +3,7 @@ using ceTe.DynamicPDF;
 using ceTe.DynamicPDF.PageElements;
 using System.Net.Mail;
 using System.Net;
+using System.ComponentModel.DataAnnotations;
 
 namespace MultiCalculator.Helpers
 {
@@ -24,7 +25,7 @@ namespace MultiCalculator.Helpers
             return document;
         }
 
-        public string GenerateQuestionSheet(List<(string, string)> questionAndAnswer, UserModel user, bool sendToEmail = false)
+        public string GenerateQuestionSheet(List<(string, string)> questionAndAnswer, UserModel user, bool sendToEmail = false, string email = null)
         {
             var questionSheet = GeneratePdf(questionAndAnswer, user);
             var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -67,7 +68,7 @@ namespace MultiCalculator.Helpers
             page.Elements.Add(creatingUserLabel);
         }
 
-        private void SendQuestionSheetToEmail(UserModel user, string filePath)
+        private void SendQuestionSheetToEmail(UserModel user, string filePath, string email = null)
         {
             string fromEmail = "dennishsuhospitalmanagesystem@gmail.com";
             string password = "kwfhmblprldwwxbc";
@@ -88,7 +89,7 @@ namespace MultiCalculator.Helpers
 
             System.Net.Mail.Attachment attachment = new System.Net.Mail.Attachment(filePath);
             mailMessage.Attachments.Add(attachment);
-            mailMessage.To.Add(user.Email);
+            mailMessage.To.Add(email ?? user.Email);
 
             try
             {

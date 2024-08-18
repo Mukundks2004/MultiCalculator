@@ -76,13 +76,5 @@ namespace MultiCalculator
             }
             return false;
         }
-
-        void TempByPassButton_Click(object sender, RoutedEventArgs e) // Temp remove later so we dont waste time
-        {
-            var user = databaseService.LoadUserById(11111);
-            mainWindow.loggedUser = user;
-            mainWindow.Show();
-            this.Close();
-        }
     }
 }

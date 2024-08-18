@@ -14,6 +14,5 @@
         <Label Content="Login Menu" HorizontalAlignment="Center" Margin="0,45,0,0" VerticalAlignment="Top"/>
         <Label x:Name="failureMessageLabel" Content="" HorizontalAlignment="Center" Margin="0,282,0,0" VerticalAlignment="Top" Width="216"/>
         <PasswordBox x:Name="passwordTextBlock" HorizontalAlignment="Left" Margin="309,150,0,0" VerticalAlignment="Top" Width="266"/>
-        <Button Content="TempByPassButton" HorizontalAlignment="Left" Margin="681,71,0,0" VerticalAlignment="Top" Click="TempByPassButton_Click"/>
     </Grid>
 </Window>
