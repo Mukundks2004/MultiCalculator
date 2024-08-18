@@ -1,5 +1,4 @@
-﻿
-using MultiCalculator.Database.Models;
+﻿using MultiCalculator.Database.Models;
 using MultiCalculator.Database.Services;
 using MultiCalculator.Helpers;
 using System.Diagnostics;
