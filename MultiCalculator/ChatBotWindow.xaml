@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
@@ -28,6 +28,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                     <RowDefinition/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="60"/>
                 </Grid.RowDefinitions>
 
@@ -39,13 +40,17 @@
                            Margin="8, 0, 0, 0"/>
                 </Border>
 
-                <ListView Background="Transparent" BorderThickness="0" Grid.Row="1"/>
+                <ListView Name="PreviousChatslv" Background="Transparent" BorderThickness="0" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}" ItemsSource="{Binding PreviousChats}"/>
 
                 <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
+                    <Button Content="Go To Selected Chat" Click="GoToSelectedChat_Click"/>
+                </Border>
+                
+                <Border Grid.Row="3" BorderBrush="Black" BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel VerticalAlignment="Center">
-                            <Label Content="Username" Foreground="Black" FontWeight="SemiBold" Margin="15, 0, 0, 0"/>
-                            <Label Content="Full Name" Foreground="Gray" FontWeight="SemiBold" Margin="15, 0, 0, 0"/>
+                            <Label x:Name="usernameLabel" Content="Username" Foreground="Black" FontWeight="SemiBold" Margin="15, 0, 0, 0"/>
+                            <Label x:Name="fullNameLabel" Content="Full Name" Foreground="Gray" FontWeight="SemiBold" Margin="15, 0, 0, 0"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -68,7 +73,7 @@
                 </Grid>
             </Border>
 
-            <ListView Background="Transparent" BorderThickness="0" Margin="8, 0, 0, 0" Grid.Row="1"/>
+            <ListView Background="Transparent" BorderThickness="0" Margin="8, 0, 0, 0" Grid.Row="1" ItemsSource="{Binding Messages}" d:ItemsSource="{d:SampleData ItemCount=5}"/>
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -76,10 +81,12 @@
                     <ColumnDefinition Width="90"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="MessageTextBox" Grid.Row="1" Height="50" Grid.ColumnSpan="2" Style="{StaticResource MessageTextBox}"/>
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <TextBox x:Name="MessageTextBox" Grid.Row="1" Height="50" Grid.ColumnSpan="2" Style="{StaticResource MessageTextBox}"/>
+                </Border>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Margin="0, 0, 16, 0">
-                    <Button Content="Send" Width="50" Height="50" HorizontalAlignment="Right" Click="SendMessage_Click"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Margin="0, 0, 0, 0">
+                    <Button Content="Send" Width="90" Height="75" HorizontalAlignment="Right" Click="SendMessage_Click"/>
                 </StackPanel>
              </Grid>
 

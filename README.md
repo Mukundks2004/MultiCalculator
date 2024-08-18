@@ -1,8 +1,9 @@
 # MultiCalculator
 
+## Guide to TaskMate (previously known as MultiCalculator)
 ## WHAT EVERYONE IS WORKING ON
 - Mukund:
-  - Plugins (estimated time: 200 min)
+  - README
 - Dennis: Setup OPENAI, has $10 credit, we still need testing. AI/Database basically has been setup.
 
 ## TODO
@@ -14,4 +15,3 @@ Mukund:
   - 
 - Make all windows look ok when resized or non resizeable otherwise
 - Hope the project can be net8.0-windows because it is
-- README make it good

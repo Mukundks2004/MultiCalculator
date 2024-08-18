@@ -22,27 +22,25 @@ namespace MultiCalculator.Controls
 		{
 			foreach (var plugin in package.Buttons)
 			{
-				var btn = new Button
-				{
-					Content = plugin.Name,
-					Width = plugin.Width,
-					Height = plugin.Height
-				};
+                if (plugin.Token is not null)
+                {
+					var btn = new Button
+					{
+						Content = plugin.Token.TokenSymbol,
+						Width = plugin.Width,
+						Height = plugin.Height,
+						FontFamily = new System.Windows.Media.FontFamily("MS Gothic"),
+						FontSize = 12,
+						FontWeight = FontWeights.Bold,
+					};
 
-				Canvas.SetLeft(btn, plugin.XPos);
-				Canvas.SetTop(btn, plugin.YPos);
-				Sandbox.Children.Add(btn);
+					Canvas.SetLeft(btn, plugin.XPos);
+					Canvas.SetTop(btn, plugin.YPos);
+					Sandbox.Children.Add(btn);
 
-				if (plugin.Token is not null)
-				{
 					controllingWindow.CalculatorSubscribesToButton(btn, plugin.Token);
-				}
+                }
 			}
 		}
-
-		//public void CustomButton_Click(object sender, RoutedEventArgs e, IToken? t)
-		//{
-		//	WriteCustomTokenToScreen?.Invoke(sender, e, t);
-		//}
 	}
 }

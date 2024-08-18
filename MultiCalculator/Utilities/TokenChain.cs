@@ -35,6 +35,11 @@ namespace MultiCalculator.Utilities
 			return result;
 		}
 
+		public string GetStringWithoutCursor()
+		{
+			return string.Join("", operations.Select(x => x.TokenSymbol));
+		}
+
 		public override string ToString()
 		{
 			var hasCursorBeenPlaced = false;

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace MultiCalculator
 {
@@ -23,6 +24,7 @@ namespace MultiCalculator
 		public PluginsWindow()
 		{
 			InitializeComponent();
+			Icon = new BitmapImage(new Uri("pack://application:,,,./icon.png"));
 		}
 
 		void UploadButton_Click(object sender, RoutedEventArgs e)
@@ -118,9 +120,12 @@ namespace MultiCalculator
 
 				var btn = new Button
 				{
-					Content = CustomName.Text,
+					Content = matchingImplementation.TokenSymbol,
 					Width = inputWidth,
-					Height = inputHeight
+					Height = inputHeight,
+					FontFamily = new System.Windows.Media.FontFamily("MS Gothic"),
+					FontSize = 12,
+					FontWeight = FontWeights.Bold,
 				};
 
 				Canvas.SetLeft(btn, newButton.XPos);
@@ -131,6 +136,7 @@ namespace MultiCalculator
 				YPosBox.Text = string.Empty;
 				CustomHeightBox.Text = string.Empty;
 				CustomWidthBox.Text = string.Empty;
+				CustomName.Text = string.Empty;
 				FilePathTextBox.Text = string.Empty;
 			}
 			catch (Exception ex)

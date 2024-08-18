@@ -1,8 +1,8 @@
 ﻿using MultiCalculator.Abstractions;
+using MultiCalculator.Delegates;
 using MultiCalculator.Models;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace MultiCalculator.Controls
 {
@@ -11,6 +11,8 @@ namespace MultiCalculator.Controls
 	/// </summary>
 	public partial class CalculatorControlBar : UserControl
 	{
+		public event SimpleEventHandler? CopyToClipBoard;
+
 		public CalculatorControlBar()
 		{
 			InitializeComponent();
@@ -32,6 +34,11 @@ namespace MultiCalculator.Controls
 					BuildWindow(selectedPackage);
 				}
 			}
+		}
+
+		void Copy_Click(object sender, RoutedEventArgs e)
+		{
+			CopyToClipBoard?.Invoke();
 		}
 
 		void BuildWindow(PluginPackage package)

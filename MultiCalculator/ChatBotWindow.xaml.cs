@@ -26,28 +26,92 @@ namespace MultiCalculator
         readonly IDatabaseService _databaseService;
         readonly UserModel _user;
         readonly OpenAiHelper openAiHelper;
-        private ChatBotHistoryModel ChatBotHistory = new ChatBotHistoryModel();
-        private ObservableCollection<string> chatHistory = new ObservableCollection<string>();
+        private ChatBotHistoryModel ChatBotHistory;
+        private List<ChatBotHistoryModel> chatBotHistoryModel;
+
+        private ObservableCollection<string> messages;
+
+        public ObservableCollection<string> Messages
+        { 
+            get { return messages; }
+            set { messages = value; }
+        }
+
+        private ObservableCollection<string> previousChats;
+
+        public ObservableCollection<string> PreviousChats
+        {
+            get { return previousChats; }
+            set { previousChats = value; }
+        }
 
         public ChatBotWindow(IDatabaseService databaseService, UserModel user)
         {
+            DataContext = this;
+            messages = new ObservableCollection<string>();
+            previousChats = new ObservableCollection<string>();
             InitializeComponent();
             _databaseService = databaseService;
             _user = user;
             openAiHelper = new OpenAiHelper(databaseService);
-            ChatBotHistory.ChatBotUser = _user;
+            usernameLabel.Content = user.Username;
+            fullNameLabel.Content = $"{user.FirstName} {user.LastName}";
         }
 
-        void SendMessage_Click(object sender, RoutedEventArgs e)
+        void SetupPreviousChatsAndChats()
         {
-            var prompt = MessageTextBox.Text;
-            chatHistory.Add(prompt);
-            var result = openAiHelper.SubmitAndGetApiResponse(prompt, _user);
-            ChatBotHistory.QuestionHistory.Add(prompt);
-            ChatBotHistory.AnswerHistory.Add(result);
-            chatHistory.Add(result);
+            chatBotHistoryModel = _databaseService.LoadAllChatBotHistoryBasedOffUser(_user);
+            ChatBotHistory.ChatBotUser = _user;
+            ChatBotHistory.DisplayName = "Previous Chat from: " + DateTime.Now.ToString();
+            previousChats.Add("New chat");
+            for (var i = chatBotHistoryModel.Count - 1; i >= 0; i--)
+            {
+                previousChats.Add(chatBotHistoryModel[i].DisplayName);
+            }
+            _databaseService.AddChatBotHistory(ChatBotHistory);
+        }
 
-            MessageTextBox.Text = string.Empty;
+        async void SendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageTextBox.Equals(string.Empty))
+            {
+                MessageBox.Show("Please enter a prompt.");
+            }
+            else
+            {
+                var prompt = MessageTextBox.Text;
+                messages.Add(_user.Username + ": " + prompt);
+                var result = await openAiHelper.SubmitAndGetApiResponse(prompt, _user);
+                ChatBotHistory.QuestionHistory.Add(prompt);
+                ChatBotHistory.AnswerHistory.Add(result);
+                messages.Add("MDM AI Chat Bot: " + result);
+                _databaseService.UpdateChatBot(ChatBotHistory);
+                MessageTextBox.Text = string.Empty;
+            }
+        }
+
+        void GoToSelectedChat_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (string)PreviousChatslv.SelectedItem;
+            if (selectedItem.Equals("New chat"))
+            {
+                SetupSelectedChat(ChatBotHistory);
+            }
+            else
+            {
+                var selectedChat = chatBotHistoryModel.Where(a => a.DisplayName == selectedItem).First();
+                SetupSelectedChat(selectedChat);
+            }
+        }
+
+        void SetupSelectedChat(ChatBotHistoryModel chat)
+        {
+            messages.Clear();
+            for (var i = 0; i < chat.QuestionHistory.Count; i++)
+            {
+                messages.Add(chat.QuestionHistory[i]);
+                messages.Add(chat.AnswerHistory[i]);
+            }
         }
     }
 }

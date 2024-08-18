@@ -8,6 +8,8 @@ using MultiCalculator.Database.Services;
 using MultiCalculator.Database.Repositories;
 using MultiCalculator.Database.Models;
 using MultiCalculator.Helpers;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace MultiCalculator
 {
@@ -23,7 +25,8 @@ namespace MultiCalculator
 		{
             InitializeComponent();
 			_databaseService = databaseService;
-        }
+			Icon = new BitmapImage(new Uri("pack://application:,,,./icon.png"));
+		}
 
 		void OpenWindowButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -52,8 +55,11 @@ namespace MultiCalculator
 				case "PluginsWindow":
 					windowToOpen = new PluginsWindow();
 					break;
-				case "ChatBot":
+				case "Chatbot":
 					windowToOpen = new ChatBotWindow(_databaseService, loggedUser);
+					break;
+				case "History":
+					windowToOpen = new HistoryWindow(_databaseService, loggedUser);
 					break;
 				default:
 					MessageBox.Show($"Unknown window tag: {windowTag ?? "Empty"}");
