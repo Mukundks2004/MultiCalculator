@@ -22,6 +22,42 @@ namespace MultiCalculator.Helpers
 				case "Dark":
 					ChangeThemeByResourceDictionary("DarkTheme.xaml");
 					break;
+				case "Miami":
+					ChangeThemeByResourceDictionary("MiamiTheme.xaml");
+					break;
+				case "Terra":
+					ChangeThemeByResourceDictionary("TerraTheme.xaml");
+					break;
+				case "Strawberry":
+					ChangeThemeByResourceDictionary("StrawberryTheme.xaml");
+					break;
+				case "Aokiji":
+					ChangeThemeByResourceDictionary("AokijiTheme.xaml");
+					break;
+				case "Akainu":
+					ChangeThemeByResourceDictionary("AkainuTheme.xaml");
+					break;
+				case "Kizaru":
+					ChangeThemeByResourceDictionary("KizaruTheme.xaml");
+					break;
+				case "Matrix":
+					ChangeThemeByResourceDictionary("MatrixTheme.xaml");
+					break;
+				case "Joker":
+					ChangeThemeByResourceDictionary("JokerTheme.xaml");
+					break;
+				case "Spiderman":
+					ChangeThemeByResourceDictionary("SpidermanTheme.xaml");
+					break;
+				case "Sandy":
+					ChangeThemeByResourceDictionary("SandyTheme.xaml");
+					break;
+				case "Pink":
+					ChangeThemeByResourceDictionary("PinkTheme.xaml");
+					break;
+				case "Winter":
+					ChangeThemeByResourceDictionary("WinterTheme.xaml");
+					break;
 				case "Default":
 				default:
 					Application.Current.Resources.MergedDictionaries.Clear();
