@@ -49,6 +49,9 @@ namespace MultiCalculator
 				case "PracticeProblems":
 					windowToOpen = new PracticeProblemsWindow(_databaseService, loggedUser);
 					break;
+				case "PluginsWindow":
+					windowToOpen = new PluginsWindow();
+					break;
 				case "ChatBot":
 					windowToOpen = new ChatBotWindow(_databaseService, loggedUser);
 					break;

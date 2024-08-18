@@ -7,7 +7,7 @@
         xmlns:calculatorbuttons="clr-namespace:MultiCalculator.Controls"
         xmlns:importedcontrols="clr-namespace:WpfMath.Controls;assembly=WpfMath"
         mc:Ignorable="d"
-        Title="ScientificCalculatorWindow" Height="600" Width="320">
+        Title="ScientificCalculatorWindow" Height="600" Width="320" MinHeight="600" MinWidth="320" MaxHeight="600" MaxWidth="320">
     <Grid>
         <Button Content="←" Height="70" Width="35" FontSize="20" Margin="100,0,144,240" Padding="1" Panel.ZIndex="10" Click="MoveLeft_Click">
             <Button.Resources>

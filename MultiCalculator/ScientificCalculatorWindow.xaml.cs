@@ -1,7 +1,9 @@
-﻿using MultiCalculator.Abstractions;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using MultiCalculator.Abstractions;
 using MultiCalculator.Controls;
 using MultiCalculator.Database.Models;
 using MultiCalculator.Database.Services;
+using MultiCalculator.Delegates;
 using MultiCalculator.Implementations;
 using MultiCalculator.Utilities;
 using System.Windows;
@@ -53,12 +55,16 @@ namespace MultiCalculator
 			set => SetValue(CalculatorAnswerProperty, value);
 		}
 
+		public void SubscribeToCustomButtons(Button button, IToken t)
+		{
+			button.Click += (sender, e) => CustomButton_Clicked(t);
+		}
+
 		public void UpdateExpressionBox()
 		{
 			var isValid = CalculatorExpression.IsValid();
 			if (isValid)
 			{
-				CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
 				ExpressionBoxContainer.Visibility = Visibility.Collapsed;
 				FormulaBoxContainer.Visibility = Visibility.Visible;
 				FormulaBox.Formula = CalculatorExpression.GetLatexString();
@@ -101,8 +107,16 @@ namespace MultiCalculator
 			_databaseService.AddCalculationHistory(new CalculationHistoryModel { Id = new Guid(), Question = question, Answer = answer, QuestionSender = _user });
 		}
 
+		void CustomButton_Clicked(IToken? t)
+		{
+			if (t != null)
+			{
+				CalculatorAnswer = string.Empty;
+				CalculatorExpression.Add(t);
+			}
+		}
 
-        public void GetAnswer_Click()
+		public void GetAnswer_Click()
 		{
 			CalculatorAnswer = string.Empty;
 			//Replace this with real answer when we have a history service or something- maybe we need a history model?
@@ -127,7 +141,7 @@ namespace MultiCalculator
 					StoreAnswer(CalculatorExpression.GetLatexString(), result.ToString());
 				}
 			}
-			catch (Exception myException)
+			catch
 			{
 				CalculatorAnswer = "Bad expression!";
 			}

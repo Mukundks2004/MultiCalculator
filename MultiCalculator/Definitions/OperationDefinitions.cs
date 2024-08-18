@@ -63,6 +63,8 @@ namespace MultiCalculator.Definitions
 		static readonly UnaryOperationToken sinc = new() { CalculateUnary = (x) => x == 0 ? double.NaN : Math.Sin(x) / x, Fixity = Fixity.Prefix, TokenSymbol = "sinc", Priority = 2, LatexString = (x) => "sinc{" + x + "}" };
 		static readonly UnaryOperationToken exp = new() { CalculateUnary = Math.Exp, Fixity = Fixity.Prefix, TokenSymbol = "exp", Priority = 2, LatexString = (x) => "\\exp{" + x + "}" };
 		static readonly UnaryOperationToken erf = new() { CalculateUnary = MathHelpers.Erf, Fixity = Fixity.Prefix, TokenSymbol = "erf", Priority = 2, LatexString = (x) => "\\erf{" + x + "}" };
+		
+		static readonly UnaryOperationToken doNothing = new() { CalculateUnary = (x) => x, Fixity = Fixity.Prefix, TokenSymbol = "MUKUNDTEST", Priority = 100, LatexString = (x) => "\\left(" + x + "\\right)" };
 
 		static readonly BinaryOperationToken multiplication = new() { CalculateBinary = (a, b) => a * b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "×", LatexString = (x, y) => "{" + x + "}\\times{" + y + "}" };
         static readonly BinaryOperationToken division = new() { CalculateBinary = (a, b) => b == 0 ? double.NaN : a / b, Associativity = Associativity.Left, Priority = 1, TokenSymbol = "÷", LatexString = (x, y) => "\\frac{" + x + "}{" + y + "}" };
@@ -153,6 +155,8 @@ namespace MultiCalculator.Definitions
 		public static UnaryOperationToken Productlog => productlog;
 
 		public static UnaryOperationToken Sinc => sinc;
+
+		public static UnaryOperationToken Braces => doNothing;
 
 		public static BracketToken ClosedBracket => BracketToken.ClosedBracket;
 

@@ -1,6 +1,4 @@
-﻿using ceTe.DynamicPDF.PageElements.BarCoding;
-using MultiCalculator.Delegates;
-using MultiCalculator.Implementations;
+﻿using MultiCalculator.Delegates;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,10 +6,10 @@ using static MultiCalculator.Definitions.OperationDefinitions;
 
 namespace MultiCalculator.Controls
 {
-    /// <summary>
-    /// Interaction logic for PrimaryFunctions.xaml
-    /// </summary>
-    public partial class PrimaryFunctions : UserControl
+	/// <summary>
+	/// Interaction logic for PrimaryFunctions.xaml
+	/// </summary>
+	public partial class PrimaryFunctions : UserControl
 	{
 		public event EventHandler? WriteTokenToScreen;
 

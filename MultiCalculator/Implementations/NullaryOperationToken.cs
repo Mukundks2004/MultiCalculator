@@ -3,7 +3,7 @@ using MultiCalculator.Exceptions;
 
 namespace MultiCalculator.Implementations
 {
-	public class NullaryOperationToken : IToken
+	public class NullaryOperationToken : INullaryOperation
     {
 		public string TokenSymbol { get; init; } = string.Empty;
 
