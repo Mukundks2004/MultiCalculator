@@ -59,7 +59,8 @@ namespace MultiCalculator
         {
 			if (QuestionTextBlock.Text != string.Empty && QuestionTextBlock.Text != null && !QuestionTextBlock.Text.Equals("Here will be the generated question"))
 			{
-                problemHelper.SendPracticeProblemEmail(_user, QuestionTextBlock.Text, DetermineEmail() == string.Empty ? null : DetermineEmail());
+				var email = DetermineEmail();
+				problemHelper.SendPracticeProblemEmail(_user, QuestionTextBlock.Text, string.IsNullOrWhiteSpace(email) ? null : email);
 				MessageBox.Show("Email has been sent!");
             }
 			else

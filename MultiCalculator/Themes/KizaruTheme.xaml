@@ -1,22 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- Define colors -->
     <Color x:Key="WindowBackgroundColor">#FFFFF3</Color>
-    <!-- Off-white for a bright, clean base -->
     <Color x:Key="ControlBackgroundColor">#FFEB3B</Color>
-    <!-- Bright yellow for controls -->
     <Color x:Key="TextColor">#212121</Color>
-    <!-- Dark gray for text to contrast against light background -->
     <Color x:Key="SeparatorColor">#FBC02D</Color>
-    <!-- Light gold for separators -->
     <Color x:Key="ButtonBackgroundColor">#FFC107</Color>
-    <!-- Golden yellow for buttons -->
     <Color x:Key="ButtonForegroundColor">#000000</Color>
-    <!-- Black text on buttons for readability -->
     <Color x:Key="HighlightColor">#FF9800</Color>
-    <!-- Deep orange for highlights -->
 
-    <!-- Define brushes -->
     <SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource WindowBackgroundColor}" />
     <SolidColorBrush x:Key="ControlBackgroundBrush" Color="{StaticResource ControlBackgroundColor}" />
     <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
@@ -25,7 +16,6 @@
     <SolidColorBrush x:Key="ButtonForegroundBrush" Color="{StaticResource ButtonForegroundColor}" />
     <SolidColorBrush x:Key="HighlightBrush" Color="{StaticResource HighlightColor}" />
 
-    <!-- Define styles -->
     <Style TargetType="Window">
         <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}" />
     </Style>

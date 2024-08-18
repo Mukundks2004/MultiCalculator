@@ -20,7 +20,7 @@ namespace MultiCalculator.Helpers
             _databaseService = databaseService;
         }
 
-        public void SendPracticeProblemEmail(UserModel user, string practiceProblem, string email = null)
+        public void SendPracticeProblemEmail(UserModel user, string practiceProblem, string? email = null)
         {
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -42,7 +42,7 @@ namespace MultiCalculator.Helpers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error sending message:" + ex.Message); // Error handling could be more graceful or thorough
+                Console.WriteLine("Error sending message:" + ex.Message);
             }
         }
 

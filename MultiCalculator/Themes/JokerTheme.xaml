@@ -1,22 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- Define colors -->
     <Color x:Key="WindowBackgroundColor">#1C1C1C</Color>
-    <!-- Dark background to reflect the Joker's chaotic nature -->
     <Color x:Key="ControlBackgroundColor">#3F3F3F</Color>
-    <!-- Dark gray for controls -->
     <Color x:Key="TextColor">#00FF00</Color>
-    <!-- Neon green for text, reflecting Joker's color -->
     <Color x:Key="SeparatorColor">#FF00FF</Color>
-    <!-- Bright purple for separators -->
     <Color x:Key="ButtonBackgroundColor">#4A148C</Color>
-    <!-- Deep purple for buttons -->
     <Color x:Key="ButtonForegroundColor">#FFFFFF</Color>
-    <!-- White text on buttons -->
     <Color x:Key="HighlightColor">#FFEB3B</Color>
-    <!-- Bright yellow for highlights, adding a pop of color -->
 
-    <!-- Define brushes -->
     <SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource WindowBackgroundColor}" />
     <SolidColorBrush x:Key="ControlBackgroundBrush" Color="{StaticResource ControlBackgroundColor}" />
     <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
@@ -25,7 +16,6 @@
     <SolidColorBrush x:Key="ButtonForegroundBrush" Color="{StaticResource ButtonForegroundColor}" />
     <SolidColorBrush x:Key="HighlightBrush" Color="{StaticResource HighlightColor}" />
 
-    <!-- Define styles -->
     <Style TargetType="Window">
         <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}" />
     </Style>
