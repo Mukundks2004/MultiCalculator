@@ -56,6 +56,8 @@ namespace MultiCalculator
             openAiHelper = new OpenAiHelper(databaseService);
             usernameLabel.Content = user.Username;
             fullNameLabel.Content = $"{user.FirstName} {user.LastName}";
+            ChatBotHistory = new ChatBotHistoryModel();
+            SetupPreviousChatsAndChats();
         }
 
         void SetupPreviousChatsAndChats()
@@ -93,6 +95,10 @@ namespace MultiCalculator
         void GoToSelectedChat_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = (string)PreviousChatslv.SelectedItem;
+            if (selectedItem == null)
+            {
+                return;
+            }
             if (selectedItem.Equals("New chat"))
             {
                 SetupSelectedChat(ChatBotHistory);
@@ -109,8 +115,8 @@ namespace MultiCalculator
             messages.Clear();
             for (var i = 0; i < chat.QuestionHistory.Count; i++)
             {
-                messages.Add(chat.QuestionHistory[i]);
-                messages.Add(chat.AnswerHistory[i]);
+                messages.Add(_user.Username + ": " + chat.QuestionHistory[i]);
+                messages.Add("MDM AI Chat Bot: " + chat.AnswerHistory[i]);
             }
         }
     }
