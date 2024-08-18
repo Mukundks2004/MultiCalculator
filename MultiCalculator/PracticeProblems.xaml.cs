@@ -51,9 +51,10 @@ namespace MultiCalculator
         {
 			if (question != null && question != string.Empty)
 			{
-				if (answerLabel.Content == string.Empty)
+				if (answerLabel.Content.ToString() == string.Empty)
 				{
 					answerLabel.Content = "Answer: " + answer;
+					answerLabel.Visibility = Visibility.Visible;
 					answerBtn.Content = "Hide Answer";
 				}
 				else
