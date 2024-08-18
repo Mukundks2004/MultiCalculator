@@ -28,11 +28,12 @@
         <Button x:Name="feedback" Content="Submit Feedback" Grid.Row="4" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
         <Label x:Name="Smiley" Content=":)" Grid.Row="4" Grid.Column="1" FontSize="20" Margin="4" FontFamily="MS Gothic" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
 
-        <TextBlock x:Name="title" Text="TestMate" Grid.Row="0" Grid.Column="0" FontSize="40" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="MS Gothic" FontWeight="Bold" Foreground="White"  Panel.ZIndex="2"/>
-        <Image Stretch="Fill" Grid.ColumnSpan="2" Panel.ZIndex="1">
+        <TextBlock x:Name="title" Text="TestMate" Grid.Row="0" Grid.Column="0" FontSize="40" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="MS Gothic" FontWeight="Bold" Foreground="White" Panel.ZIndex="1"/>
+        <Image Stretch="Fill" Grid.ColumnSpan="2" Panel.ZIndex="0">
             <Image.Source>
                 <BitmapImage UriSource="./background2.jpg"/>
             </Image.Source>
         </Image>
+            
     </Grid>
 </Window>
