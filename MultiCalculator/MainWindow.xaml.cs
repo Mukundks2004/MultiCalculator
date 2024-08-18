@@ -55,7 +55,7 @@ namespace MultiCalculator
 				case "PluginsWindow":
 					windowToOpen = new PluginsWindow();
 					break;
-				case "ChatBot":
+				case "Chatbot":
 					windowToOpen = new ChatBotWindow(_databaseService, loggedUser);
 					break;
 				default:

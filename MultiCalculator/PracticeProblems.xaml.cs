@@ -54,7 +54,15 @@ namespace MultiCalculator
 
         void SendEmail_Click(object sender, RoutedEventArgs e)
         {
-            helper.SendPracticeProblemEmail(_user, EmailTextBox.Text);
+			if (QuestionTextBlock.Text != string.Empty && QuestionTextBlock.Text != null && !QuestionTextBlock.Text.Equals("Here will be the generated question"))
+			{
+				helper.SendPracticeProblemEmail(_user, QuestionTextBlock.Text, EmailTextBox.Text == string.Empty ? null : EmailTextBox.Text);
+				MessageBox.Show("Email has been sent!");
+            }
+			else
+			{
+				MessageBox.Show("Please request for a question prior to sending an email.");
+			}
         }
     }
 }
