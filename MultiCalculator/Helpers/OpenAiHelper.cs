@@ -29,7 +29,7 @@ namespace MultiCalculator.Helpers
                 {
                     Prompt = prompt,
                     Model = OpenAI_API.Models.Model.DefaultModel,
-                    MaxTokens = 200,
+                    MaxTokens = 500,
                 };
 
                 var completionResult = await openAiApi.Completions.CreateCompletionAsync(completionRequest);
