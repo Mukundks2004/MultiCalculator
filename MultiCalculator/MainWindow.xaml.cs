@@ -58,6 +58,9 @@ namespace MultiCalculator
 				case "ChatBot":
 					windowToOpen = new ChatBotWindow(_databaseService, loggedUser);
 					break;
+				case "History":
+					windowToOpen = new HistoryWindow(_databaseService, loggedUser);
+					break;
 				default:
 					MessageBox.Show($"Unknown window tag: {windowTag ?? "Empty"}");
 					break;

@@ -12,7 +12,7 @@ namespace MultiCalculator.Helpers
         {
             var document = new Document();
             var listOfPages = new List<Page>();
-            for (var i = 0; i < (questionAndAnswer.Count / 5) * 2; i++)
+            for (var i = 0; i < (questionAndAnswer.Count / 5 + 1) * 2; i++)
             {
                 var page = new Page(PageSize.Letter, PageOrientation.Portrait, 54.0f);
                 listOfPages.Add(page);
@@ -44,7 +44,7 @@ namespace MultiCalculator.Helpers
 
         private void PdfWriter(List<(string, string)> questionAndAnswer, List<Page> pages)
         {
-            var answerStart = (questionAndAnswer.Count / 5) * 2;
+            var answerStart = questionAndAnswer.Count / 5 + 1;
             for (var i = 0; i < questionAndAnswer.Count; i++)
             {
                 pages[i/5].Elements.Add(new Label($"Question {i + 1}:\t\t{questionAndAnswer[i].Item1}", 0, 40 + (i%5 != 0 ? (700/5) * (i%5) : 0), 504, 100, Font.Helvetica, 16, TextAlign.Left));
