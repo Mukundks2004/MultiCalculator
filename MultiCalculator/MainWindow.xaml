@@ -5,11 +5,10 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:MultiCalculator"
 		mc:Ignorable="d"
-		Title="MainWindow" Height="500" Width="1000">
+		Title="MainWindow" Height="500" Width="800">
     <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="200"/>
-			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
@@ -21,16 +20,20 @@
 		</Grid.ColumnDefinitions>
 
         <Button x:Name="scientific" Content="Scientific Calculator" Grid.Row="1" Grid.Column="0" FontSize="20" Margin="4" Tag="ScientificCalculator" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="calculus" Content="Calculus Calculator" Grid.Row="2" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="graphing" Content="Graphing Calculator" Grid.Row="3" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="encyclopedia" Content="Encyclopedia" Grid.Row="4" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="history" Content="History" Grid.Row="5" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="plugins" Content="Plugins" Grid.Row="1" Grid.Column="1" FontSize="20" Margin="4" Tag="PluginsWindow" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="chat" Content="Chat Bot" Grid.Row="1" Grid.Column="1" FontSize="20" Margin="4" Tag="Chatbot" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="plugins" Content="Plugins" Grid.Row="2" Grid.Column="0" FontSize="20" Margin="4" Tag="PluginsWindow" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
         <Button x:Name="practice" Content="Practice Problems" Grid.Row="2" Grid.Column="1" FontSize="20" Margin="4" Tag="PracticeProblems" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="chat" Content="Chat Bot" Grid.Row="3" Grid.Column="1" FontSize="20" Margin="4" Tag="ChatBot" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="feedback" Content="Submit Feedback" Grid.Row="4" Grid.Column="1" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        <Button x:Name="settings" Content="Settings" Grid.Row="5" Grid.Column="1" FontSize="20" Margin="4" Tag="Settings" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
-        
-        <TextBlock x:Name="title" Text="Calculator" Grid.Row="0" Grid.Column="0" FontSize="20" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="history" Content="History" Grid.Row="3" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="settings" Content="Settings" Grid.Row="3" Grid.Column="1" FontSize="20" Margin="4" Tag="Settings" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Button x:Name="feedback" Content="Submit Feedback" Grid.Row="4" Grid.Column="0" FontSize="20" Margin="4" Click="OpenWindowButton_Click" FontFamily="MS Gothic" FontWeight="Bold"/>
+        <Label x:Name="Smiley" Content=":)" Grid.Row="4" Grid.Column="1" FontSize="20" Margin="4" FontFamily="MS Gothic" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
+        <TextBlock x:Name="title" Text="TestMate" Grid.Row="0" Grid.Column="0" FontSize="40" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="MS Gothic" FontWeight="Bold" Foreground="White" Panel.ZIndex="1"/>
+        <Image Stretch="Fill" Grid.ColumnSpan="2" Panel.ZIndex="0">
+            <Image.Source>
+                <BitmapImage UriSource="./background2.jpg"/>
+            </Image.Source>
+        </Image>
+            
     </Grid>
 </Window>

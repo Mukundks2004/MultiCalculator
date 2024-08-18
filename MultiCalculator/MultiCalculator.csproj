@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="background2.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ceTe.DynamicPDF.CoreSuite.NET" Version="12.19.0" />
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
@@ -24,6 +28,10 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="background2.jpg" />
   </ItemGroup>
 
 </Project>

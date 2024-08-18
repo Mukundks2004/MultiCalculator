@@ -61,6 +61,9 @@ namespace MultiCalculator.Controls
             Add("Matrix");
             Add("Joker");
             Add("Spiderman");
+            Add("Sandy");
+            Add("Winter");
+            Add("Pink");
         }
     }
 }

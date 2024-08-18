@@ -13,14 +13,14 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Label Content="Package Name:" VerticalAlignment="Center"/>
-                <TextBox Name="PackageNameBox" Width="150"/>
+                <Label Content="Package Name:" VerticalAlignment="Center" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                <TextBox Name="PackageNameBox" Width="150" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Label Content="File:" VerticalAlignment="Center"/>
+                <Label Content="File:" VerticalAlignment="Center" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
                 <TextBox Name="FilePathTextBox" IsReadOnly="True" Width="240" Height="50" TextWrapping="Wrap"/>
             </StackPanel>
-            <Button Content="Upload dll" Width="100" Height="30" Click="UploadButton_Click" Margin="5"/>
+            <Button Content="Upload dll" Width="100" Height="30" Click="UploadButton_Click" Margin="5" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -28,21 +28,21 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <Label Content="X-pos" Margin="10,0,0,0"/>
-                    <TextBox x:Name="XPosBox" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting"/>
-                    <Label Content="Y-pos" Margin="10,0,0,0"/>
-                    <TextBox x:Name="YPosBox" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting"/>
-                    <Label Content="Name" Margin="10,0,0,0"/>
-                    <TextBox x:Name="CustomName" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                    <Button Content="Save and Quit" Margin="10,10,0,0" Click="SaveAndQuit_Click"/>
+                    <Label Content="X-pos" Margin="10,0,0,0" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <TextBox x:Name="XPosBox" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <Label Content="Y-pos" Margin="10,0,0,0" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <TextBox x:Name="YPosBox" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <Label Content="Name" Margin="10,0,0,0" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <TextBox x:Name="CustomName" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <Button Content="Save and Quit" Margin="10,10,10,0" Click="SaveAndQuit_Click" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <Label Content="Width" Margin="10,0,0,0"/>
-                    <TextBox x:Name="CustomWidthBox" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting"/>
-                    <Label Content="Height" Margin="10,0,0,0"/>
-                    <TextBox x:Name="CustomHeightBox" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting"/>
-                    <Button Content="Add" Margin="10,25,0,0" Click="AddPlugin_Click"/>
-                    <Button Content="Quit" Margin="10,9,0,0" Click="QuitWithoutSaving_Click"/>
+                    <Label Content="Width" Margin="10,0,0,0" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <TextBox x:Name="CustomWidthBox" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <Label Content="Height" Margin="10,0,0,0" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <TextBox x:Name="CustomHeightBox" Width="130" HorizontalAlignment="Left" Margin="10,0,0,0" PreviewTextInput="PositionBoxes_PreviewInput" DataObject.Pasting="PositionBoxes_Pasting" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <Button Content="Add" Margin="10,25,10,0" Click="AddPlugin_Click" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
+                    <Button Content="Quit" Margin="10,9,10,0" Click="QuitWithoutSaving_Click" FontFamily="MS Gothic" FontSize="12" FontWeight="Bold"/>
                 </StackPanel>
             </Grid>
         </StackPanel>
