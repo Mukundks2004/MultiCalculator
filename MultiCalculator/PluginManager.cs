@@ -11,7 +11,7 @@ namespace MultiCalculator
 
 		private PluginManager()
 		{
-			PluginPackages = []
+			PluginPackages = [];
 		}
 
 		public static PluginManager Instance
