@@ -22,6 +22,7 @@ namespace MultiCalculator
         public SettingsWindow()
         {
             InitializeComponent();
-        }
+			Icon = new BitmapImage(new Uri("pack://application:,,,./icon.png"));
+		}
     }
 }

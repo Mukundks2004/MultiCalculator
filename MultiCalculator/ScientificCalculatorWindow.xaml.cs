@@ -9,6 +9,7 @@ using MultiCalculator.Utilities;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace MultiCalculator
 {
@@ -23,6 +24,7 @@ namespace MultiCalculator
 		public ScientificCalculatorWindow(IDatabaseService databaseService, UserModel user)
 		{
 			InitializeComponent();
+			Icon = new BitmapImage(new Uri("pack://application:,,,./icon.png"));
 			_databaseService = databaseService;
 			_user = user;
 			CalculatorExpression = new TokenChain();

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MultiCalculator.Database.Services;
 using System.CodeDom;
 using MultiCalculator.Database.Models;
+using System.Windows.Media.Imaging;
 
 namespace MultiCalculator
 {
@@ -21,8 +22,9 @@ namespace MultiCalculator
         public LoginWindow()
         {
             InitializeComponent();
+			Icon = new BitmapImage(new Uri("pack://application:,,,./icon.png"));
 
-            var builder = Host.CreateApplicationBuilder();
+			var builder = Host.CreateApplicationBuilder();
             builder.Services.AddDependencyGroup();
 
             using (var context = new CalculatorDbContext())
