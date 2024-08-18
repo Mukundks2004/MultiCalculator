@@ -52,6 +52,9 @@ namespace MultiCalculator.Controls
         {
             Add("Default");
             Add("Dark");
+            Add("Sandy");
+            Add("Winter");
+            Add("Pink");
         }
     }
 }

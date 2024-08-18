@@ -22,6 +22,15 @@ namespace MultiCalculator.Helpers
 				case "Dark":
 					ChangeThemeByResourceDictionary("DarkTheme.xaml");
 					break;
+				case "Sandy":
+					ChangeThemeByResourceDictionary("SandyTheme.xaml");
+					break;
+				case "Pink":
+					ChangeThemeByResourceDictionary("PinkTheme.xaml");
+					break;
+				case "Winter":
+					ChangeThemeByResourceDictionary("WinterTheme.xaml");
+					break;
 				case "Default":
 				default:
 					Application.Current.Resources.MergedDictionaries.Clear();
