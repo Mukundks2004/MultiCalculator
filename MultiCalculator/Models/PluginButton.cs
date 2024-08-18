@@ -2,6 +2,8 @@
 {
 	public class PluginButton
 	{
+		public string Name { get; set; } = string.Empty;
+
 		public int XPos { get; set; } = 0;
 
 		public int YPos { get; set; } = 0;

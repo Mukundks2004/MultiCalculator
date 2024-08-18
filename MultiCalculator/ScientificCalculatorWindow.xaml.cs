@@ -113,7 +113,7 @@ namespace MultiCalculator
 					CalculatorAnswer = double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity ? "Math Error" : result.ToString();
 				}
 			}
-			catch (Exception myException)
+			catch
 			{
 				CalculatorAnswer = "Bad expression!";
 			}

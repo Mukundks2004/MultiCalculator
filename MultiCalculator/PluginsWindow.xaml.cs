@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Win32;
 using MultiCalculator.Exceptions;
 using MultiCalculator.Models;
 using System;
@@ -9,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -23,8 +25,8 @@ namespace MultiCalculator
 	/// </summary>
 	public partial class PluginsWindow : Window
 	{
-		const int MaxHeight = 350;
-		const int MaxWidth = 300;
+		const int OutOfBoundsHeight = 350;
+		const int OutOfBoundsWidth = 300;
 
 		readonly List<PluginButton> pluginPaths = [];
 		public PluginsWindow()
@@ -48,29 +50,66 @@ namespace MultiCalculator
 		{
 			try
 			{
-				if (int.Parse(XPosBox.Text + 40) > MaxWidth || int.Parse(YPosBox.Text + 40) > MaxHeight)
+				var inputXPos = int.Parse(XPosBox.Text);
+				var inputYPos = int.Parse(YPosBox.Text);
+				var inputHeight = int.Parse(CustomHeightBox.Text);
+				var inputWidth = int.Parse(CustomWidthBox.Text);
+
+				if (inputWidth < 30 || inputHeight < 30)
 				{
-					throw new MultiCalculatorException("out of range");
+					throw new MultiCalculatorException("button too small");
+				}
+				if (inputXPos + inputWidth < 0 || inputXPos + inputWidth > OutOfBoundsWidth || inputYPos + inputHeight > OutOfBoundsHeight || inputYPos + inputHeight < 0)
+				{
+					throw new MultiCalculatorException("button out of range");
+				}
+				if (FilePathTextBox.Text == string.Empty || CustomName.Text == string.Empty)
+				{
+					throw new MultiCalculatorException("dll missing/name invalid");
+				}
+				if (PackageNameBox.Text == string.Empty)
+				{
+					throw new MultiCalculatorException("enter package name first");
 				}
 
 				var newButtonDetails = new PluginButton()
 				{
-					XPos = int.Parse(XPosBox.Text),
-					YPos = int.Parse(YPosBox.Text),
-					Width = 40,
-					Height = 40,
+					XPos = inputXPos,
+					YPos = inputYPos,
+					Width = inputWidth,
+					Height = inputHeight,
 					DllPath = FilePathTextBox.Text,
+					Name = CustomName.Text
 				};
 
 				pluginPaths.Add(newButtonDetails);
-			}
-			catch
-			{
-			}
 
-			XPosBox.Text = string.Empty;
-			YPosBox.Text = string.Empty;
-			FilePathTextBox.Text = string.Empty;
+				var btn = new Button
+				{
+					Content = CustomName.Text,
+					Width = inputWidth,
+					Height = inputHeight
+				};
+
+				Canvas.SetLeft(btn, newButtonDetails.XPos);
+				Canvas.SetTop(btn, newButtonDetails.YPos);
+				Sandbox.Children.Add(btn);
+
+				XPosBox.Text = string.Empty;
+				YPosBox.Text = string.Empty;
+				CustomHeightBox.Text = string.Empty;
+				CustomWidthBox.Text = string.Empty;
+				FilePathTextBox.Text = string.Empty;
+			}
+			catch (Exception ex)
+			{
+				var messageBoxText = ex.Message;
+				var caption = "MultiCalculatorWarning";
+				var button = MessageBoxButton.OK;
+				var icon = MessageBoxImage.Warning;
+
+				MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+			}
 		}
 
 		void PositionBoxes_PreviewInput(object sender, TextCompositionEventArgs e)
@@ -92,6 +131,16 @@ namespace MultiCalculator
 			{
 				e.CancelCommand();
 			}
+		}
+
+		void SaveAndQuit_Click(object sender, RoutedEventArgs e)
+		{
+			Close();
+		}
+
+		void QuitWithoutSaving_Click(object sender, RoutedEventArgs e)
+		{
+			Close();
 		}
 
 		static bool IsTextAllowed(string text)
