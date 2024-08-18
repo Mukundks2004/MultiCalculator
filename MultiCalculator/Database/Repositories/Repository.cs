@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace MultiCalculator.Database.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+	public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly CalculatorDbContext _context; // Database context instance
 
