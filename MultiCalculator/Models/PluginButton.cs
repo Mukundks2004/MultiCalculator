@@ -1,4 +1,6 @@
-﻿namespace MultiCalculator.Models
+﻿using MultiCalculator.Abstractions;
+
+namespace MultiCalculator.Models
 {
 	public class PluginButton
 	{
@@ -13,5 +15,7 @@
 		public int Height { get; set; } = 40;
 
 		public string DllPath { get; set; } = string.Empty;
+
+		public IToken? Token { get; set; } = null;
 	}
 }

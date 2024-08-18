@@ -1,6 +1,8 @@
-﻿using MultiCalculator.Abstractions;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using MultiCalculator.Abstractions;
 using MultiCalculator.Controls;
 using MultiCalculator.Database.Services;
+using MultiCalculator.Delegates;
 using MultiCalculator.Implementations;
 using MultiCalculator.Utilities;
 using System.Windows;
@@ -47,6 +49,11 @@ namespace MultiCalculator
 			set => SetValue(CalculatorAnswerProperty, value);
 		}
 
+		public void SubscribeToCustomButtons(Button button, IToken t)
+		{
+			button.Click += (sender, e) => CustomButton_Clicked(t);
+		}
+
 		public void UpdateExpressionBox()
 		{
 			var isValid = CalculatorExpression.IsValid();
@@ -87,6 +94,15 @@ namespace MultiCalculator
 			_ = button ?? throw new ArgumentNullException(nameof(button));
 			CalculatorAnswer = string.Empty;
 			CalculatorExpression.Add(button.CalculatorTask.Tokens);
+		}
+
+		void CustomButton_Clicked(IToken? t)
+		{
+			if (t != null)
+			{
+				CalculatorAnswer = string.Empty;
+				CalculatorExpression.Add(t);
+			}
 		}
 
 		public void GetAnswer_Click()
