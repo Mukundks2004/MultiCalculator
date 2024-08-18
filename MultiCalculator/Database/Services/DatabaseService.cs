@@ -177,8 +177,8 @@ namespace MultiCalculator.Database.Services
                     questionHistory.Add(new List<string>());
                     answerHistory.Add(new List<string>());
                 }
-                questionHistory[i / 10].Add(users[0].Username + ": " + randomQuestions[i].Question);
-                answerHistory[i / 10].Add("MDM AI Chat Bot: " + randomQuestions[i].Answer);
+                questionHistory[i / 10].Add(randomQuestions[i].Question);
+                answerHistory[i / 10].Add(randomQuestions[i].Answer);
             }
 
             var chatBotHistory = new List<ChatBotHistoryModel>()
