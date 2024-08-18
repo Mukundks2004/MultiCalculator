@@ -28,7 +28,10 @@ namespace MultiCalculator.Controls
 					{
 						Content = plugin.Token.TokenSymbol,
 						Width = plugin.Width,
-						Height = plugin.Height
+						Height = plugin.Height,
+						FontFamily = new System.Windows.Media.FontFamily("MS Gothic"),
+						FontSize = 12,
+						FontWeight = FontWeights.Bold,
 					};
 
 					Canvas.SetLeft(btn, plugin.XPos);
