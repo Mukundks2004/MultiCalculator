@@ -1,5 +1,6 @@
 # MultiCalculator
 
+## Guide to TaskMate (previously known as MultiCalculator)
 ## WHAT EVERYONE IS WORKING ON
 - Mukund:
   - README
