@@ -25,6 +25,16 @@ namespace MultiCalculator.Utilities
 			this.operations = operations.ToList();
 		}
 
+		public static TokenChain Duplicate(TokenChain initial)
+		{
+			var result = new TokenChain();
+			foreach (var operation in initial.operations)
+			{
+				result.operations.Add(operation);
+			}
+			return result;
+		}
+
 		public override string ToString()
 		{
 			var hasCursorBeenPlaced = false;
@@ -107,13 +117,16 @@ namespace MultiCalculator.Utilities
 
 		public bool IsValid()
 		{
-			return HasNonEmptyAndNonNegativeOpenBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation();
+			return HasNonEmptyAndNonNegativeOpenBraces() && NumbersExistAndAreWellFormed() && NoConsecutiveBinaryOperations() && NoDigitsFollowClosingBrace() && ExpressionDoesNotEndInOperation() && NoIllegalConsecutiveTokens();
 		}
 
 		//This is only called on valid strings
 		public string GetLatexString()
 		{
-			var tree = ParseFromIndexToIndexKeepInTreeForm(0, operations.Count);
+			var chainCopy = Duplicate(this);
+			chainCopy.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
+
+			var tree = chainCopy.ParseFromIndexToIndexKeepInTreeForm(0, chainCopy.operations.Count);
 			var latexString = tree.GetLatexString();
 			return latexString;
 		}
@@ -340,7 +353,10 @@ namespace MultiCalculator.Utilities
 						nextClosingBraceDistance++;
 					}
 
-					numStackIncludingTrees.Push(ParseFromIndexToIndexProductConst(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1));
+					var nestedTreeResult = ParseFromIndexToIndexKeepInTreeForm(currentIndex + 1, currentIndex + nextClosingBraceDistance - 1);
+					var bracketWrapper = new TreeNode<IToken>(OperationDefinitions.Braces);
+					bracketWrapper.AddTree(nestedTreeResult);
+					numStackIncludingTrees.Push(bracketWrapper);
 					currentIndex += nextClosingBraceDistance - 1;
 				}
 
@@ -359,9 +375,9 @@ namespace MultiCalculator.Utilities
 					else if (opStack.Count == 0)
 					{
 						var unaryOperation = operation as UnaryOperationToken;
-						var unaryOperand = numStackIncludingTrees.Pop().Evaluate();
+						var unaryOperand = numStackIncludingTrees.Pop();
 						var resultTree = new TreeNode<IToken>(unaryOperation!);
-						resultTree.AddChild(unaryOperand);
+						resultTree.AddTree(unaryOperand);
 						numStackIncludingTrees.Push(resultTree);
 					}
 
@@ -369,12 +385,11 @@ namespace MultiCalculator.Utilities
 					{
 						if (operation is UnaryOperationToken unary && unary.Fixity == Fixity.Postfix)
 						{
-							var lastOperationBeforePostfix = opStack.Peek();
 							var unaryPostfixTree = new TreeNode<IToken>(unary);
 							while (opStack.Count > 0 && opStack.Peek().Priority > unary.Priority)
 							{
 								var laterOperand = numStackIncludingTrees.Pop();
-								lastOperationBeforePostfix = opStack.Pop();
+								var lastOperationBeforePostfix = opStack.Pop();
 
 								var resultTree = new TreeNode<IToken>(lastOperationBeforePostfix);
 								resultTree.AddTree(laterOperand);
@@ -466,8 +481,30 @@ namespace MultiCalculator.Utilities
 
 		public void InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets()
 		{
+			InsertMultiplicationSigns();
+			ConvertDualUnariesToUnariesAndPlaceClosingBrackets();
+		}
+
+		NullaryOperationToken ParseDoubleFromIndex(int index, out int lengthParsed)
+		{
+			var resultAsString = (operations[index] as DigitToken)!.TokenSymbol;
+			index++;
+			lengthParsed = 1;
+
+			while (index < operations.Count && operations[index] is DigitToken digit)
+			{
+				resultAsString += digit.TokenSymbol;
+				lengthParsed++;
+				index++;
+			}
+
+			var result = double.Parse(resultAsString);
+			return NullaryOperationToken.GetConstFromDouble(result);
+		}
+
+		public void InsertMultiplicationSigns()
+		{
 			IToken currentToken, nextToken;
-			var unmatchedOpenBraces = 0;
 			for (int i = 0; i < operations.Count - 1; i++)
 			{
 				currentToken = operations[i];
@@ -480,7 +517,11 @@ namespace MultiCalculator.Utilities
 					i++;
 				}
 			}
+		}
 
+		public void ConvertDualUnariesToUnariesAndPlaceClosingBrackets()
+		{
+			var unmatchedOpenBraces = 0;
 			var isInOperationString = true;
 
 			for (int i = 0; i < operations.Count; i++)
@@ -520,23 +561,6 @@ namespace MultiCalculator.Utilities
 			}
 		}
 
-		NullaryOperationToken ParseDoubleFromIndex(int index, out int lengthParsed)
-		{
-			var resultAsString = (operations[index] as DigitToken)!.TokenSymbol;
-			index++;
-			lengthParsed = 1;
-
-			while (index < operations.Count && operations[index] is DigitToken digit)
-			{
-				resultAsString += digit.TokenSymbol;
-				lengthParsed++;
-				index++;
-			}
-
-			var result = double.Parse(resultAsString);
-			return NullaryOperationToken.GetConstFromDouble(result);
-		}
-
 		bool NoDigitsFollowClosingBrace()
 		{
 			bool currentTokenIsClosingBrace = false;
@@ -556,6 +580,29 @@ namespace MultiCalculator.Utilities
 						}
 					}
 					currentTokenIsClosingBrace = false;
+				}
+			}
+
+			return true;
+		}
+
+		bool NoIllegalConsecutiveTokens()
+		{
+			IToken currentToken, nextToken;
+			for (int i = 0; i < operations.Count - 1; i++)
+			{
+				currentToken = operations[i];
+				nextToken = operations[i + 1];
+
+				if ((currentToken == OperationDefinitions.OpenBracket || currentToken is BinaryOperationToken or DualArityOperationToken || currentToken is UnaryOperationToken unary && unary.Fixity == Fixity.Prefix)
+					&& (nextToken == OperationDefinitions.ClosedBracket || nextToken  is BinaryOperationToken || nextToken is UnaryOperationToken unaryPost && unaryPost.Fixity == Fixity.Postfix))
+				{
+					return false;
+				}
+
+				if ((currentToken == OperationDefinitions.ClosedBracket || currentToken is NullaryOperationToken || currentToken is UnaryOperationToken unaryPostFix && unaryPostFix.Fixity == Fixity.Postfix) && nextToken is DigitToken)
+				{
+					return false;
 				}
 			}
 

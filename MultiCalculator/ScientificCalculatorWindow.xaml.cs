@@ -1,6 +1,8 @@
-﻿using MultiCalculator.Abstractions;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using MultiCalculator.Abstractions;
 using MultiCalculator.Controls;
 using MultiCalculator.Database.Services;
+using MultiCalculator.Delegates;
 using MultiCalculator.Implementations;
 using MultiCalculator.Utilities;
 using System.Windows;
@@ -14,12 +16,9 @@ namespace MultiCalculator
 	/// </summary>
 	public partial class ScientificCalculatorWindow : Window
 	{
-		readonly IDatabaseService _databaseService;
-
-		public ScientificCalculatorWindow(IDatabaseService databaseService)
+		public ScientificCalculatorWindow()
 		{
 			InitializeComponent();
-			_databaseService = databaseService;
 			CalculatorExpression = new TokenChain();
 			CalculatorExpression.OperationsUpdated += UpdateExpressionBox;
 			DataContext = this;
@@ -50,12 +49,16 @@ namespace MultiCalculator
 			set => SetValue(CalculatorAnswerProperty, value);
 		}
 
+		public void SubscribeToCustomButtons(Button button, IToken t)
+		{
+			button.Click += (sender, e) => CustomButton_Clicked(t);
+		}
+
 		public void UpdateExpressionBox()
 		{
 			var isValid = CalculatorExpression.IsValid();
 			if (isValid)
 			{
-				CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
 				ExpressionBoxContainer.Visibility = Visibility.Collapsed;
 				FormulaBoxContainer.Visibility = Visibility.Visible;
 				FormulaBox.Formula = CalculatorExpression.GetLatexString();
@@ -93,6 +96,15 @@ namespace MultiCalculator
 			CalculatorExpression.Add(button.CalculatorTask.Tokens);
 		}
 
+		void CustomButton_Clicked(IToken? t)
+		{
+			if (t != null)
+			{
+				CalculatorAnswer = string.Empty;
+				CalculatorExpression.Add(t);
+			}
+		}
+
 		public void GetAnswer_Click()
 		{
 			CalculatorAnswer = string.Empty;
@@ -117,7 +129,7 @@ namespace MultiCalculator
 					CalculatorAnswer = double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity ? "Math Error" : result.ToString();
 				}
 			}
-			catch (Exception myException)
+			catch
 			{
 				CalculatorAnswer = "Bad expression!";
 			}
