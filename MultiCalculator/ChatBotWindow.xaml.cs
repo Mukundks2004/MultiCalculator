@@ -51,14 +51,11 @@ namespace MultiCalculator
             messages = new ObservableCollection<string>();
             previousChats = new ObservableCollection<string>();
             InitializeComponent();
-
             _databaseService = databaseService;
             _user = user;
             openAiHelper = new OpenAiHelper(databaseService);
             usernameLabel.Content = user.Username;
             fullNameLabel.Content = $"{user.FirstName} {user.LastName}";
-            ChatBotHistory = new ChatBotHistoryModel();
-            SetupPreviousChatsAndChats();
         }
 
         void SetupPreviousChatsAndChats()
@@ -74,7 +71,7 @@ namespace MultiCalculator
             _databaseService.AddChatBotHistory(ChatBotHistory);
         }
 
-        void SendMessage_Click(object sender, RoutedEventArgs e)
+        async void SendMessage_Click(object sender, RoutedEventArgs e)
         {
             if (MessageTextBox.Equals(string.Empty))
             {
@@ -84,12 +81,11 @@ namespace MultiCalculator
             {
                 var prompt = MessageTextBox.Text;
                 messages.Add(_user.Username + ": " + prompt);
-                var result = openAiHelper.SubmitAndGetApiResponse(prompt, _user);
+                var result = await openAiHelper.SubmitAndGetApiResponse(prompt, _user);
                 ChatBotHistory.QuestionHistory.Add(prompt);
                 ChatBotHistory.AnswerHistory.Add(result);
                 messages.Add("MDM AI Chat Bot: " + result);
                 _databaseService.UpdateChatBot(ChatBotHistory);
-
                 MessageTextBox.Text = string.Empty;
             }
         }
