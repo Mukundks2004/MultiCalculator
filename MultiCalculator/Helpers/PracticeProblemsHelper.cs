@@ -24,7 +24,7 @@ namespace MultiCalculator.Helpers
         {
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
             {
-                Credentials = new NetworkCredential("dotnethms.matthewlam@gmail.com", "zixp oqmn wnqy argz"),
+                Credentials = new NetworkCredential("dotnethms.matthewlam@gmail.com", "zixp oqmm wnqy argz"),
                 EnableSsl = true,
             };
             MailMessage mail = new MailMessage
