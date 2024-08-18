@@ -20,6 +20,7 @@ namespace MultiCalculator
 	{
 		readonly IDatabaseService _databaseService;
 		readonly UserModel _user;
+		double mostRecentAnswer = 0;
 
 		public ScientificCalculatorWindow(IDatabaseService databaseService, UserModel user)
 		{
@@ -39,6 +40,9 @@ namespace MultiCalculator
 			PrimaryButtonsGrid.BackspaceToken += Delete_Click;
 			PrimaryButtonsGrid.ClearEntireExpression += ClearAll_Click;
 			PrimaryButtonsGrid.EvaluateExpression += EvaluateExpression_Click;
+
+			ControlBarGrid.CopyToClipBoard += CopyAnswerToClipboard;
+			mostRecentAnswer = 0;
 		}
 
 		public static readonly DependencyProperty CalculatorExpressionProperty = DependencyProperty.Register("CalculatorExpression", typeof(TokenChain), typeof(ScientificCalculatorWindow), new PropertyMetadata(null, ExpressionValueChanged));
@@ -100,8 +104,6 @@ namespace MultiCalculator
 			var control = d as ScientificCalculatorWindow;
 			_ = control ?? throw new ArgumentNullException(nameof(control));
 
-			//Need to change this to something else when ans box made
-			//control.ResultBox.Text = e.NewValue.ToString();
 			control.FormulaResult.Formula = (string)e.NewValue;
 		}
 
@@ -118,6 +120,11 @@ namespace MultiCalculator
 			_databaseService.AddCalculationHistory(new CalculationHistoryModel { Id = new Guid(), Question = question, Answer = answer, QuestionSender = _user });
 		}
 
+		void CopyAnswerToClipboard()
+		{
+			Clipboard.SetText(CalculatorAnswer);
+		}
+
 		void CustomButton_Clicked(IToken? t)
 		{
 			if (t != null)
@@ -130,9 +137,7 @@ namespace MultiCalculator
 		public void GetAnswer_Click()
 		{
 			CalculatorAnswer = string.Empty;
-			//Replace this with real answer when we have a history service or something- maybe we need a history model?
-			//Also move explicit references to token to service maybe. the view should not know about the impelemtnation details.
-			CalculatorExpression.Add(new NullaryOperationToken() { Calculate = () => 0, TokenSymbol = "Ans", LatexString = "{Ans}"});
+			CalculatorExpression.Add(new NullaryOperationToken() { Calculate = () => mostRecentAnswer, TokenSymbol = "Ans", LatexString = "{Ans}"});
 		}
 
 		public void EvaluateExpression_Click()
@@ -148,8 +153,9 @@ namespace MultiCalculator
 				{
 					CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
 					var result = CalculatorExpression.ParseTree();
+					mostRecentAnswer = double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity ? 0 : result;
 					CalculatorAnswer = double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity ? "Math Error" : result.ToString();
-					StoreAnswer(CalculatorExpression.GetLatexString(), result.ToString());
+					StoreAnswer(CalculatorExpression.GetStringWithoutCursor(), result.ToString());
 				}
 			}
 			catch

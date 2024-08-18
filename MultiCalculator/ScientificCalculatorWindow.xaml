@@ -35,7 +35,7 @@
             </ScrollViewer> 
             <Separator/>
             <Separator Height="10" Background="Transparent"/>
-            <calculatorbuttons:CalculatorControlBar/>
+            <calculatorbuttons:CalculatorControlBar x:Name="ControlBarGrid"/>
             <calculatorbuttons:ScientificFunctions x:Name="ScientificButtonsGrid"/>
             <Separator Height="10" Background="Transparent"/>
             <calculatorbuttons:PrimaryFunctions x:Name="PrimaryButtonsGrid"/>
