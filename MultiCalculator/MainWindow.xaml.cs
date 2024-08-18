@@ -25,9 +25,7 @@ namespace MultiCalculator
 		{
             InitializeComponent();
 			_databaseService = databaseService;
-
-			//ImageSource imageSource = new BitmapImage(new Uri("./background.jpg"));
-			//image1.Source = imageSource;
+			Icon = new BitmapImage(new Uri("pack://application:,,,./icon.png"));
 		}
 
 		void OpenWindowButton_Click(object sender, RoutedEventArgs e)

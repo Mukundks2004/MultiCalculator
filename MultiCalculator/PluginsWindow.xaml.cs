@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace MultiCalculator
 {
@@ -23,6 +24,7 @@ namespace MultiCalculator
 		public PluginsWindow()
 		{
 			InitializeComponent();
+			Icon = new BitmapImage(new Uri("pack://application:,,,./icon.png"));
 		}
 
 		void UploadButton_Click(object sender, RoutedEventArgs e)
