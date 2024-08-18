@@ -25,5 +25,6 @@ namespace MultiCalculator.Database.Services
         void AddChatBotHistory(ChatBotHistoryModel chatBotHistory);
         void SeedData();
         void ClearData();
+        void UpdateChatBot(ChatBotHistoryModel chatBotHistory);
     }
 }

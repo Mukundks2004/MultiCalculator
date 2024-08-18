@@ -1,4 +1,5 @@
-﻿using MultiCalculator.Database.Models;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using MultiCalculator.Database.Models;
 using MultiCalculator.Database.Repositories;
 using System;
 using System.Collections.Generic;
@@ -98,7 +99,7 @@ namespace MultiCalculator.Database.Services
         public void SeedData()
         {
             var users = new List<UserModel>() {
-                new UserModel() { Id = 11111, Password = "11111", FirstName = "Admin", LastName = "Admin", Username = "Admin101", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
+                new UserModel() { Id = 11111, Password = "11111", FirstName = "Anakin", LastName = "Skywalker", Username = "Darth Vader", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
                 new UserModel() { Id = 22222, Password = "22222", FirstName = "Dennis", LastName = "Hsu", Username = "Dennis", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
                 new UserModel() { Id = 33333, Password = "33333", FirstName = "Mukund", LastName = "Srinivasan", Username = "Mukund", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
                 new UserModel() { Id = 44444, Password = "44444", FirstName = "Matt", LastName = "Lam", Username = "Matt", Email = "Admin@gmail.com", Phone = "0444444444", AmountOfGeneratedPdfs = 0 },
@@ -167,8 +168,31 @@ namespace MultiCalculator.Database.Services
                 new CalculationHistoryModel() { Id = Guid.NewGuid(), Question = "64 - 21", Answer = "43", QuestionSender = users[0] },
             };
 
+            var questionHistory = new List<List<string>>();
+            var answerHistory = new List<List<string>>();
+            for (int i = 0; i < randomQuestions.Count; i++)
+            {
+                if (i % 10 == 0)
+                {
+                    questionHistory.Add(new List<string>());
+                    answerHistory.Add(new List<string>());
+                }
+                questionHistory[i / 10].Add(users[0].Username + ": " + randomQuestions[i].Question);
+                answerHistory[i / 10].Add("MDM AI Chat Bot: " + randomQuestions[i].Answer);
+            }
+
+            var chatBotHistory = new List<ChatBotHistoryModel>()
+            {
+                new ChatBotHistoryModel() { Id = new Guid(), QuestionHistory = questionHistory[0], AnswerHistory = answerHistory[0], ChatBotUser = users[0], DisplayName = "Previous Chat from: 15-Aug-2024 3:46:28 PM" },
+                new ChatBotHistoryModel() { Id = new Guid(), QuestionHistory = questionHistory[1], AnswerHistory = answerHistory[1], ChatBotUser = users[0], DisplayName = "Previous Chat from: 15-Aug-2024 6:21:59 PM"  },
+                new ChatBotHistoryModel() { Id = new Guid(), QuestionHistory = questionHistory[2], AnswerHistory = answerHistory[2], ChatBotUser = users[0], DisplayName = "Previous Chat from: 16-Aug-2024 11:41:01 PM"  },
+                new ChatBotHistoryModel() { Id = new Guid(), QuestionHistory = questionHistory[3], AnswerHistory = answerHistory[3], ChatBotUser = users[0], DisplayName = "Previous Chat from: 17-Aug-2024 1:30:29 PM"  },
+                new ChatBotHistoryModel() { Id = new Guid(), QuestionHistory = questionHistory[4], AnswerHistory = answerHistory[4], ChatBotUser = users[0], DisplayName = "Previous Chat from: 18-Aug-2024 3:20:00 PM"  },
+            };
+
             users.ForEach(u => AddUser(u));
             randomQuestions.ForEach(q => AddCalculationHistory(q));
+            chatBotHistory.ForEach(c => AddChatBotHistory(c));
         }
 
         public void ClearData()
@@ -176,6 +200,12 @@ namespace MultiCalculator.Database.Services
             _userRepository.ClearDatabase();
             _calculationHistoryRepository.ClearDatabase();
             _openAiQuestionsRepository.ClearDatabase();
+            _chatBotHistoryRepository.ClearDatabase();
+        }
+
+        public void UpdateChatBot(ChatBotHistoryModel chatBotHistory)
+        {
+            _chatBotHistoryRepository.UpdateChatBotHistory(chatBotHistory);
         }
     }
 }

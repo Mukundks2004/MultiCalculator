@@ -1,47 +1,43 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="TextBox" x:Key="MessageTextBox">
-        <Setter Property="Foreground" Value="Gray"/>
-        <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="Margin" Value="8"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TextBox">
-                    <Border CornerRadius="8" Background="{TemplateBinding Background}">
+    <Setter Property="Foreground" Value="Gray"/>
+    <Setter Property="FontWeight" Value="Medium"/>
+    <Setter Property="Margin" Value="8"/>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="TextBox">
+                <Border CornerRadius="8" Background="{TemplateBinding Background}">
                         <Grid>
-                            <TextBox VerticalAlignment="Stretch"
-                                 VerticalContentAlignment="Center"
-                                 HorizontalAlignment="Stretch"
-                                 x:Name="InnerTextBox"
-                                 Background="Transparent"
-                                 TextWrapping="Wrap"
-                                 Foreground="{TemplateBinding Foreground}"
-                                 CaretBrush="Gray"
-                                 Margin="8, 0, 0, 0"
-                                 Text="{TemplateBinding Text}" />
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch"
+                                      Background="Transparent"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      Margin="8, 0, 0, 0"/>
 
-                            <TextBlock IsHitTestVisible="False"
-                                   Text="@Message"
-                                   VerticalAlignment="Center"
+                        <TextBlock IsHitTestVisible="False"
+                                   Text="Enter a message."
+                                   VerticalAlignment="Top"
                                    HorizontalAlignment="Left"
                                    Margin="10, 0, 0, 0"
                                    Foreground="DarkGray">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Text, ElementName=InnerTextBox}" Value="">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
 
 </ResourceDictionary>
