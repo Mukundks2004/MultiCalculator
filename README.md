@@ -5,6 +5,12 @@ How to use:
 1) Clone repository
 2) Run dotnet ef database drop
 3) Run dotnet ef database update
+
+
+
+
+---
+
 ## WHAT EVERYONE IS WORKING ON
 - Mukund:
   - README
