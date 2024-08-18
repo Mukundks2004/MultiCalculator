@@ -8,6 +8,8 @@ using MultiCalculator.Database.Services;
 using MultiCalculator.Database.Repositories;
 using MultiCalculator.Database.Models;
 using MultiCalculator.Helpers;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace MultiCalculator
 {
@@ -23,7 +25,10 @@ namespace MultiCalculator
 		{
             InitializeComponent();
 			_databaseService = databaseService;
-        }
+
+			//ImageSource imageSource = new BitmapImage(new Uri("./background.jpg"));
+			//image1.Source = imageSource;
+		}
 
 		void OpenWindowButton_Click(object sender, RoutedEventArgs e)
 		{

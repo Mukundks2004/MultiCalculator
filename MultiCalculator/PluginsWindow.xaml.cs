@@ -131,6 +131,7 @@ namespace MultiCalculator
 				YPosBox.Text = string.Empty;
 				CustomHeightBox.Text = string.Empty;
 				CustomWidthBox.Text = string.Empty;
+				CustomName.Text = string.Empty;
 				FilePathTextBox.Text = string.Empty;
 			}
 			catch (Exception ex)

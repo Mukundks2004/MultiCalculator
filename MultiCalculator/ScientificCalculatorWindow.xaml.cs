@@ -56,14 +56,23 @@ namespace MultiCalculator
 
 		public void UpdateExpressionBox()
 		{
-			var isValid = CalculatorExpression.IsValid();
-			if (isValid)
+			try
 			{
-				ExpressionBoxContainer.Visibility = Visibility.Collapsed;
-				FormulaBoxContainer.Visibility = Visibility.Visible;
-				FormulaBox.Formula = CalculatorExpression.GetLatexString();
+				var isValid = CalculatorExpression.IsValid();
+				if (isValid)
+				{
+					ExpressionBoxContainer.Visibility = Visibility.Collapsed;
+					FormulaBoxContainer.Visibility = Visibility.Visible;
+					FormulaBox.Formula = CalculatorExpression.GetLatexString();
+				}
+				else
+				{
+					ExpressionBoxContainer.Visibility = Visibility.Visible;
+					FormulaBoxContainer.Visibility = Visibility.Collapsed;
+					ExpressionBox.Text = CalculatorExpression.ToString();
+				}
 			}
-			else
+			catch
 			{
 				ExpressionBoxContainer.Visibility = Visibility.Visible;
 				FormulaBoxContainer.Visibility = Visibility.Collapsed;

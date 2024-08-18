@@ -14,6 +14,16 @@ namespace MultiCalculator.Controls
 			}
 		}
 
+		public static string PackageDropDownText
+		{
+			get 
+			{
+				return "Packages1";
+			}
+			
+			set { }
+		}
+
 		public ComboBoxModel()
 		{
 		}
