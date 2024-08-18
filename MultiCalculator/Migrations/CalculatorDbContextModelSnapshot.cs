@@ -44,6 +44,34 @@ namespace MultiCalculator.Migrations
                     b.ToTable("CalculationHistory");
                 });
 
+            modelBuilder.Entity("MultiCalculator.Database.Models.ChatBotHistoryModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AnswerHistory")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ChatBotUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("QuestionHistory")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatBotUserId");
+
+                    b.ToTable("ChatBotHistory");
+                });
+
             modelBuilder.Entity("MultiCalculator.Database.Models.OpenAiQuestionsModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -121,6 +149,17 @@ namespace MultiCalculator.Migrations
                     b.Navigation("QuestionSender");
                 });
 
+            modelBuilder.Entity("MultiCalculator.Database.Models.ChatBotHistoryModel", b =>
+                {
+                    b.HasOne("MultiCalculator.Database.Models.UserModel", "ChatBotUser")
+                        .WithMany("chatBotHistory")
+                        .HasForeignKey("ChatBotUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChatBotUser");
+                });
+
             modelBuilder.Entity("MultiCalculator.Database.Models.OpenAiQuestionsModel", b =>
                 {
                     b.HasOne("MultiCalculator.Database.Models.UserModel", "QuestionSender")
@@ -135,6 +174,8 @@ namespace MultiCalculator.Migrations
             modelBuilder.Entity("MultiCalculator.Database.Models.UserModel", b =>
                 {
                     b.Navigation("calculationHistory");
+
+                    b.Navigation("chatBotHistory");
 
                     b.Navigation("openAiQuestions");
                 });

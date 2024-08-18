@@ -1,5 +1,6 @@
 ﻿using MultiCalculator.Abstractions;
 using MultiCalculator.Controls;
+using MultiCalculator.Database.Models;
 using MultiCalculator.Database.Services;
 using MultiCalculator.Implementations;
 using MultiCalculator.Utilities;
@@ -15,11 +16,13 @@ namespace MultiCalculator
 	public partial class ScientificCalculatorWindow : Window
 	{
 		readonly IDatabaseService _databaseService;
+		readonly UserModel _user;
 
-		public ScientificCalculatorWindow(IDatabaseService databaseService)
+		public ScientificCalculatorWindow(IDatabaseService databaseService, UserModel user)
 		{
 			InitializeComponent();
 			_databaseService = databaseService;
+			_user = user;
 			CalculatorExpression = new TokenChain();
 			CalculatorExpression.OperationsUpdated += UpdateExpressionBox;
 			DataContext = this;
@@ -93,7 +96,13 @@ namespace MultiCalculator
 			CalculatorExpression.Add(button.CalculatorTask.Tokens);
 		}
 
-		public void GetAnswer_Click()
+        void StoreAnswer(string question, string answer)
+		{
+			_databaseService.AddCalculationHistory(new CalculationHistoryModel { Id = new Guid(), Question = question, Answer = answer, QuestionSender = _user });
+		}
+
+
+        public void GetAnswer_Click()
 		{
 			CalculatorAnswer = string.Empty;
 			//Replace this with real answer when we have a history service or something- maybe we need a history model?
@@ -115,6 +124,7 @@ namespace MultiCalculator
 					CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
 					var result = CalculatorExpression.ParseTree();
 					CalculatorAnswer = double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity ? "Math Error" : result.ToString();
+					StoreAnswer(CalculatorExpression.GetLatexString(), result.ToString());
 				}
 			}
 			catch (Exception myException)

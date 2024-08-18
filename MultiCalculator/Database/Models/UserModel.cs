@@ -23,5 +23,8 @@ namespace MultiCalculator.Database.Models
         
         [InverseProperty("QuestionSender")]
         public ICollection<OpenAiQuestionsModel> openAiQuestions { get; set; } = new List<OpenAiQuestionsModel>();
+
+        [InverseProperty("ChatBotUser")]
+        public ICollection<ChatBotHistoryModel> chatBotHistory { get; set; } = new List<ChatBotHistoryModel>();
     }
 }
