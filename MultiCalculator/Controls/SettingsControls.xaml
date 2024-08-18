@@ -19,6 +19,9 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center">
             <TextBlock x:Name="ThemeLabel"
                 Text="Choose Theme:"
@@ -32,7 +35,7 @@
                 FontSize="18"/>
             <ComboBox x:Name="ThemeChoice"
                 Height="30"
-                Width="150"
+                Width="125"
                 Grid.Column="1"
                 Grid.Row="0"
                 HorizontalContentAlignment="Center"
@@ -42,6 +45,14 @@
                 FontFamily="MS Gothic"
                 FontWeight="Bold"
                 FontSize="14"/>
+            <Button x:Name="ImFeelingLucky"
+                    Content="I'm feeling lucky"
+                    Height="30"
+                    Width="90"
+                    FontFamily="MS Gothic"
+                    FontWeight="Bold"
+                    FontSize="9"
+                    Margin="10,0,0,0" Click="ImFeelingLucky_Click"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
             <TextBlock x:Name="UsernameLabel"

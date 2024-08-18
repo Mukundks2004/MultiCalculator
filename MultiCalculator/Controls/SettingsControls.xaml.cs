@@ -44,10 +44,19 @@ namespace MultiCalculator.Controls
 			var newUsername = (string)UsernameInput.Text;
 			SettingsHelper.ChangeUsername(newUsername);
         }
-    }
+
+		private void ImFeelingLucky_Click(object sender, RoutedEventArgs e)
+		{
+            var themesList = new Themes();
+            var randomTheme = themesList.GetRandomTheme();
+            ThemeChoice.SelectedItem = randomTheme;
+            SettingsHelper.ChangeTheme(randomTheme);
+		}
+	}
 
 	class Themes : ObservableCollection<string>
     {
+        private readonly Random random = new Random();
         public Themes()
         {
             Add("Default");
@@ -64,6 +73,16 @@ namespace MultiCalculator.Controls
             Add("Sandy");
             Add("Winter");
             Add("Pink");
+        }
+
+        public string GetRandomTheme()
+        {
+            if (Count == 0)
+            {
+                throw new InvalidOperationException("No themes!");
+            }
+            var index = random.Next(Count);
+            return this[index];
         }
     }
 }

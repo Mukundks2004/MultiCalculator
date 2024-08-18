@@ -58,6 +58,7 @@ namespace MultiCalculator.Helpers
 				case "Winter":
 					ChangeThemeByResourceDictionary("WinterTheme.xaml");
 					break;
+				case "Random":
 				case "Default":
 				default:
 					Application.Current.Resources.MergedDictionaries.Clear();
