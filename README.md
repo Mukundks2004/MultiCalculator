@@ -6,6 +6,7 @@ How to use:
 2) Run dotnet ef database drop
 3) Run dotnet ef database update
 4) Uncomment "Seed Data" code in LoginWindow.xaml.cs (you can recomment this after first run to stop clearing db)
+5) Run! have fun!
 
 ## Features:
 
