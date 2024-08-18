@@ -53,6 +53,27 @@ namespace MultiCalculator.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatBotHistory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DisplayName = table.Column<string>(type: "TEXT", nullable: false),
+                    QuestionHistory = table.Column<string>(type: "TEXT", nullable: false),
+                    AnswerHistory = table.Column<string>(type: "TEXT", nullable: false),
+                    ChatBotUserId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatBotHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChatBotHistory_User_ChatBotUserId",
+                        column: x => x.ChatBotUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OpenAiQuestions",
                 columns: table => new
                 {
@@ -78,6 +99,11 @@ namespace MultiCalculator.Migrations
                 column: "QuestionSenderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatBotHistory_ChatBotUserId",
+                table: "ChatBotHistory",
+                column: "ChatBotUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenAiQuestions_QuestionSenderId",
                 table: "OpenAiQuestions",
                 column: "QuestionSenderId");
@@ -88,6 +114,9 @@ namespace MultiCalculator.Migrations
         {
             migrationBuilder.DropTable(
                 name: "CalculationHistory");
+
+            migrationBuilder.DropTable(
+                name: "ChatBotHistory");
 
             migrationBuilder.DropTable(
                 name: "OpenAiQuestions");

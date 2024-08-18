@@ -28,7 +28,7 @@ namespace MultiCalculator.Database.Repositories
         {
             try
             {
-                return CalculatorDbContext.User.Where(a => a.Id == id).Include(a => a.openAiQuestions).Include(a => a.calculationHistory).First();
+                return CalculatorDbContext.User.Where(a => a.Id == id).Include(a => a.openAiQuestions).Include(a => a.calculationHistory).Include(a => a.chatBotHistory).First();
             }
             catch (InvalidOperationException)
             {

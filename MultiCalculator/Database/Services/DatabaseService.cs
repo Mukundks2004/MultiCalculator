@@ -14,13 +14,15 @@ namespace MultiCalculator.Database.Services
         readonly UserRepository _userRepository;
         readonly CalculationHistoryRepository _calculationHistoryRepository;
         readonly OpenAiQuestionsRepository _openAiQuestionsRepository;
+        readonly ChatBotHistoryRepository _chatBotHistoryRepository;
 
-        public DatabaseService(CalculatorDbContext dbContext, UserRepository userRepository, CalculationHistoryRepository calculationHistoryRepository, OpenAiQuestionsRepository openAiQuestionsRepository)
+        public DatabaseService(CalculatorDbContext dbContext, UserRepository userRepository, CalculationHistoryRepository calculationHistoryRepository, OpenAiQuestionsRepository openAiQuestionsRepository, ChatBotHistoryRepository chatBotHistoryRepository)
         {
             _dbContext = dbContext;
             _userRepository = userRepository;
             _calculationHistoryRepository = calculationHistoryRepository;
             _openAiQuestionsRepository = openAiQuestionsRepository;
+            _chatBotHistoryRepository = chatBotHistoryRepository;
         }
 
         public UserModel? LoadUserById(int id)
@@ -36,6 +38,11 @@ namespace MultiCalculator.Database.Services
         public OpenAiQuestionsModel LoadOpenAiQuestionsById(Guid id)
         {
             return _openAiQuestionsRepository.GetOpenAiQuestionHistoryById(id);
+        }
+
+        public ChatBotHistoryModel LoadChatBotHistoryById(Guid id)
+        {
+            return _chatBotHistoryRepository.GetChatBotHistoryById(id);
         }
 
         public List<CalculationHistoryModel> LoadAllCalculationHistory()
@@ -57,6 +64,15 @@ namespace MultiCalculator.Database.Services
         {
             return _openAiQuestionsRepository.GetAllOpenAiQuestionHistoryBasedOffUser(user).ToList();
         }
+        public List<ChatBotHistoryModel> LoadAllChatBotHistory()
+        {
+            return _chatBotHistoryRepository.GetAllChatBotHistory().ToList();
+        }
+
+        public List<ChatBotHistoryModel> LoadAllChatBotHistoryBasedOffUser(UserModel user)
+        {
+            return _chatBotHistoryRepository.GetAllChatBotHistoryBasedOffUser(user).ToList();
+        }
 
         public void AddUser(UserModel user)
         {
@@ -72,6 +88,12 @@ namespace MultiCalculator.Database.Services
         {
             _openAiQuestionsRepository.Add(openAiQuestion);
         }
+
+        public void AddChatBotHistory(ChatBotHistoryModel chatBotHistory)
+        {
+            _chatBotHistoryRepository.Add(chatBotHistory);
+        }
+
 
         public void SeedData()
         {

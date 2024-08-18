@@ -28,7 +28,7 @@ namespace MultiCalculator
 		private string question;
 		private string answer;
 		readonly IDatabaseService _databaseService;
-		readonly UserModel user;
+		readonly UserModel _user;
 		PracticeProblemsHelper helper;
 
 		public PracticeProblemsWindow(IDatabaseService databaseService, UserModel user)
@@ -36,7 +36,7 @@ namespace MultiCalculator
 			InitializeComponent();
 			helper = new PracticeProblemsHelper(databaseService);
 			_databaseService = databaseService;
-			user = user;
+			_user = user;
 		}
 
 		void GeneratePracticeProblem_Click(object sender, RoutedEventArgs e)
@@ -67,7 +67,7 @@ namespace MultiCalculator
 
         void SendEmail_Click(object sender, RoutedEventArgs e)
         {
-            helper.SendPracticeProblemEmail(user, EmailTextBox.Text);
+            helper.SendPracticeProblemEmail(_user, EmailTextBox.Text);
         }
     }
 }
