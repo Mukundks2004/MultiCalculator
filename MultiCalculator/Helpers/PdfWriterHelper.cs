@@ -38,7 +38,7 @@ namespace MultiCalculator.Helpers
 
             if (sendToEmail)
             {
-                SendQuestionSheetToEmail(user, filePath);
+                SendQuestionSheetToEmail(user, filePath, email);
             }
             return filePath;
         }
