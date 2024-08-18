@@ -5,15 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiCalculator"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="800">
+        Title="LoginWindow" Height="300" Width="400">
     <Grid>
-        <TextBox x:Name="idTextBlock" HorizontalAlignment="Left" Margin="309,109,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="266"/>
-        <Label x:Name="id" Content="ID:" HorizontalAlignment="Left" Margin="267,105,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="1.054,0.577"/>
-        <Label x:Name="password" Content="Password:" HorizontalAlignment="Left" Margin="235,146,0,0" VerticalAlignment="Top"/>
-        <Button Content="Login" HorizontalAlignment="Center" Margin="0,217,0,0" VerticalAlignment="Top" Height="28" Width="340" Click="VerifyAndOpenWindow_Click"/>
-        <Label Content="Login Menu" HorizontalAlignment="Center" Margin="0,45,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="failureMessageLabel" Content="" HorizontalAlignment="Center" Margin="0,282,0,0" VerticalAlignment="Top" Width="216"/>
-        <PasswordBox x:Name="passwordTextBlock" HorizontalAlignment="Left" Margin="309,150,0,0" VerticalAlignment="Top" Width="266"/>
-        <Button Content="TempByPassButton" HorizontalAlignment="Left" Margin="681,71,0,0" VerticalAlignment="Top" Click="TempByPassButton_Click"/>
+        <StackPanel>
+            <Label Content="Login Menu" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label x:Name="id" Content="ID:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold"/>
+                <TextBox x:Name="idTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="266" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label x:Name="password" Content="Password:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold"/>
+                <PasswordBox x:Name="passwordTextBlock" HorizontalAlignment="Left" VerticalAlignment="Center" Width="266" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold"/>
+            </StackPanel>
+            <Label x:Name="failureMessageLabel" Content="" HorizontalAlignment="Center" VerticalAlignment="Top" Width="216" FontSize="10" FontFamily="MS Gothic" FontWeight="Bold"/>
+            <Button Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Height="28" Width="340" Click="VerifyAndOpenWindow_Click" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold"/>
+        </StackPanel>
+        <Button Content="TempByPassButton" Click="TempByPassButton_Click" Height="40" Margin="135,175,136,19"/>
     </Grid>
 </Window>
