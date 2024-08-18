@@ -11,18 +11,6 @@
         <Label FontSize="20" FontWeight="Bold" FontFamily="MS Gothic" Content="History" Margin="20" HorizontalAlignment="Center"/>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ListBox BorderThickness="2" x:Name="HistoryListBox" SelectionMode="Extended" Width="550" Height="300">
-                <ListBoxItem>
-                    <importedcontrols:FormulaControl Formula="\frac{3}{2}"/>
-                </ListBoxItem>
-                <ListBoxItem>
-                    <importedcontrols:FormulaControl Formula="\frac{5}{6}"/>
-                </ListBoxItem>
-                <ListBoxItem>
-                    <importedcontrols:FormulaControl Formula="\frac{345}{2}"/>
-                </ListBoxItem>
-                <ListBoxItem>
-                    <importedcontrols:FormulaControl Formula="\sqrt{(444)}"/>
-                </ListBoxItem>
             </ListBox>
         </ScrollViewer>
         <Button Content="Generate PDF" Width="120" Height="30" FontSize="15" FontWeight="Bold" FontFamily="MS Gothic" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" Click="GeneratePdf_Click"/>
