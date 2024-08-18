@@ -35,10 +35,9 @@ How to use:
 - Can see recently submit questions
 - Can select them by clicking and turn them into a pdf homework style (questions and answers)
 
-### 
-
-
-
+### Generate practice questions
+- Can generate questions and answers for testing
+- Can send them to a user's email in case they are using this remotely
 
 ---
 
