@@ -21,6 +21,7 @@ namespace MultiCalculator.Extensions
                 .AddScoped<CalculationHistoryRepository>()
                 .AddScoped<UserRepository>()
                 .AddScoped<OpenAiQuestionsRepository>()
+                .AddScoped<ChatBotHistoryRepository>()
                 .AddTransient<IDatabaseService, DatabaseService>();
 
             return services;

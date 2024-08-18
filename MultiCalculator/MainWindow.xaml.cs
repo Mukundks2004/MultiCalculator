@@ -46,7 +46,7 @@ namespace MultiCalculator
 			switch (windowTag)
 			{
 				case "ScientificCalculator":
-					windowToOpen = new ScientificCalculatorWindow();
+					windowToOpen = new ScientificCalculatorWindow(_databaseService, loggedUser);
 					break;
 				case "Settings":
 					windowToOpen = new SettingsWindow();
@@ -56,6 +56,9 @@ namespace MultiCalculator
 					break;
 				case "PluginsWindow":
 					windowToOpen = new PluginsWindow();
+					break;
+				case "ChatBot":
+					windowToOpen = new ChatBotWindow(_databaseService, loggedUser);
 					break;
 				default:
 					MessageBox.Show($"Unknown window tag: {windowTag ?? "Empty"}");

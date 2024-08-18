@@ -13,9 +13,9 @@ namespace MultiCalculator.Helpers
     public class OpenAiHelper
     {
         private string openAiResponse;
-        readonly DatabaseService _databaseService;
+        readonly IDatabaseService _databaseService;
 
-        public OpenAiHelper(DatabaseService databaseService)
+        public OpenAiHelper(IDatabaseService databaseService)
         {
             _databaseService = databaseService;
         }
@@ -29,7 +29,7 @@ namespace MultiCalculator.Helpers
 
             try
             {
-                string model = "gpt-4o-mini"; // We gonna have to use gpt-4o-mini seems to be the cheapest at around $0.015 for 1000 output tokens & $0.005 for 1000 input tokens. 
+                string model = OpenAI_API.Models.Model.DefaultModel; // We gonna have to use gpt-4o-mini seems to be the cheapest at around $0.015 for 1000 output tokens & $0.005 for 1000 input tokens. 
                 int maxTokens = 50; // So do not spam use this for no reason now -- Still needs testing, but the API Link and Model should be fine? (Model not 100% sure but the API does work and has $10 on that account.
 
                 var completionRequest = new CompletionRequest
@@ -42,8 +42,7 @@ namespace MultiCalculator.Helpers
                 var completionResult = await openAiApi.Completions.CreateCompletionAsync(completionRequest);
                 var generatedText = completionResult.Completions[0].Text;
 
-                Console.WriteLine("Generated text:");
-                Console.WriteLine(generatedText);
+                openAiResponse = generatedText;
             }
             catch (Exception ex)
             {

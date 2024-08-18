@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Query.Internal;
 using MultiCalculator.Abstractions;
 using MultiCalculator.Controls;
+using MultiCalculator.Database.Models;
 using MultiCalculator.Database.Services;
 using MultiCalculator.Delegates;
 using MultiCalculator.Implementations;
@@ -16,9 +17,14 @@ namespace MultiCalculator
 	/// </summary>
 	public partial class ScientificCalculatorWindow : Window
 	{
-		public ScientificCalculatorWindow()
+		readonly IDatabaseService _databaseService;
+		readonly UserModel _user;
+
+		public ScientificCalculatorWindow(IDatabaseService databaseService, UserModel user)
 		{
 			InitializeComponent();
+			_databaseService = databaseService;
+			_user = user;
 			CalculatorExpression = new TokenChain();
 			CalculatorExpression.OperationsUpdated += UpdateExpressionBox;
 			DataContext = this;
@@ -105,6 +111,11 @@ namespace MultiCalculator
 			CalculatorExpression.Add(button.CalculatorTask.Tokens);
 		}
 
+        void StoreAnswer(string question, string answer)
+		{
+			_databaseService.AddCalculationHistory(new CalculationHistoryModel { Id = new Guid(), Question = question, Answer = answer, QuestionSender = _user });
+		}
+
 		void CustomButton_Clicked(IToken? t)
 		{
 			if (t != null)
@@ -136,6 +147,7 @@ namespace MultiCalculator
 					CalculatorExpression.InsertMultiplicationSignsConvertUnaryDualsToUnaryPlaceBrackets();
 					var result = CalculatorExpression.ParseTree();
 					CalculatorAnswer = double.IsNaN(result) || result == double.PositiveInfinity || result == double.NegativeInfinity ? "Math Error" : result.ToString();
+					StoreAnswer(CalculatorExpression.GetLatexString(), result.ToString());
 				}
 			}
 			catch

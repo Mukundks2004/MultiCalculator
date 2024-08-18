@@ -52,6 +52,15 @@ namespace MultiCalculator.Controls
         {
             Add("Default");
             Add("Dark");
+            Add("Miami");
+            Add("Terra");
+            Add("Strawberry");
+            Add("Aokiji");
+            Add("Akainu");
+            Add("Kizaru");
+            Add("Matrix");
+            Add("Joker");
+            Add("Spiderman");
             Add("Sandy");
             Add("Winter");
             Add("Pink");

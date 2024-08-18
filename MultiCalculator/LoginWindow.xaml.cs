@@ -35,8 +35,8 @@ namespace MultiCalculator
 
             databaseService = built.Services.GetRequiredService<IDatabaseService>();
             mainWindow = built.Services.GetRequiredService<MainWindow>();
-            //databaseService.ClearData();
-            //databaseService.SeedData(); // (Uncomment if you need data seeded else please leave, so we build a larger database of questions).
+            // databaseService.ClearData();
+            // databaseService.SeedData(); // (Uncomment if you need data seeded else please leave, so we build a larger database of questions).
         }
 
         void VerifyAndOpenWindow_Click(object sender, RoutedEventArgs e)
