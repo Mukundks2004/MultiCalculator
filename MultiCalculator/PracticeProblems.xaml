@@ -5,69 +5,81 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:MultiCalculator"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800"
+        d:DesignHeight="450" d:DesignWidth="800" ResizeMode="CanResizeWithGrip" MinHeight="450" MinWidth="800"
         Title="PracticeProblems">
 
     <Grid Margin="10">
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="Title"
-                   Text="Random Question Generator"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,20"
-                   Grid.Row="0"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="QuestionTextBlock"
-                   Text="Here will be the generated question"
-                   FontSize="18"
-                   Margin="0,0,0,10"
-                   HorizontalAlignment="Center"
-                   Grid.Row="1"/>
+        <Border Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1">
+            <Grid HorizontalAlignment="Stretch">
+                <Label Content="Practice Problem Generator" Foreground="Gray" FontWeight="SemiBold" FontSize="20"/>
+            </Grid>
+        </Border>
 
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Button x:Name="generateQuestionBtn"
-                    Content="Generate Question"
-                    Width="200"
-                    Height="30"
-                    Margin="0,0,0,10"
-                    Click="GeneratePracticeProblem_Click"/>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+            <Button x:Name="generateQuestionBtn" Content="Generate Question" Click="GeneratePracticeProblem_Click"/>
+        </Border>
 
-            <Button x:Name="answerBtn"
-                    Content="Show Answer"
-                    Width="200"
-                    Height="30"
-                    Margin="0,0,0,10"
-                    Click="HandleAnswer_Click"/>
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
+            <Button x:Name="answerBtn" Content="Show Answer" Click="HandleAnswer_Click"/>
+        </Border>
 
-            <Label x:Name="answerLabel"
-                       Content="Answer will appear here"
-                       FontSize="16"
-                       Visibility="Collapsed"
-                       HorizontalAlignment="Center"/>
-        </StackPanel>
+        <Border Grid.Row="3" BorderBrush="Black" BorderThickness="1">
+            <Button Content="Send Email" Click="SendEmail_Click"/>
+        </Border>
 
-        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0">
-            <TextBlock Text="Send practice question to an email:" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <Border Grid.Row="4" BorderBrush="Black" BorderThickness="1">
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
-                <TextBlock Text="Email:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBox x:Name="EmailTextBox"
-                         Width="200"
-                         VerticalAlignment="Center"/>
+        </Border>
+
+        <Border Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+            <TextBlock x:Name="QuestionTextBlock" Text="Here will be the generated question" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+
+        <Border Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="2" BorderBrush="Black" BorderThickness="1">
+            <TextBlock x:Name="answerText" Text="" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+
+        <Border Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="3">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel VerticalAlignment="Center">
+                    <RadioButton x:Name="AccountEmailRadioButton" Margin="15, 0, 0, 30" VerticalAlignment="Center" IsChecked="True">
+                        <Label Content="Send To Account Email" VerticalAlignment="Center"/>
+                    </RadioButton>
+                    <RadioButton x:Name="CustomEmailRadioButton" Margin="15, 0, 0, 0">
+                        <TabPanel>
+                            <Label Content="Send to this email:"/>
+                            <TextBox x:Name="EmailTextBox" Width="300"/>
+                        </TabPanel>
+                    </RadioButton>
+                </StackPanel>
             </StackPanel>
+        </Border>
 
-            <Button Content="Send Email"
-                    Width="200"
-                    Height="30"
-                    Click="SendEmail_Click"/>
-        </StackPanel>
+        <Border Grid.Row="4">
+            <Button x:Name="GeneratePdfOfQuestions" Content="Generate practice paper and send to Email" Click="GeneratePdfOfQuestions_Click"/>
+        </Border>
+
+        <Grid Grid.Row="4" Grid.Column="1">
+            <Label x:Name="NumberOfQuestionsLabel" Content="Number of questions:" Foreground="Black" FontWeight="SemiBold" Margin="15, 0, 0, 0" Width="130" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="2">
+            <TextBox x:Name="numberOfQuestionTextBox" Width="200" Margin="-117,22,0,22" Height="30" HorizontalAlignment="Left"/>
+        </Grid>
+
     </Grid>
 </Window>

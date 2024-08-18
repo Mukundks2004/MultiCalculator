@@ -47,12 +47,23 @@ namespace MultiCalculator.Helpers
 
         public (string, string) GeneratePracticeProblem()
         {
-            // TODO: CALL OpenAIHelper, method: SubmitAndGetApiResponse(string prompt, UserModel sendingUser) to generate question and then return it.
-            // Maybe not we could generate a random question from the calculation history model instead (Performs similar function and doesn't require chatgpt)
             var allPreviousQuestions = _databaseService.LoadAllCalculationHistory();
             var random = new Random();
             var randomNumber = random.Next(0, allPreviousQuestions.Count);
 			return (allPreviousQuestions[randomNumber].Question, allPreviousQuestions[randomNumber].Answer);
+        }
+
+        public List<(string, string)> GenerateNAmountOfPracticeProblems(int numberOfProblems)
+        {
+            var allPreviousQuestions = _databaseService.LoadAllCalculationHistory();
+            var random = new Random();
+            var practiceProblems = new List<(string, string)>();
+            for (int i = 0; i < numberOfProblems; i++)
+            {
+                var randomNumber = random.Next(0, allPreviousQuestions.Count);
+                practiceProblems.Add((allPreviousQuestions[randomNumber].Question, allPreviousQuestions[randomNumber].Answer));
+            }
+            return practiceProblems;
         }
     }
 }
