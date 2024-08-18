@@ -15,22 +15,24 @@ namespace MultiCalculator
 		private string answer;
 		readonly IDatabaseService _databaseService;
 		readonly UserModel _user;
-		PracticeProblemsHelper helper;
+		PracticeProblemsHelper problemHelper;
+		PdfWriterHelper pdfWriterHelper;
 
 		public PracticeProblemsWindow(IDatabaseService databaseService, UserModel user)
 		{
 			InitializeComponent();
 			Icon = new BitmapImage(new Uri("pack://application:,,,./icon.png"));
-			helper = new PracticeProblemsHelper(databaseService);
-			_databaseService = databaseService;
+            problemHelper = new PracticeProblemsHelper(databaseService);
+			pdfWriterHelper = new PdfWriterHelper();
+            _databaseService = databaseService;
 			_user = user;
 		}
 
 		void GeneratePracticeProblem_Click(object sender, RoutedEventArgs e)
 		{
-			(question, answer) = helper.GeneratePracticeProblem();
+			(question, answer) = problemHelper.GeneratePracticeProblem();
 			QuestionTextBlock.Text = question;
-			answerLabel.Content = string.Empty;
+			answerText.Text = string.Empty;
 			answerBtn.Content = "Show Answer";
 		}
 
@@ -38,16 +40,16 @@ namespace MultiCalculator
         {
 			if (question != null && question != string.Empty)
 			{
-				if (answerLabel.Content.ToString() == string.Empty)
+				if (answerText.Text == string.Empty)
 				{
-					answerLabel.Content = "Answer: " + answer;
-					answerLabel.Visibility = Visibility.Visible;
+					answerText.Text = "Answer: " + answer;
+					answerText.Visibility = Visibility.Visible;
 					answerBtn.Content = "Hide Answer";
 				}
 				else
 				{
 
-                    answerLabel.Content = string.Empty;
+                    answerText.Text = string.Empty;
                     answerBtn.Content = "Show Answer";
                 }
 			}
@@ -57,7 +59,7 @@ namespace MultiCalculator
         {
 			if (QuestionTextBlock.Text != string.Empty && QuestionTextBlock.Text != null && !QuestionTextBlock.Text.Equals("Here will be the generated question"))
 			{
-				helper.SendPracticeProblemEmail(_user, QuestionTextBlock.Text, EmailTextBox.Text == string.Empty ? null : EmailTextBox.Text);
+                problemHelper.SendPracticeProblemEmail(_user, QuestionTextBlock.Text, DetermineEmail() == string.Empty ? null : DetermineEmail());
 				MessageBox.Show("Email has been sent!");
             }
 			else
@@ -65,5 +67,46 @@ namespace MultiCalculator
 				MessageBox.Show("Please request for a question prior to sending an email.");
 			}
         }
+
+        private void GeneratePdfOfQuestions_Click(object sender, RoutedEventArgs e)
+        {
+			var numberOfQuestionsText = numberOfQuestionTextBox.Text;
+			int numberOfQuestions; 
+			try
+			{
+				numberOfQuestions = Int32.Parse(numberOfQuestionsText);
+			}
+			catch
+			{
+				MessageBox.Show("Please enter an integer amount.");
+				return;
+			}
+			var problems = problemHelper.GenerateNAmountOfPracticeProblems(numberOfQuestions);
+			pdfWriterHelper.GenerateQuestionSheet(problems, _user, sendToEmail: true, email: DetermineEmail());
+            MessageBox.Show("Email has been sent!");
+        }
+
+		string DetermineEmail()
+		{
+			bool customEmailCheck = CustomEmailRadioButton.IsChecked ?? false;
+			if (customEmailCheck)
+			{
+				if (EmailTextBox.Text == null || EmailTextBox.Text.Equals(string.Empty))
+				{
+                    MessageBox.Show("Please have an email selected if this option is chosen.");
+				}
+                else
+                {
+					return EmailTextBox.Text;
+                }
+            }
+			else
+			{
+				return _user.Email;
+			}
+			return string.Empty;
+        }
+
+        // AccountEmailRadioButton
     }
 }

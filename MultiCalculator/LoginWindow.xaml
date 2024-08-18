@@ -20,6 +20,5 @@
             <Label x:Name="failureMessageLabel" Content="" HorizontalAlignment="Center" VerticalAlignment="Top" Width="216" FontSize="10" FontFamily="MS Gothic" FontWeight="Bold"/>
             <Button Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Height="28" Width="340" Click="VerifyAndOpenWindow_Click" FontSize="14" FontFamily="MS Gothic" FontWeight="Bold"/>
         </StackPanel>
-        <Button Content="TempByPassButton" Click="TempByPassButton_Click" Height="40" Margin="135,175,136,19"/>
     </Grid>
 </Window>
